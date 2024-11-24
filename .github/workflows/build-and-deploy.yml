@@ -3,7 +3,7 @@ name: Build and Push Docker Image
 on:
   push:
     branches:
-      - main  # Событие триггерится при пуше в ветку main
+      - main # Событие триггерится при пуше в ветку main
   pull_request:
 
 jobs:
@@ -31,3 +31,10 @@ jobs:
       - name: Push Docker image
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.FE_PROJECT_NAME }}:${{ github.sha }}
+
+      # Шаг 5: (Опционально) Пуш Docker-образа с тегом "latest"
+      - name: Tag and push latest
+        if: github.ref_name == 'main' # Только для ветки main
+        run: |
+          docker tag ${{ secrets.DOCKER_USERNAME }}/${{ secrets.FE_PROJECT_NAME }}:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/${{ secrets.FE_PROJECT_NAME }}:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.FE_PROJECT_NAME }}:latest
