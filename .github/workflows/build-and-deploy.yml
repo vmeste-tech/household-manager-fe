@@ -19,10 +19,6 @@ jobs:
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.FE_PROJECT_NAME }}:${{ github.sha }} .
 
-      # Шаг 3: Сохранение данных для передачи в push
-      - name: Save Docker image name
-        run: echo "image_name=${{ secrets.DOCKER_USERNAME }}/${{ secrets.FE_PROJECT_NAME }}:${{ github.sha }}" >> $GITHUB_ENV
-
   push:
     runs-on: ubuntu-latest
     needs: build # Выполняется после завершения build
@@ -38,13 +34,13 @@ jobs:
       # Шаг 2: Пуш Docker-образа
       - name: Push Docker image
         run: |
-          docker push ${{ env.image_name }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.FE_PROJECT_NAME }}:${{ github.sha }}
 
       # Шаг 3: Пуш Docker-образа с тегом "latest"
       - name: Tag and push latest
         if: github.ref_name == 'main' # Только для ветки main
         run: |
-          docker tag ${{ env.image_name }} ${{ secrets.DOCKER_USERNAME }}/${{ secrets.FE_PROJECT_NAME }}:latest
+          docker tag ${{ secrets.DOCKER_USERNAME }}/${{ secrets.FE_PROJECT_NAME }}:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/${{ secrets.FE_PROJECT_NAME }}:latest
           docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.FE_PROJECT_NAME }}:latest
 
   deploy:
