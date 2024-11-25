@@ -1,4 +1,4 @@
-name: Build, push and pdeloy
+name: CI/CD
 
 on:
   push:
