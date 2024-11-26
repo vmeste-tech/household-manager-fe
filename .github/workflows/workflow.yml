@@ -60,5 +60,4 @@ jobs:
       - name: Run new container
         run: |
           ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} \
-          "docker run -d --name fe-${{ secrets.FE_PROJECT_NAME }} -p 80:4173 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.FE_PROJECT_NAME }}:latest"
-
+          "docker run -d --name fe-${{ secrets.FE_PROJECT_NAME }} -p 3000:4173 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.FE_PROJECT_NAME }}:latest"
