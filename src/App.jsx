@@ -4,6 +4,7 @@ import Home from "./components/Home";
 import Login from "./components/Login";
 import "./App.css";
 import { useState } from "react";
+import SignUp from "./components/Signup";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -27,6 +28,7 @@ function App() {
             path="/login"
             element={<Login setLoggedIn={setLoggedIn} setEmail={setEmail} />}
           />
+          <Route path="/register" element={<SignUp />} />
         </Routes>
       </BrowserRouter>
     </div>
