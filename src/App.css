@@ -27,7 +27,7 @@
 /* Шапка страницы */
 .header {
   background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-    url("/Users/kolpakovee/Desktop/ВКР/household-manager-fe/public/main-page.jpg");
+    url("/main-page.jpg");
   background-size: cover;
   background-position: center;
   color: white; /* Белый текст */
