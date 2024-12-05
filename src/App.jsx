@@ -1,10 +1,13 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { useState } from "react";
+
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css";
+
 import Home from "./components/Home";
 import Login from "./components/Login";
-import "./App.css";
-import { useState } from "react";
 import SignUp from "./components/Signup";
+import Main from "./components/Main";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -29,6 +32,7 @@ function App() {
             element={<Login setLoggedIn={setLoggedIn} setEmail={setEmail} />}
           />
           <Route path="/register" element={<SignUp />} />
+          <Route path="/main" element={<Main />} />
         </Routes>
       </BrowserRouter>
     </div>
