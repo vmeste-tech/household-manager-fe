@@ -2,7 +2,7 @@ import { Card } from "react-bootstrap";
 import PropTypes from "prop-types";
 import "../App.css";
 
-const ClickableCard = ({ title, description, onClick, style, imageUrl }) => {
+const ClickableCard = ({ title, onClick, style, imageUrl, children }) => {
   return (
     <Card
       onClick={onClick}
@@ -25,6 +25,25 @@ const ClickableCard = ({ title, description, onClick, style, imageUrl }) => {
         e.currentTarget.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.1)";
       }}
     >
+      {/* Если imageUrl передан, отображаем изображение в центре под текстом */}
+      {imageUrl && (
+        <div
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "7rem",
+            height: "7rem",
+            backgroundImage: `url(${imageUrl})`,
+            backgroundSize: "cover",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+            opacity: 0.2, // Регулирует прозрачность, чтобы текст был видимым
+            zIndex: 0,
+          }}
+        />
+      )}
       {/* Добавляем картинку в правом верхнем углу */}
       {imageUrl && (
         <img
@@ -41,10 +60,18 @@ const ClickableCard = ({ title, description, onClick, style, imageUrl }) => {
         />
       )}
       <Card.Body className="text-center">
-        <Card.Title className="clickable-card-title">{title}</Card.Title>
-        <Card.Text className="clickable-card-description">
-          {description}
-        </Card.Text>
+        <Card.Title
+          className="clickable-card-title"
+          style={{ color: "#fff", textAlign: "left", fontSize: "1.5rem" }}
+        >
+          {title}
+        </Card.Title>
+        <div
+          className="clickable-card-content"
+          style={{ textAlign: "left", color: "#fff" }}
+        >
+          {children}
+        </div>
       </Card.Body>
     </Card>
   );
@@ -56,6 +83,7 @@ ClickableCard.propTypes = {
   onClick: PropTypes.func.isRequired, // onClick обязателен
   style: PropTypes.object, // Дополнительные стили
   imageUrl: PropTypes.string, // URL картинки (необязателен)
+  children: PropTypes.node, // Динамический контент
 };
 
 // Значения по умолчанию для необязательных пропсов

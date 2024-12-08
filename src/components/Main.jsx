@@ -1,4 +1,4 @@
-import { Container, Row, Col, Image } from "react-bootstrap";
+import { Container, Row, Col, Image, Button } from "react-bootstrap";
 import ClickableCard from "./ClickableCard";
 import "../App.css";
 import "./Main.css";
@@ -25,6 +25,65 @@ const imageUrls = [
   "/home.png",
 ];
 
+const blockNames = [
+  "ЗАДАЧИ",
+  "ПРАВИЛА",
+  "УВЕДОМЛЕНИЯ",
+  "ПРОФИЛЬ",
+  "ШТРАФЫ",
+  "ПОКУПКИ",
+  "ФИНАНСЫ",
+  "КВАРТИРА",
+];
+
+const cardContents = [
+  <div key="tasks" style={{ color: "#fff" }}>
+    <div style={{ fontSize: "3.5rem", fontWeight: "bold" }}>
+      <span style={{ color: "#C2F2FF" }}>8 / 12</span>
+    </div>
+    <div style={{ fontSize: "0.9rem", marginTop: "0.5rem" }}>
+      прогресс за сегодня
+    </div>
+    <div style={{ marginTop: "0.5rem", position: "relative" }}>
+      <div
+        style={{
+          height: "0.5rem",
+          backgroundColor: "#8CE6FF",
+          borderRadius: "0.25rem",
+          width: "67%",
+        }}
+      />
+      <div
+        style={{
+          height: "0.5rem",
+          backgroundColor: "#555",
+          borderRadius: "0.25rem",
+          width: "100%",
+          position: "absolute",
+          top: 0,
+          left: 0,
+          zIndex: -1,
+        }}
+      />
+    </div>
+  </div>,
+
+  // Существующие элементы для остальных карточек
+  <p key="rules">Список всех правил для проживания</p>,
+  <p key="notifications">Настройте уведомления по вашему выбору</p>,
+  <Button key="edit-profile" variant="info">
+    Редактировать профиль
+  </Button>,
+  <p key="fines">Сумма штрафов: 500 руб.</p>,
+  <Button key="shop" variant="success">
+    Перейти в магазин
+  </Button>,
+  <p key="balance">Баланс: 1000 руб.</p>,
+  <Button key="view-apartment" variant="warning">
+    Посмотреть квартиру
+  </Button>,
+];
+
 const Main = () => {
   return (
     <div className="custom-container">
@@ -39,14 +98,15 @@ const Main = () => {
             <Col key={index} xs={12} sm={6} md={3}>
               <div className="card-wrapper">
                 <ClickableCard
-                  title={`Карточка ${index + 1}`}
-                  description={`Описание для карточки ${index + 1}`}
+                  title={blockNames[index]}
                   imageUrl={imageUrls[index]}
                   style={{
                     background: gradient,
                   }}
                   onClick={() => alert(`Вы нажали на карточку ${index + 1}`)}
-                />
+                >
+                  {cardContents[index]}
+                </ClickableCard>
               </div>
             </Col>
           ))}
