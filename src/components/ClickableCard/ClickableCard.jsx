@@ -1,6 +1,5 @@
 import { Card } from "react-bootstrap";
 import PropTypes from "prop-types";
-import "../App.css";
 
 const ClickableCard = ({ title, onClick, style, imageUrl, children }) => {
   return (

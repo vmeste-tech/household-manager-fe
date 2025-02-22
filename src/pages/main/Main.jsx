@@ -1,6 +1,6 @@
 import { Container, Row, Col, Image, Button } from "react-bootstrap";
-import ClickableCard from "./ClickableCard";
-import "../App.css";
+import ClickableCard from "../../components/ClickableCard/ClickableCard";
+import "../../App.css";
 import "./Main.css";
 
 const gradients = [

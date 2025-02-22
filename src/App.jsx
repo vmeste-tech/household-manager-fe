@@ -4,10 +4,12 @@ import { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
-import Home from "./components/Home";
-import Login from "./components/Login";
-import SignUp from "./components/Signup";
-import Main from "./components/Main";
+import Home from "./pages/home/Home";
+import Login from "./pages/login/Login";
+import SignUp from "./pages/register/Signup";
+import Main from "./pages/main/Main";
+import TaskPage from "./pages/task/TaskPage";
+import RulePage from "./pages/rule/RulePage";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -33,6 +35,8 @@ function App() {
           />
           <Route path="/register" element={<SignUp />} />
           <Route path="/main" element={<Main />} />
+          <Route path="/tasks" element={<TaskPage />} />
+          <Route path="/rules" element={<RulePage />} />
         </Routes>
       </BrowserRouter>
     </div>
