@@ -2,6 +2,7 @@ import { Container, Row, Col, Image, Button } from "react-bootstrap";
 import ClickableCard from "../../components/ClickableCard/ClickableCard";
 import "../../App.css";
 import "./Main.css";
+import Dashboard from "../../components/Dashboard/Dashboard";
 
 const gradients = [
   "linear-gradient(90deg, rgba(140,230,255,1) 0%, rgba(0,0,0,1) 100%)",
@@ -86,32 +87,8 @@ const cardContents = [
 
 const Main = () => {
   return (
-    <div className="custom-container">
-      <div className="header m-2">
-        <Image src="/together.png" alt="Логотип" className="logo" />
-        <h1 className="header-title">ВМЕСТЕ</h1>
-      </div>
-
-      <Container fluid>
-        <Row className="g-3 justify-content-center">
-          {gradients.map((gradient, index) => (
-            <Col key={index} xs={12} sm={6} md={3}>
-              <div className="card-wrapper">
-                <ClickableCard
-                  title={blockNames[index]}
-                  imageUrl={imageUrls[index]}
-                  style={{
-                    background: gradient,
-                  }}
-                  onClick={() => alert(`Вы нажали на карточку ${index + 1}`)}
-                >
-                  {cardContents[index]}
-                </ClickableCard>
-              </div>
-            </Col>
-          ))}
-        </Row>
-      </Container>
+    <div>
+      <Dashboard></Dashboard>
     </div>
   );
 };
