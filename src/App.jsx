@@ -5,8 +5,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
 import Home from "./pages/home/Home";
-import Login from "./pages/login/Login";
-import SignUp from "./pages/register/Signup";
+import Login from "./pages/login/SignInPage";
+import SignUp from "./pages/register/SignUpPage";
 import Main from "./pages/main/Main";
 import TaskPage from "./pages/task/TaskPage";
 import RulePage from "./pages/rule/RulePage";
@@ -31,10 +31,10 @@ function App() {
             }
           />
           <Route
-            path="/login"
+            path="/signin"
             element={<Login setLoggedIn={setLoggedIn} setEmail={setEmail} />}
           />
-          <Route path="/register" element={<SignUp />} />
+          <Route path="/signup" element={<SignUp />} />
           <Route path="/main" element={<Main />} />
           <Route path="/tasks" element={<TaskPage />} />
           <Route path="/rules" element={<RulePage />} />
