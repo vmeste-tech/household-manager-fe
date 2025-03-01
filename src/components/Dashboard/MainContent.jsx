@@ -1,4 +1,9 @@
+import ApartmentCard from "./ApartmentCard";
+import FinancesCard from "./FinancesCard";
 import InboxCard from "./InboxCard";
+import PenaltyCard from "./PenaltyCard";
+import PurchasesCard from "./PurchasesCard";
+import RulesCard from "./RulesCard";
 import TasksCard from "./TasksCard";
 import WelcomeCard from "./WelcomeCard";
 
@@ -12,36 +17,19 @@ const MainContent = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <TasksCard />
-        <div
-          className="bg-white rounded-xl shadow-lg p-6 h-64 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl animate-slide-up"
-          style={{ animationDelay: "0.2s" }}
-        >
-          <h3 className="text-xl font-bold text-indigo-800">Stats Card 2</h3>
-        </div>
-        <div
-          className="bg-white rounded-xl shadow-lg p-6 h-64 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl animate-slide-up"
-          style={{ animationDelay: "0.3s" }}
-        >
-          <h3 className="text-xl font-bold text-indigo-800">Stats Card 3</h3>
-        </div>
-        <div
-          className="bg-white rounded-xl shadow-lg p-6 h-64 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl animate-slide-up"
-          style={{ animationDelay: "0.3s" }}
-        >
-          <h3 className="text-xl font-bold text-indigo-800">Stats Card 3</h3>
-        </div>
-        <div
-          className="bg-white rounded-xl shadow-lg p-6 h-64 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl animate-slide-up"
-          style={{ animationDelay: "0.3s" }}
-        >
-          <h3 className="text-xl font-bold text-indigo-800">Stats Card 3</h3>
-        </div>
-        <div
-          className="bg-white rounded-xl shadow-lg p-6 h-64 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl animate-slide-up"
-          style={{ animationDelay: "0.3s" }}
-        >
-          <h3 className="text-xl font-bold text-indigo-800">Stats Card 3</h3>
-        </div>
+        <RulesCard activeRules={3} votingRules={1} />
+        <PenaltyCard finesCount={2} totalFines={430} />
+        <FinancesCard balance={100} />
+        <PurchasesCard
+          purchasesData={[
+            100, 250, 345, 234, 543, 123, 453, 234, 123, 432, 212, 1000,
+          ]}
+        />
+        <ApartmentCard
+          apartmentName={"Большая Очаковская 2"}
+          residentsCount={3}
+          daysLived={720}
+        />
       </div>
     </main>
   );
