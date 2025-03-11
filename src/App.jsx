@@ -10,7 +10,7 @@ import SignUp from "./pages/register/SignUpPage";
 import Main from "./pages/main/Main";
 import TaskPage from "./pages/task/TaskPage";
 import RulePage from "./pages/rule/RulePage";
-import ViolationPage from "./pages/violation/ViolationPage";
+import PenaltyPage from "./pages/penalty/PenaltyPage";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -38,7 +38,7 @@ function App() {
           <Route path="/main" element={<Main />} />
           <Route path="/tasks" element={<TaskPage />} />
           <Route path="/rules" element={<RulePage />} />
-          <Route path="/violation" element={<ViolationPage />} />
+          <Route path="/penalties" element={<PenaltyPage />} />
         </Routes>
       </BrowserRouter>
     </div>
