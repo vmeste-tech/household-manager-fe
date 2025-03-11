@@ -1,3 +1,4 @@
+import KanbanBoard from "../../components/Board/KanbanBoard";
 import DashboardHeader from "../../components/Dashboard/DashboardHeader";
 import TaskStats from "../../components/TaskStats/TaskStats";
 
@@ -7,6 +8,7 @@ function TaskPage() {
       <DashboardHeader />
       <div className="pt-20 max-w-7xl mx-auto flex flex-col gap-8">
         <TaskStats />
+        <KanbanBoard />
       </div>
     </div>
   );
