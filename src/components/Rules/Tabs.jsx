@@ -12,8 +12,8 @@ const Tabs = ({ activeFilter, setActiveFilter }) => {
             onClick={() => setActiveFilter(filter)}
             className={`flex-1 px-2 py-1 transition-colors text-center ${
               activeFilter === filter
-                ? "bg-blue-600 text-white rounded-lg"
-                : "hover:text-blue-600"
+                ? "bg-indigo-800 text-white rounded-lg"
+                : "hover:text-indigo-700"
             }`}
           >
             {filter}
