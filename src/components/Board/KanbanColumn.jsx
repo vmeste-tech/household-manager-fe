@@ -17,7 +17,7 @@ const KanbanColumn = ({ column, tasks, users }) => {
           {...provided.droppableProps}
           className="bg-indigo-100 border border-indigo-200 rounded-xl p-6 animate-fade-in"
         >
-          <h2 className="text-xl font-semibold mb-4">{columnLabels[column]}</h2>
+          <p className="text-xl font-semibold mb-4">{columnLabels[column]}</p>
           <div className="space-y-4">
             {tasks.map((task, index) => {
               const user = users.find((u) => u.id === task.assignedTo);

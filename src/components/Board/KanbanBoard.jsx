@@ -91,9 +91,9 @@ const KanbanBoard = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-blue-900">Доска задач</h1>
+        <p className="text-3xl font-bold text-blue-900">Доска задач</p>
         <Filter filter={filter} onChange={handleFilterChange} users={users} />
       </div>
       <DragDropContext onDragEnd={handleDragEnd}>

@@ -10,7 +10,7 @@ const TaskCard = ({ task, user, provided }) => (
     className="bg-white p-4 rounded-lg shadow-md transition-transform duration-200 hover:scale-105 focus-within:ring-2 focus-within:ring-blue-500"
   >
     <div className="flex items-center justify-between mb-2">
-      <h3 className="text-sm font-semibold">{task.title}</h3>
+      <p className="text-lg font-semibold">{task.title}</p>
       {user ? (
         <img
           src={user.avatar}

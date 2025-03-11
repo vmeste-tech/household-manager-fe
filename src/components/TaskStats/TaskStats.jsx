@@ -11,9 +11,9 @@ const TaskStats = () => {
     <div className="bg-gradient-to-r from-blue-800 to-indigo-900 w-full rounded-xl">
       <div className="max-w-7xl mx-auto py-4 px-2 sm:py-6 sm:px-3 lg:px-4 lg:py-8">
         <div className="max-w-5xl mx-auto text-center">
-          <h2 className="pb-1 text-4xl font-extrabold text-white">
+          <p className="pb-1 text-4xl font-extrabold text-white">
             Статистика задач
-          </h2>
+          </p>
           <p className="mt-3 text-lg text-white">
             Обзор текущей статистики по вашим задачам
           </p>
