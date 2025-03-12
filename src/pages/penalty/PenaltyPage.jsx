@@ -1,6 +1,6 @@
 import DashboardHeader from "../../components/Dashboard/DashboardHeader";
-import PenaltyStats from "../../components/penalty/PenaltyStats";
-import PenaltyTable from "../../components/penalty/PenaltyTable";
+import PenaltyStats from "../../components/Penalty/PenaltyStats";
+import PenaltyTable from "../../components/Penalty/PenaltyTable";
 
 function PenaltyPage() {
   return (
