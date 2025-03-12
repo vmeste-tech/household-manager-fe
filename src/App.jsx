@@ -12,6 +12,7 @@ import TaskPage from "./pages/task/TaskPage";
 import RulePage from "./pages/rule/RulePage";
 import PenaltyPage from "./pages/penalty/PenaltyPage";
 import FinancesPage from "./pages/finance/FinancesPage";
+import PurchasesPage from "./pages/purchases/PurchasesPage";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -41,6 +42,7 @@ function App() {
           <Route path="/rules" element={<RulePage />} />
           <Route path="/penalties" element={<PenaltyPage />} />
           <Route path="/finances" element={<FinancesPage />} />
+          <Route path="/purchases" element={<PurchasesPage />} />
         </Routes>
       </BrowserRouter>
     </div>
