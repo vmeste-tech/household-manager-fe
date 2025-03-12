@@ -1,3 +1,4 @@
+import { useState } from "react";
 import DashboardHeader from "../../components/Dashboard/DashboardHeader";
 import BarChart from "../../components/Finances/BarChart";
 import DebtsTable from "../../components/Finances/DebtsTable";
@@ -5,7 +6,7 @@ import FilterDropdown from "../../components/Finances/FilterDropdown";
 import ProgressTable from "../../components/Finances/ProgressTable";
 
 function FinancesPage() {
-  // Модель данных для пользователей (единая модель)
+  // Исходная модель данных пользователей
   const userData = {
     Егор: { fines: 100, expenses: 250 },
     Алексей: { fines: 456, expenses: 380 },
@@ -14,29 +15,38 @@ function FinancesPage() {
     Сергей: { fines: 0, expenses: 50 },
   };
 
-  // Данные для долгов – отдельный запрос (пока константа)
+  // Данные для долгов (константа)
   const debts = [
     {
       id: 1,
-      debtor: "Анна",
-      creditor: "Максим",
+      debtor: "Егор",
+      creditor: "Тимур",
       amount: "1500",
       status: "Задолженность",
     },
     {
       id: 2,
-      debtor: "Илья",
-      creditor: "Общий котел",
+      debtor: "Тимур",
+      creditor: "Алексей",
       amount: "800",
       status: "Погашено",
     },
+    // Пример долга с участием выбранных пользователей
+    {
+      id: 3,
+      debtor: "Егор",
+      creditor: "Алексей",
+      amount: "500",
+      status: "Задолженность",
+    },
   ];
 
-  const filtersData = [
+  // Начальные данные фильтров
+  const initialFiltersData = [
     {
       label: "По пользователю",
       items: ["Егор", "Алексей", "Тимур"],
-      selected: ["Егор"],
+      selected: [],
       multiple: true,
     },
     {
@@ -47,19 +57,55 @@ function FinancesPage() {
     },
   ];
 
+  // Поднимаем состояние фильтров на уровень страницы
+  const [filters, setFilters] = useState(initialFiltersData);
+
+  // Callback для обновления фильтров (будет вызываться из FilterDropdown)
+  const handleFiltersChange = (newFilters) => {
+    setFilters(newFilters);
+  };
+
+  // Извлекаем выбранных пользователей из фильтра "По пользователю"
+  const userFilter = filters.find(
+    (filter) => filter.label === "По пользователю"
+  );
+  const selectedUsers =
+    userFilter && userFilter.selected && userFilter.selected.length > 0
+      ? userFilter.selected
+      : Object.keys(userData);
+
+  // Формируем данные для таблицы и графика исходя из выбранных пользователей
+  const filteredUserData = Object.keys(userData).reduce((acc, user) => {
+    if (selectedUsers.includes(user)) {
+      acc[user] = userData[user];
+    }
+    return acc;
+  }, {});
+
+  // Фильтруем долги, оставляя те, где должник или кредитор входит в выбранных пользователей
+  const filteredDebts = debts.filter(
+    (debt) =>
+      selectedUsers.includes(debt.debtor) ||
+      selectedUsers.includes(debt.creditor)
+  );
+
   return (
     <div className="bg-indigo-50 min-h-screen overflow-x-hidden">
       <DashboardHeader />
       <div className="pt-20 max-w-7xl mx-auto flex flex-col gap-8">
-        <FilterDropdown filters={filtersData} />
+        {/* Передаём как filters, так и callback для обновления фильтров */}
+        <FilterDropdown
+          filters={filters}
+          onFiltersChange={handleFiltersChange}
+        />
 
-        {/* Контейнер с таблицей и графиком */}
+        {/* Передаём отфильтрованные данные */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
-          <ProgressTable userData={userData} />
-          <BarChart userData={userData} />
+          <ProgressTable userData={filteredUserData} />
+          <BarChart userData={filteredUserData} />
         </div>
 
-        <DebtsTable debts={debts} />
+        <DebtsTable debts={filteredDebts} />
       </div>
     </div>
   );

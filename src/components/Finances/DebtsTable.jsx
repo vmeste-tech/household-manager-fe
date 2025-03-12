@@ -1,21 +1,6 @@
-const debts = [
-  {
-    id: 1,
-    debtor: "Анна",
-    creditor: "Максим",
-    amount: "1500",
-    status: "Задолженность",
-  },
-  {
-    id: 2,
-    debtor: "Илья",
-    creditor: "Общий котел",
-    amount: "800",
-    status: "Погашено",
-  },
-];
+import PropTypes from "prop-types";
 
-const DebtsTable = () => {
+const DebtsTable = ({ debts }) => {
   return (
     <div className="overflow-x-auto rounded-xl">
       <table className="min-w-full divide-y divide-gray-200">
@@ -70,6 +55,19 @@ const DebtsTable = () => {
       </table>
     </div>
   );
+};
+
+DebtsTable.propTypes = {
+  debts: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+      debtor: PropTypes.string.isRequired,
+      creditor: PropTypes.string.isRequired,
+      amount: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+        .isRequired,
+      status: PropTypes.string.isRequired,
+    })
+  ).isRequired,
 };
 
 export default DebtsTable;

@@ -2,7 +2,7 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import Dropdown from "./Dropdown";
 
-const CustomCheckboxesWithFilters = ({ filters }) => {
+const CustomCheckboxesWithFilters = ({ filters, onFiltersChange }) => {
   const [dropdowns, setDropdowns] = useState(filters);
 
   const handleSelectionChange = (filterLabel, selectedValues) => {
@@ -15,9 +15,10 @@ const CustomCheckboxesWithFilters = ({ filters }) => {
     );
   };
 
+  // При отправке формы вызываем callback для передачи выбранных фильтров родителю
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Фильтры применены:", dropdowns);
+    onFiltersChange(dropdowns);
   };
 
   return (
@@ -88,6 +89,7 @@ CustomCheckboxesWithFilters.propTypes = {
       multiple: PropTypes.bool,
     })
   ).isRequired,
+  onFiltersChange: PropTypes.func.isRequired,
 };
 
 export default CustomCheckboxesWithFilters;
