@@ -1,6 +1,7 @@
 import { useState } from "react";
-import CustomButton from "../Buttons/Button";
+import CustomButton from "../Universal/CustomButton";
 import FileDropZone from "./FileDropZone";
+import Modal from "../Universal/Modal";
 
 const defaultUser = {
   firstName: "Иван",
@@ -16,18 +17,16 @@ export default function AccountSettings() {
     <>
       {/* Модальное окно для загрузки файлов */}
       {showFileDropZone && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 max-w-md w-full">
-            <FileDropZone />
-            <div className="flex justify-end mt-4">
-              <CustomButton
-                text="Закрыть"
-                variant="outlined"
-                onClick={() => setShowFileDropZone(false)}
-              />
-            </div>
+        <Modal onClose={() => setShowFileDropZone(false)}>
+          <FileDropZone />
+          <div className="flex justify-end mt-4">
+            <CustomButton
+              text="Закрыть"
+              variant="outlined"
+              onClick={() => setShowFileDropZone(false)}
+            />
           </div>
-        </div>
+        </Modal>
       )}
 
       <div className="p-8 bg-white rounded-xl">

@@ -1,4 +1,4 @@
-import CustomButton from "../Buttons/Button";
+import CustomButton from "../Universal/CustomButton";
 
 export default function FileDropZone() {
   return (
