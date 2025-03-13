@@ -1,6 +1,12 @@
 import PropTypes from "prop-types";
+import { useState } from "react";
+import Pagination from "../Universal/Pagination";
 
 const DebtsTable = ({ debts }) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+  const totalPages = Math.ceil(debts.length / itemsPerPage);
+
   return (
     <div className="overflow-x-auto rounded-xl">
       <table className="min-w-full divide-y divide-gray-200">
@@ -53,6 +59,14 @@ const DebtsTable = ({ debts }) => {
           ))}
         </tbody>
       </table>
+      {/* Пагинация вне таблицы */}
+      <div className="mt-2">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      </div>
     </div>
   );
 };

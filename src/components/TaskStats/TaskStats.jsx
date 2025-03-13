@@ -4,7 +4,7 @@ import { StatCard } from "./StatCard";
 // Компонент для отображения сетки карточек статистики
 export function StatCardsGrid({ cardsData }) {
   return (
-    <div className="grid gap-4 lg:gap-8 md:grid-cols-3">
+    <div className="grid gap-4 lg:gap-8 grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(200px,1fr))]">
       {cardsData.map((card) => (
         <StatCard
           key={card.title}
