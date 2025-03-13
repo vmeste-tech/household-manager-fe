@@ -92,10 +92,13 @@ const KanbanBoard = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
-        <p className="text-3xl font-bold text-blue-900">Доска задач</p>
+      <div className="flex justify-between items-center mb-2">
+        <p className="text-xl font-bold uppercase tracking-wider text-indigo-800 m-0 p-0">
+          Доска задач
+        </p>
         <Filter filter={filter} onChange={handleFilterChange} users={users} />
       </div>
+
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {columns.map((column) => {
