@@ -14,6 +14,7 @@ import PenaltyPage from "./pages/penalty/PenaltyPage";
 import FinancesPage from "./pages/finance/FinancesPage";
 import PurchasesPage from "./pages/purchases/PurchasesPage";
 import ApartmentPage from "./pages/apartment/ApartmentPage";
+import NotificationPage from "./pages/notification/NotificationPage";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -45,6 +46,7 @@ function App() {
           <Route path="/finances" element={<FinancesPage />} />
           <Route path="/purchases" element={<PurchasesPage />} />
           <Route path="/apartments" element={<ApartmentPage />} />
+          <Route path="/notifications" element={<NotificationPage />} />
         </Routes>
       </BrowserRouter>
     </div>
