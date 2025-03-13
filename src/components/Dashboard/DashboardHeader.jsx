@@ -13,6 +13,10 @@ const DashboardHeader = () => {
     navigate("/notifications");
   };
 
+  const handleProfileClick = () => {
+    navigate("/profile");
+  };
+
   useEffect(() => {
     const interval = setInterval(() => {
       if (notificationRef.current) {
@@ -44,6 +48,7 @@ const DashboardHeader = () => {
             уведомления
           </span>
           <img
+            onClick={handleProfileClick}
             className="w-10 h-10 rounded-full transition-transform duration-300 hover:scale-110 object-cover"
             src="https://i.pinimg.com/736x/bd/d9/aa/bdd9aaee8c129b1d0a7180512c6f7ae5.jpg"
             alt="Profile"
