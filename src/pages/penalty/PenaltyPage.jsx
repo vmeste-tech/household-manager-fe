@@ -1,6 +1,6 @@
 import DashboardHeader from "../../components/Dashboard/DashboardHeader";
 import PenaltyTable from "../../components/Penalty/PenaltyTable";
-import StatCardsGrid from "../../components/TaskStats/TaskStats";
+import StatCardsGrid from "../../components/Tasks/TaskStats";
 import Heading from "../../components/Universal/Heading";
 
 function PenaltyPage() {

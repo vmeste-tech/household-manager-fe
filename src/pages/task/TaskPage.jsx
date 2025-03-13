@@ -1,6 +1,7 @@
 import KanbanBoard from "../../components/Board/KanbanBoard";
 import DashboardHeader from "../../components/Dashboard/DashboardHeader";
-import StatCardsGrid from "../../components/TaskStats/TaskStats";
+import StatCardsGrid from "../../components/Tasks/TaskStats";
+import CustomButton from "../../components/Universal/CustomButton";
 import Heading from "../../components/Universal/Heading";
 
 function TaskPage() {
@@ -30,6 +31,9 @@ function TaskPage() {
       <DashboardHeader />
       <div className="pt-20 max-w-7xl mx-auto flex flex-col gap-8">
         <KanbanBoard />
+        <div className="flex justify-center">
+          <CustomButton text="+ Добавить задачу" variant="filled" />
+        </div>
         <Heading>Статистика выполнения</Heading>
         <StatCardsGrid cardsData={sampleCardsData} />
       </div>

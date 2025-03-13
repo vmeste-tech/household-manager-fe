@@ -4,6 +4,7 @@ import BarChart from "../../components/Finances/BarChart";
 import DebtsTable from "../../components/Finances/DebtsTable";
 import FilterDropdown from "../../components/Finances/FilterDropdown";
 import ProgressTable from "../../components/Finances/ProgressTable";
+import Heading from "../../components/Universal/Heading";
 
 function FinancesPage() {
   // Исходная модель данных пользователей
@@ -93,6 +94,7 @@ function FinancesPage() {
     <div className="bg-indigo-50 min-h-screen overflow-x-hidden">
       <DashboardHeader />
       <div className="pt-20 max-w-7xl mx-auto flex flex-col gap-8">
+        <Heading>Статистика расходов</Heading>
         {/* Передаём как filters, так и callback для обновления фильтров */}
         <FilterDropdown
           filters={filters}
@@ -104,6 +106,8 @@ function FinancesPage() {
           <ProgressTable userData={filteredUserData} />
           <BarChart userData={filteredUserData} />
         </div>
+
+        <Heading>Таблица задолженностей</Heading>
 
         <DebtsTable debts={filteredDebts} />
       </div>

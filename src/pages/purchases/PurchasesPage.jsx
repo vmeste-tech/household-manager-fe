@@ -1,6 +1,8 @@
 import DashboardHeader from "../../components/Dashboard/DashboardHeader";
 import PurchaseTables from "../../components/Purchases/PurchasesTable";
 import Timeline from "../../components/Purchases/PurchaseHistory";
+import Heading from "../../components/Universal/Heading";
+import CustomButton from "../../components/Universal/CustomButton";
 
 function PurchasesPage() {
   const expencesData = [
@@ -62,10 +64,14 @@ function PurchasesPage() {
     <div className="bg-indigo-50 min-h-screen overflow-x-hidden">
       <DashboardHeader />
       <div className="pt-20 max-w-7xl mx-auto flex flex-col gap-8">
+        <Heading>Покупки и затраты</Heading>
         <div className="flex flex-col md:flex-row gap-8">
           {/* Таблица слева */}
           <div className="flex-1">
             <PurchaseTables expenses={expencesData} />
+            <div className="flex justify-center mt-3">
+              <CustomButton text="+ Добавить статью затрат" variant="filled" />
+            </div>
           </div>
           {/* История справа */}
           <div className="flex-1">
