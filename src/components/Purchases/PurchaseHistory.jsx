@@ -7,8 +7,8 @@ const PurchaseHistory = ({ purchases }) => {
   );
 
   return (
-    <div className="p-4 max-w-xl mx-auto dark:bg-gray-800 bg-white rounded-xl">
-      <div className="font-heading dark:text-gray-100 mb-8 text-xl font-bold">
+    <div className="p-4 max-w-xl mx-auto bg-white rounded-xl">
+      <div className="font-heading mb-8 text-xl font-bold">
         История покупок и затрат
       </div>
 
@@ -26,7 +26,7 @@ const PurchaseHistory = ({ purchases }) => {
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className="h-6 w-6 text-blue-800 dark:text-slate-200"
+                  className="h-6 w-6 text-blue-800"
                 >
                   <path d="M12 5l0 14" />
                   <path d="M18 13l-6 6" />
@@ -34,16 +34,16 @@ const PurchaseHistory = ({ purchases }) => {
                 </svg>
               </div>
             </div>
-            <div className="h-full w-px bg-gray-300 dark:bg-slate-500"></div>
+            <div className="h-full w-px bg-gray-300"></div>
           </div>
           <div className="pt-1 pb-8">
-            <div className="mb-1 text-sm font-bold text-gray-900 dark:text-slate-300">
+            <div className="mb-1 text-sm font-bold text-gray-900">
               {purchase.item} — {purchase.amount}₽
             </div>
-            <div className="mb-1 text-sm text-gray-600 dark:text-slate-400">
+            <div className="mb-1 text-sm text-gray-600">
               {purchase.date}
             </div>
-            <div className="text-sm text-gray-600 dark:text-slate-400">
+            <div className="text-sm text-gray-600">
               {purchase.description}
             </div>
           </div>
@@ -63,7 +63,7 @@ const PurchaseHistory = ({ purchases }) => {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="h-6 w-6 text-white dark:text-slate-200"
+                className="h-6 w-6 text-white"
               >
                 <path d="M5 12l5 5l10 -10" />
               </svg>
@@ -71,7 +71,7 @@ const PurchaseHistory = ({ purchases }) => {
           </div>
         </div>
         <div className="pt-1">
-          <div className="mb-2 text-sm font-bold text-gray-900 dark:text-slate-300">
+          <div className="mb-2 text-sm font-bold text-gray-900">
             Всего расходов: {totalExpenses}₽
           </div>
         </div>

@@ -3,19 +3,13 @@ import PropTypes from "prop-types";
 // Переиспользуемый компонент для отображения статистики
 const StatCard = ({ title, value, change, isIncrease = true }) => {
   return (
-    <div className="p-6 bg-white shadow rounded-2xl dark:bg-gray-900">
+    <div className="p-6 bg-white shadow rounded-2xl">
       <dl className="space-y-2">
-        <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
-          {title}
-        </dt>
-        <dd className="text-5xl font-light md:text-6xl dark:text-white">
-          {value}
-        </dd>
+        <dt className="text-sm font-medium text-gray-500">{title}</dt>
+        <dd className="text-5xl font-light md:text-6xl">{value}</dd>
         <dd
           className={`flex items-center space-x-1 text-sm font-medium ${
-            isIncrease
-              ? "text-green-500 dark:text-green-400"
-              : "text-red-500 dark:text-red-400"
+            isIncrease ? "text-green-500" : "text-red-500"
           }`}
         >
           <span>{change}</span>
