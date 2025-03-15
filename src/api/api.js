@@ -20,7 +20,7 @@ import createAuthRefreshInterceptor from "axios-auth-refresh";
 
 // Создаем экземпляр axios с базовым URL
 const api = axios.create({
-  baseURL: "/api/v1",
+  baseURL: "http://localhost:8082/api/v1",
 });
 
 // Перехватчик запросов для добавления access token в заголовок
@@ -60,7 +60,7 @@ const refreshAuthLogic = (failedRequest) => {
       console.error("Ошибка обновления токена:", error);
       // Если обновление не удалось, можно выполнить логаут или перенаправить на страницу логина
       localStorage.clear();
-      window.location.href = "/login";
+      window.location.href = "/signin";
       return Promise.reject(error);
     });
 };

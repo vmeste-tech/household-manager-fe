@@ -1,21 +1,32 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CustomButton from "../Universal/CustomButton";
 import FileDropZone from "./FileDropZone";
 import Modal from "../Universal/Modal";
-
-const defaultUser = {
-  firstName: "Иван",
-  lastName: "Иванов",
-  email: "ivan.ivanov@example.com",
-  status: "Активен",
-};
+import api from "../../api/api";
+import Heading from "../Universal/Heading";
 
 export default function AccountSettings() {
+  const [user, setUser] = useState(null);
   const [showFileDropZone, setShowFileDropZone] = useState(false);
+
+  useEffect(() => {
+    async function fetchUserData() {
+      try {
+        const response = await api.get("/users/me"); // укажите правильный endpoint
+        setUser(response.data);
+      } catch (error) {
+        console.error("Ошибка получения данных пользователя:", error);
+      }
+    }
+    fetchUserData();
+  }, []);
+
+  if (!user) {
+    return <div>Загрузка...</div>;
+  }
 
   return (
     <>
-      {/* Модальное окно для загрузки файлов */}
       {showFileDropZone && (
         <Modal onClose={() => setShowFileDropZone(false)}>
           <FileDropZone />
@@ -30,13 +41,16 @@ export default function AccountSettings() {
       )}
 
       <div className="p-8 bg-white rounded-xl">
-        {/* Заголовок */}
-        <div className="text-2xl font-bold mb-6">Настройки</div>
+        <div className="mb-6">
+          <Heading>Настройки</Heading>
+        </div>
 
-        {/* Аватар и элементы управления */}
         <div className="flex flex-wrap items-center gap-4 mb-6">
           <img
-            src="https://i.pinimg.com/736x/bd/d9/aa/bdd9aaee8c129b1d0a7180512c6f7ae5.jpg"
+            src={
+              user.profilePictureUrl ||
+              "https://i.pinimg.com/736x/bd/d9/aa/bdd9aaee8c129b1d0a7180512c6f7ae5.jpg"
+            }
             alt="Profile"
             className="w-20 h-20 rounded-full object-cover"
           />
@@ -52,10 +66,8 @@ export default function AccountSettings() {
           />
         </div>
 
-        {/* Форма настроек */}
         <form>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Имя */}
             <div>
               <label
                 htmlFor="firstName"
@@ -66,13 +78,12 @@ export default function AccountSettings() {
               <input
                 id="firstName"
                 type="text"
-                defaultValue={defaultUser.firstName}
+                defaultValue={user.firstName}
                 placeholder="Введите имя"
                 className="w-full px-3 py-2 border rounded !border-gray-300 focus:outline-none focus:!border-indigo-600"
               />
             </div>
 
-            {/* Фамилия */}
             <div>
               <label
                 htmlFor="lastName"
@@ -83,13 +94,12 @@ export default function AccountSettings() {
               <input
                 id="lastName"
                 type="text"
-                defaultValue={defaultUser.lastName}
+                defaultValue={user.lastName}
                 placeholder="Введите фамилию"
                 className="w-full px-3 py-2 border rounded !border-gray-300 focus:outline-none focus:!border-indigo-600"
               />
             </div>
 
-            {/* Электронная почта */}
             <div>
               <label
                 htmlFor="email"
@@ -104,14 +114,13 @@ export default function AccountSettings() {
                 <input
                   id="email"
                   type="email"
-                  defaultValue={defaultUser.email}
+                  defaultValue={user.email}
                   placeholder="name@example.com"
                   className="w-full pl-9 pr-3 py-2 border rounded !border-gray-300 focus:outline-none focus:!border-indigo-600"
                 />
               </div>
             </div>
 
-            {/* Статус */}
             <div>
               <label
                 htmlFor="status"
@@ -121,7 +130,7 @@ export default function AccountSettings() {
               </label>
               <select
                 id="status"
-                defaultValue={defaultUser.status}
+                defaultValue="Активен" // статус может определяться отдельно
                 className="w-full px-3 py-2 border rounded !border-gray-300 focus:outline-none focus:!border-indigo-600"
               >
                 <option>Активен</option>
@@ -130,7 +139,6 @@ export default function AccountSettings() {
               </select>
             </div>
 
-            {/* Изменение пароля */}
             <div className="md:col-span-2">
               <label className="block mb-1 text-xs font-medium uppercase tracking-wider">
                 ИЗМЕНЕНИЕ ПАРОЛЯ
@@ -155,7 +163,6 @@ export default function AccountSettings() {
             </div>
           </div>
 
-          {/* Кнопка "Сохранить" */}
           <div className="flex justify-end mt-6">
             <CustomButton
               text="Сохранить"
