@@ -1,6 +1,6 @@
 export async function registerUser(userData) {
   const response = await fetch(
-    "http://user-service:8082/api/v1/users/register",
+    "http://89.169.172.148:8082/api/v1/users/register",
     {
       method: "POST",
       headers: {
@@ -23,7 +23,7 @@ import createAuthRefreshInterceptor from "axios-auth-refresh";
 
 // Создаем экземпляр axios с базовым URL
 const api = axios.create({
-  baseURL: "http://user-service:8082/api/v1",
+  baseURL: "http://89.169.172.148:8082/api/v1",
 });
 
 // Перехватчик запросов для добавления access token в заголовок
@@ -42,7 +42,7 @@ api.interceptors.request.use(
 const refreshAuthLogic = (failedRequest) => {
   const refreshToken = localStorage.getItem("refresh_token");
   return axios
-    .post("http://user-service:8082/api/v1/auth/refresh", {
+    .post("http://89.169.172.148:8082/api/v1/auth/refresh", {
       refresh_token: refreshToken,
     })
     .then((response) => {
