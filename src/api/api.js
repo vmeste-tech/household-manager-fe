@@ -1,11 +1,14 @@
 export async function registerUser(userData) {
-  const response = await fetch("http://localhost:8082/api/v1/users/register", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(userData),
-  });
+  const response = await fetch(
+    "http://user-service:8082/api/v1/users/register",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    }
+  );
 
   if (!response.ok) {
     const errorData = await response.json();
@@ -20,7 +23,7 @@ import createAuthRefreshInterceptor from "axios-auth-refresh";
 
 // Создаем экземпляр axios с базовым URL
 const api = axios.create({
-  baseURL: "http://localhost:8082/api/v1",
+  baseURL: "http://user-service:8082/api/v1",
 });
 
 // Перехватчик запросов для добавления access token в заголовок
@@ -39,7 +42,7 @@ api.interceptors.request.use(
 const refreshAuthLogic = (failedRequest) => {
   const refreshToken = localStorage.getItem("refresh_token");
   return axios
-    .post("http://localhost:8082/api/v1/auth/refresh", {
+    .post("http://user-service:8082/api/v1/auth/refresh", {
       refresh_token: refreshToken,
     })
     .then((response) => {
