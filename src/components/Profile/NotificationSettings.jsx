@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Heading from "../Universal/Heading";
 
 const notificationsList = [
   {
@@ -68,7 +67,7 @@ export default function NotificationSettings() {
   return (
     <div className="p-8 bg-white rounded-xl">
       <div className="flex items-center justify-between mb-6">
-        <Heading>Уведомления</Heading>
+        <div className="text-2xl font-bold">Уведомления</div>
         <div
           className="text-indigo-600 cursor-pointer text-sm font-medium"
           onClick={handleSelectAll}
