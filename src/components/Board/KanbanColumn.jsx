@@ -4,9 +4,9 @@ import TaskCard from "./TaskCard";
 
 const KanbanColumn = ({ column, tasks, users }) => {
   const columnLabels = {
-    "To Do": "Запланировано",
-    "In Progress": "В процессе",
-    Done: "Выполнено",
+    CREATED: "Запланировано",
+    IN_PROGRESS: "В процессе",
+    COMPLETED: "Выполнено",
   };
 
   return (
