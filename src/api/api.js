@@ -1,5 +1,5 @@
 export async function registerUser(userData) {
-  const response = await fetch("http://localhost:8082/api/v1/users/register", {
+  const response = await fetch("http://localhost:8084/api/v1/users/register", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -39,7 +39,7 @@ api.interceptors.request.use(
 const refreshAuthLogic = (failedRequest) => {
   const refreshToken = localStorage.getItem("refresh_token");
   return axios
-    .post("http://localhost:8082/api/v1/auth/refresh", {
+    .post("http://localhost:8084/api/v1/auth/refresh", {
       refresh_token: refreshToken,
     })
     .then((response) => {

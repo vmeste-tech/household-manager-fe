@@ -1,7 +1,7 @@
 import api from "./api";
 
 export const login = async (username, password) => {
-  const response = await api.post("http://localhost:8082/api/v1/auth/login", {
+  const response = await api.post("http://localhost:8084/api/v1/auth/login", {
     username,
     password,
   });
