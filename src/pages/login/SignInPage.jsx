@@ -1,28 +1,13 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../api/AuthProvider";
 
 const SignInPage = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
-  const [error, setError] = useState("");
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setError("");
-
-    const email = e.target.email.value;
-    const password = e.target.password.value;
-
-    try {
-      // вызываем функцию логина, которая обрабатывает получение токенов и их сохранение
-      await login(email, password);
-      // после успешного логина редирект на главную страницу
-      navigate("/main");
-    } catch (err) {
-      console.error("Ошибка входа:", err);
-      setError("Неверный логин или пароль. Попробуйте еще раз.");
-    }
+    // Здесь можно добавить логику аутентификации
+    // После успешной аутентификации перенаправляем на главную страницу:
+    navigate("/main");
   };
 
   return (
@@ -45,9 +30,6 @@ const SignInPage = () => {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <form onSubmit={handleSubmit} className="space-y-6">
-            {error && (
-              <div className="text-red-600 text-sm text-center">{error}</div>
-            )}
             <div>
               <label
                 htmlFor="email"

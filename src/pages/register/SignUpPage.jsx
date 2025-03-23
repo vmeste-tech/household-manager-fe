@@ -1,44 +1,13 @@
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { registerUser } from "../../api/api";
-import TextInput from "../../components/Universal/TextInput";
+import { useNavigate } from "react-router-dom";
 
 const SignUpPage = () => {
   const navigate = useNavigate();
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setError("");
-    setIsLoading(true);
-
-    const formData = new FormData(e.target);
-    const data = Object.fromEntries(formData.entries());
-
-    // Валидация: обрезаем пробелы и проверяем совпадение паролей
-    if (data.password !== data.confirm_password) {
-      setError("Пароли не совпадают");
-      setIsLoading(false);
-      return;
-    }
-
-    const userData = {
-      email: data.email.trim(),
-      password: data.password,
-      firstName: data.firstName.trim(),
-      lastName: data.lastName.trim(),
-    };
-
-    try {
-      await registerUser(userData);
-      navigate("/signin");
-    } catch (err) {
-      console.error("Ошибка регистрации:", err);
-      setError(err.message || "Произошла ошибка при регистрации");
-    } finally {
-      setIsLoading(false);
-    }
+    // Здесь можно добавить логику регистрации
+    // После успешной регистрации перенаправляем на главную страницу:
+    navigate("/main");
   };
 
   return (
@@ -49,71 +18,109 @@ const SignUpPage = () => {
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
           Или{" "}
-          <Link
-            to="/signin"
+          <a
+            href="/signin"
             className="font-medium text-blue-600 hover:text-blue-500"
           >
             войдите в свой аккаунт
-          </Link>
+          </a>
         </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          {error && (
-            <div className="mb-4 text-red-600 text-sm text-center">{error}</div>
-          )}
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <TextInput
-              id="firstName"
-              name="firstName"
-              label="Имя"
-              placeholder="Введите ваше имя"
-              required
-              autoComplete="given-name"
-            />
-            <TextInput
-              id="lastName"
-              name="lastName"
-              label="Фамилия"
-              placeholder="Введите вашу фамилию"
-              required
-              autoComplete="family-name"
-            />
-            <TextInput
-              id="email"
-              name="email"
-              type="email"
-              label="Адрес электронной почты"
-              placeholder="Введите ваш email"
-              required
-              autoComplete="email"
-            />
-            <TextInput
-              id="password"
-              name="password"
-              type="password"
-              label="Пароль"
-              placeholder="Пароль (минимум 8 символов)"
-              required
-              autoComplete="new-password"
-            />
-            <TextInput
-              id="confirm_password"
-              name="confirm_password"
-              type="password"
-              label="Подтвердите пароль"
-              placeholder="Повторите ваш пароль"
-              required
-              autoComplete="new-password"
-            />
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-6"
+            action="#"
+            method="POST"
+          >
+            <div>
+              <label
+                htmlFor="name"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Полное имя
+              </label>
+              <div className="mt-1">
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  autoComplete="name"
+                  required
+                  className="appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  placeholder="Введите ваше полное имя"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Адрес электронной почты
+              </label>
+              <div className="mt-1">
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  className="appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  placeholder="Введите ваш адрес электронной почты"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Пароль
+              </label>
+              <div className="mt-1">
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  autoComplete="new-password"
+                  required
+                  className="appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  placeholder="Введите ваш пароль"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="confirm_password"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Подтвердите пароль
+              </label>
+              <div className="mt-1">
+                <input
+                  id="confirm_password"
+                  name="confirm_password"
+                  type="password"
+                  autoComplete="new-password"
+                  required
+                  className="appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  placeholder="Подтвердите ваш пароль"
+                />
+              </div>
+            </div>
+
             <div>
               <button
                 type="submit"
-                disabled={isLoading}
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
-                {isLoading ? "Регистрация..." : "Зарегистрироваться"}
+                Зарегистрироваться
               </button>
             </div>
           </form>

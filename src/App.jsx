@@ -1,4 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { useState } from "react";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
@@ -14,29 +16,41 @@ import PurchasesPage from "./pages/purchases/PurchasesPage";
 import ApartmentPage from "./pages/apartment/ApartmentPage";
 import NotificationPage from "./pages/notification/NotificationPage";
 import ProfilePage from "./pages/profile/ProfilePage";
-import { AuthProvider } from "./api/AuthProvider";
 
 function App() {
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [email, setEmail] = useState("");
+
   return (
     <div className="App">
-      <AuthProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/signin" element={<Login />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/main" element={<Main />} />
-            <Route path="/tasks" element={<TaskPage />} />
-            <Route path="/rules" element={<RulePage />} />
-            <Route path="/penalties" element={<PenaltyPage />} />
-            <Route path="/finances" element={<FinancesPage />} />
-            <Route path="/purchases" element={<PurchasesPage />} />
-            <Route path="/apartments" element={<ApartmentPage />} />
-            <Route path="/notifications" element={<NotificationPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-          </Routes>
-        </BrowserRouter>
-      </AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Home
+                email={email}
+                loggedIn={loggedIn}
+                setLoggedIn={setLoggedIn}
+              />
+            }
+          />
+          <Route
+            path="/signin"
+            element={<Login setLoggedIn={setLoggedIn} setEmail={setEmail} />}
+          />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/main" element={<Main />} />
+          <Route path="/tasks" element={<TaskPage />} />
+          <Route path="/rules" element={<RulePage />} />
+          <Route path="/penalties" element={<PenaltyPage />} />
+          <Route path="/finances" element={<FinancesPage />} />
+          <Route path="/purchases" element={<PurchasesPage />} />
+          <Route path="/apartments" element={<ApartmentPage />} />
+          <Route path="/notifications" element={<NotificationPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }

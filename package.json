@@ -12,8 +12,6 @@
   "dependencies": {
     "@hello-pangea/dnd": "^18.0.1",
     "@tailwindcss/vite": "^4.0.9",
-    "axios": "^1.8.3",
-    "axios-auth-refresh": "^3.3.6",
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.8",
     "prop-types": "^15.8.1",
