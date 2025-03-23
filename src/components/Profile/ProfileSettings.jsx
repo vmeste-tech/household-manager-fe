@@ -1,21 +1,50 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CustomButton from "../Universal/CustomButton";
 import FileDropZone from "./FileDropZone";
 import Modal from "../Universal/Modal";
 
-const defaultUser = {
-  firstName: "Иван",
-  lastName: "Иванов",
-  email: "ivan.ivanov@example.com",
-  status: "Активен",
-};
+import DefaultApi from "../../generated-client-js/src/api/DefaultApi";
+import apiClient from "../../api/setupApi";
 
 export default function AccountSettings() {
   const [showFileDropZone, setShowFileDropZone] = useState(false);
+  const [user, setUser] = useState(null); // изначально нет данных
+  const [loading, setLoading] = useState(true); // состояние загрузки
+
+  useEffect(() => {
+    const defaultApi = new DefaultApi(apiClient);
+
+    defaultApi.getUser((error, data, response) => {
+      setLoading(false);
+      if (error) {
+        console.error("Ошибка получения данных пользователя:", error);
+      } else {
+        console.log("Получены данные пользователя:", data);
+        setUser(data);
+      }
+    });
+  }, []);
+
+  // Если данные еще не загрузились, показываем индикатор загрузки
+  if (loading) {
+    return (
+      <div className="p-8 bg-white rounded-xl text-center">
+        <p>Загрузка данных пользователя...</p>
+      </div>
+    );
+  }
+
+  // Если по какой-то причине данных нет, можно показать сообщение
+  if (!user) {
+    return (
+      <div className="p-8 bg-white rounded-xl text-center">
+        <p>Данные пользователя не найдены</p>
+      </div>
+    );
+  }
 
   return (
     <>
-      {/* Модальное окно для загрузки файлов */}
       {showFileDropZone && (
         <Modal onClose={() => setShowFileDropZone(false)}>
           <FileDropZone />
@@ -30,10 +59,8 @@ export default function AccountSettings() {
       )}
 
       <div className="p-8 bg-white rounded-xl">
-        {/* Заголовок */}
         <div className="text-2xl font-bold mb-6">Настройки</div>
 
-        {/* Аватар и элементы управления */}
         <div className="flex flex-wrap items-center gap-4 mb-6">
           <img
             src="https://i.pinimg.com/736x/bd/d9/aa/bdd9aaee8c129b1d0a7180512c6f7ae5.jpg"
@@ -52,7 +79,6 @@ export default function AccountSettings() {
           />
         </div>
 
-        {/* Форма настроек */}
         <form>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Имя */}
@@ -66,7 +92,7 @@ export default function AccountSettings() {
               <input
                 id="firstName"
                 type="text"
-                defaultValue={defaultUser.firstName}
+                defaultValue={user.firstName}
                 placeholder="Введите имя"
                 className="w-full px-3 py-2 border rounded !border-gray-300 focus:outline-none focus:!border-indigo-600"
               />
@@ -83,7 +109,7 @@ export default function AccountSettings() {
               <input
                 id="lastName"
                 type="text"
-                defaultValue={defaultUser.lastName}
+                defaultValue={user.lastName}
                 placeholder="Введите фамилию"
                 className="w-full px-3 py-2 border rounded !border-gray-300 focus:outline-none focus:!border-indigo-600"
               />
@@ -104,7 +130,7 @@ export default function AccountSettings() {
                 <input
                   id="email"
                   type="email"
-                  defaultValue={defaultUser.email}
+                  defaultValue={user.email}
                   placeholder="name@example.com"
                   className="w-full pl-9 pr-3 py-2 border rounded !border-gray-300 focus:outline-none focus:!border-indigo-600"
                 />
@@ -121,7 +147,7 @@ export default function AccountSettings() {
               </label>
               <select
                 id="status"
-                defaultValue={defaultUser.status}
+                defaultValue={user.status}
                 className="w-full px-3 py-2 border rounded !border-gray-300 focus:outline-none focus:!border-indigo-600"
               >
                 <option>Активен</option>
@@ -155,7 +181,6 @@ export default function AccountSettings() {
             </div>
           </div>
 
-          {/* Кнопка "Сохранить" */}
           <div className="flex justify-end mt-6">
             <CustomButton
               text="Сохранить"

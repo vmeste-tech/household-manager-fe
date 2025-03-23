@@ -1,13 +1,58 @@
 import { useNavigate } from "react-router-dom";
+import ApiClient from "../../generated-client-js/src/ApiClient";
+import DefaultApi from "../../generated-client-js/src/api/DefaultApi";
+import { useState } from "react";
 
 const SignUpPage = () => {
   const navigate = useNavigate();
 
+  // Локальные стейты для значений формы
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  // Обработчик отправки формы
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Здесь можно добавить логику регистрации
-    // После успешной регистрации перенаправляем на главную страницу:
-    navigate("/main");
+
+    // Проверяем, что пароли совпадают
+    if (password !== confirmPassword) {
+      alert("Пароли не совпадают!");
+      return;
+    }
+
+    // Разделяем fullName на firstName и lastName (по желанию)
+    const [firstName, ...rest] = fullName.split(" ");
+    const lastName = rest.join(" ");
+
+    // Создаём экземпляр ApiClient
+    const apiClient = new ApiClient();
+    // Задаём базовый URL для запросов
+    apiClient.basePath = "http://localhost:8082";
+
+    // Создаём экземпляр DefaultApi
+    const defaultApi = new DefaultApi(apiClient);
+
+    // Формируем объект запроса
+    const userRegistrationRequest = {
+      email: email,
+      password: password,
+      firstName: firstName,
+      lastName: lastName,
+    };
+
+    // Вызываем метод register из DefaultApi
+    defaultApi.register(userRegistrationRequest, (error, data, response) => {
+      if (error) {
+        console.error("Ошибка при регистрации:", error);
+        alert("Не удалось зарегистрироваться. Попробуйте ещё раз.");
+      } else {
+        console.log("Пользователь успешно зарегистрирован:", data);
+        // При успешной регистрации перенаправляем, например, на /main
+        navigate("/main");
+      }
+    });
   };
 
   return (
@@ -47,10 +92,13 @@ const SignUpPage = () => {
                   id="name"
                   name="name"
                   type="text"
-                  autoComplete="name"
                   required
-                  className="appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   placeholder="Введите ваше полное имя"
+                  className="appearance-none rounded-md block w-full px-3 py-2 border
+                    border-gray-300 placeholder-gray-500 text-gray-900 
+                    focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
                 />
               </div>
             </div>
@@ -67,10 +115,13 @@ const SignUpPage = () => {
                   id="email"
                   name="email"
                   type="email"
-                  autoComplete="email"
                   required
-                  className="appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   placeholder="Введите ваш адрес электронной почты"
+                  className="appearance-none rounded-md block w-full px-3 py-2 border
+                    border-gray-300 placeholder-gray-500 text-gray-900
+                    focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
             </div>
@@ -87,10 +138,13 @@ const SignUpPage = () => {
                   id="password"
                   name="password"
                   type="password"
-                  autoComplete="new-password"
                   required
-                  className="appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   placeholder="Введите ваш пароль"
+                  className="appearance-none rounded-md block w-full px-3 py-2 border
+                    border-gray-300 placeholder-gray-500 text-gray-900 
+                    focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
             </div>
@@ -107,10 +161,13 @@ const SignUpPage = () => {
                   id="confirm_password"
                   name="confirm_password"
                   type="password"
-                  autoComplete="new-password"
                   required
-                  className="appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   placeholder="Подтвердите ваш пароль"
+                  className="appearance-none rounded-md block w-full px-3 py-2 border
+                    border-gray-300 placeholder-gray-500 text-gray-900
+                    focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                 />
               </div>
             </div>
@@ -118,7 +175,11 @@ const SignUpPage = () => {
             <div>
               <button
                 type="submit"
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="group relative w-full flex justify-center py-2 px-4
+                  border border-transparent text-sm font-medium rounded-md 
+                  text-white bg-indigo-600 hover:bg-indigo-700 
+                  focus:outline-none focus:ring-2 focus:ring-offset-2 
+                  focus:ring-indigo-500"
               >
                 Зарегистрироваться
               </button>
