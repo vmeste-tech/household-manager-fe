@@ -23,7 +23,7 @@ const TaskCard = ({ task, user, provided }) => (
     </div>
     <p className="text-gray-600 mb-2">{task.description}</p>
     <div className="flex justify-between text-sm text-gray-500">
-      <span>{task.dueDate}</span>
+      <span>{new Date(task.scheduledAt).toLocaleString()}</span>
       <span>{user ? user.name : "Не назначено"}</span>
     </div>
   </div>
@@ -31,15 +31,17 @@ const TaskCard = ({ task, user, provided }) => (
 
 TaskCard.propTypes = {
   task: PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired, // UUID в виде строки
     title: PropTypes.string.isRequired,
     description: PropTypes.string,
     status: PropTypes.string,
-    assignedTo: PropTypes.number,
-    dueDate: PropTypes.string.isRequired,
+    scheduledAt: PropTypes.string, // ZonedDateTime в виде строки
+    apartmentId: PropTypes.string, // UUID в виде строки
+    assignedTo: PropTypes.string, // UUID в виде строки
+    ruleId: PropTypes.string, // UUID в виде строки
   }).isRequired,
   user: PropTypes.shape({
-    id: PropTypes.number,
+    id: PropTypes.string,
     name: PropTypes.string,
     avatar: PropTypes.string,
   }),

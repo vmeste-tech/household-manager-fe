@@ -22,11 +22,7 @@ const KanbanColumn = ({ column, tasks, users }) => {
             {tasks.map((task, index) => {
               const user = users.find((u) => u.id === task.assignedTo);
               return (
-                <Draggable
-                  key={task.id}
-                  draggableId={task.id.toString()}
-                  index={index}
-                >
+                <Draggable key={task.id} draggableId={task.id} index={index}>
                   {(provided) => (
                     <TaskCard task={task} user={user} provided={provided} />
                   )}
@@ -45,17 +41,19 @@ KanbanColumn.propTypes = {
   column: PropTypes.string.isRequired,
   tasks: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.number.isRequired,
+      id: PropTypes.string.isRequired, // UUID в формате строки
       title: PropTypes.string.isRequired,
       description: PropTypes.string,
       status: PropTypes.string,
-      assignedTo: PropTypes.number,
-      dueDate: PropTypes.string.isRequired,
+      scheduledAt: PropTypes.string, // ZonedDateTime в формате строки
+      apartmentId: PropTypes.string, // UUID в формате строки
+      assignedTo: PropTypes.string, // UUID в формате строки
+      ruleId: PropTypes.string, // UUID в формате строки
     })
   ).isRequired,
   users: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.number.isRequired,
+      id: PropTypes.string.isRequired, // UUID в формате строки
       name: PropTypes.string.isRequired,
       avatar: PropTypes.string.isRequired,
     })

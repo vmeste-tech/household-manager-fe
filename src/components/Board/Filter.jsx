@@ -23,11 +23,11 @@ const Filter = ({ filter, onChange, users }) => (
 );
 
 Filter.propTypes = {
-  filter: PropTypes.string.isRequired,
+  filter: PropTypes.string.isRequired, // UUID в виде строки
   onChange: PropTypes.func.isRequired,
   users: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.number.isRequired,
+      id: PropTypes.string.isRequired, // UUID в виде строки
       name: PropTypes.string.isRequired,
       avatar: PropTypes.string,
     })
