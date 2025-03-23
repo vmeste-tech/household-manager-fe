@@ -2,7 +2,7 @@ import api from "./api";
 
 export const login = async (username, password) => {
   const response = await api.post(
-    "http://89.169.172.148:8082/api/v1/auth/login",
+    "http://user-service:8082/api/v1/auth/login",
     {
       username,
       password,
