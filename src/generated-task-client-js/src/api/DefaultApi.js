@@ -74,7 +74,7 @@ export default class DefaultApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = ChangeStatusResponse;
@@ -116,7 +116,7 @@ export default class DefaultApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = ['application/json'];
       let accepts = ['*/*'];
       let returnType = TaskDto;
@@ -158,12 +158,67 @@ export default class DefaultApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = [];
       let accepts = [];
       let returnType = null;
       return this.apiClient.callApi(
         '/api/v1/tasks/{taskId}', 'DELETE',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the getOverdueTasks operation.
+     * @callback module:api/DefaultApi~getOverdueTasksCallback
+     * @param {String} error Error message, if any.
+     * @param {Array.<module:model/TaskDto>} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * Получение списка просроченных задач
+     * Позволяет получить список просроченных задач
+     * @param {String} apartmentId 
+     * @param {Date} startDate 
+     * @param {Date} endDate 
+     * @param {module:api/DefaultApi~getOverdueTasksCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link Array.<module:model/TaskDto>}
+     */
+    getOverdueTasks(apartmentId, startDate, endDate, callback) {
+      let postBody = null;
+      // verify the required parameter 'apartmentId' is set
+      if (apartmentId === undefined || apartmentId === null) {
+        throw new Error("Missing the required parameter 'apartmentId' when calling getOverdueTasks");
+      }
+      // verify the required parameter 'startDate' is set
+      if (startDate === undefined || startDate === null) {
+        throw new Error("Missing the required parameter 'startDate' when calling getOverdueTasks");
+      }
+      // verify the required parameter 'endDate' is set
+      if (endDate === undefined || endDate === null) {
+        throw new Error("Missing the required parameter 'endDate' when calling getOverdueTasks");
+      }
+
+      let pathParams = {
+        'apartmentId': apartmentId
+      };
+      let queryParams = {
+        'startDate': startDate,
+        'endDate': endDate
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['bearerAuth'];
+      let contentTypes = [];
+      let accepts = ['*/*'];
+      let returnType = [TaskDto];
+      return this.apiClient.callApi(
+        '/api/v1/tasks/{apartmentId}/overdue', 'GET',
         pathParams, queryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, null, callback
       );
@@ -213,12 +268,12 @@ export default class DefaultApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = [TaskDto];
       return this.apiClient.callApi(
-        '/api/v1/tasks/{apartmentId}', 'GET',
+        '/api/v1/tasks/{apartmentId}/all', 'GET',
         pathParams, queryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, null, callback
       );

@@ -7,7 +7,8 @@ Method | HTTP request | Description
 [**changeStatus**](DefaultApi.md#changeStatus) | **PATCH** /api/v1/tasks/{taskId}/status | Изменение статуса задачи
 [**create**](DefaultApi.md#create) | **POST** /api/v1/tasks | Создание задачи
 [**deleteTask**](DefaultApi.md#deleteTask) | **DELETE** /api/v1/tasks/{taskId} | Удаление задачи
-[**getTasks**](DefaultApi.md#getTasks) | **GET** /api/v1/tasks/{apartmentId} | Получение списка задач
+[**getOverdueTasks**](DefaultApi.md#getOverdueTasks) | **GET** /api/v1/tasks/{apartmentId}/overdue | Получение списка просроченных задач
+[**getTasks**](DefaultApi.md#getTasks) | **GET** /api/v1/tasks/{apartmentId}/all | Получение списка задач
 
 
 
@@ -23,6 +24,10 @@ Method | HTTP request | Description
 
 ```javascript
 import OpenApiDefinition from 'open_api_definition';
+let defaultClient = OpenApiDefinition.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new OpenApiDefinition.DefaultApi();
 let taskId = "taskId_example"; // String | 
@@ -50,7 +55,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -70,6 +75,10 @@ No authorization required
 
 ```javascript
 import OpenApiDefinition from 'open_api_definition';
+let defaultClient = OpenApiDefinition.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new OpenApiDefinition.DefaultApi();
 let createTaskRequest = new OpenApiDefinition.CreateTaskRequest(); // CreateTaskRequest | 
@@ -95,7 +104,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -115,6 +124,10 @@ No authorization required
 
 ```javascript
 import OpenApiDefinition from 'open_api_definition';
+let defaultClient = OpenApiDefinition.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new OpenApiDefinition.DefaultApi();
 let taskId = "taskId_example"; // String | 
@@ -140,12 +153,65 @@ null (empty response body)
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
 - **Content-Type**: Not defined
 - **Accept**: Not defined
+
+
+## getOverdueTasks
+
+> [TaskDto] getOverdueTasks(apartmentId, startDate, endDate)
+
+Получение списка просроченных задач
+
+Позволяет получить список просроченных задач
+
+### Example
+
+```javascript
+import OpenApiDefinition from 'open_api_definition';
+let defaultClient = OpenApiDefinition.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
+
+let apiInstance = new OpenApiDefinition.DefaultApi();
+let apartmentId = "apartmentId_example"; // String | 
+let startDate = new Date("2013-10-20"); // Date | 
+let endDate = new Date("2013-10-20"); // Date | 
+apiInstance.getOverdueTasks(apartmentId, startDate, endDate, (error, data, response) => {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+});
+```
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **apartmentId** | **String**|  | 
+ **startDate** | **Date**|  | 
+ **endDate** | **Date**|  | 
+
+### Return type
+
+[**[TaskDto]**](TaskDto.md)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: */*
 
 
 ## getTasks
@@ -160,6 +226,10 @@ No authorization required
 
 ```javascript
 import OpenApiDefinition from 'open_api_definition';
+let defaultClient = OpenApiDefinition.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new OpenApiDefinition.DefaultApi();
 let apartmentId = "apartmentId_example"; // String | 
@@ -189,7 +259,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 

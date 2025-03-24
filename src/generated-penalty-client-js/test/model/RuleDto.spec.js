@@ -28,7 +28,7 @@
   var instance;
 
   beforeEach(function() {
-    instance = new OpenApiDefinition.TaskDto();
+    instance = new OpenApiDefinition.RuleDto();
   });
 
   var getProperty = function(object, getter, property) {
@@ -47,64 +47,52 @@
       object[property] = value;
   }
 
-  describe('TaskDto', function() {
-    it('should create an instance of TaskDto', function() {
-      // uncomment below and update the code to test TaskDto
-      //var instance = new OpenApiDefinition.TaskDto();
-      //expect(instance).to.be.a(OpenApiDefinition.TaskDto);
+  describe('RuleDto', function() {
+    it('should create an instance of RuleDto', function() {
+      // uncomment below and update the code to test RuleDto
+      //var instance = new OpenApiDefinition.RuleDto();
+      //expect(instance).to.be.a(OpenApiDefinition.RuleDto);
     });
 
     it('should have the property id (base name: "id")', function() {
       // uncomment below and update the code to test the property id
-      //var instance = new OpenApiDefinition.TaskDto();
+      //var instance = new OpenApiDefinition.RuleDto();
       //expect(instance).to.be();
     });
 
-    it('should have the property title (base name: "title")', function() {
-      // uncomment below and update the code to test the property title
-      //var instance = new OpenApiDefinition.TaskDto();
+    it('should have the property name (base name: "name")', function() {
+      // uncomment below and update the code to test the property name
+      //var instance = new OpenApiDefinition.RuleDto();
       //expect(instance).to.be();
     });
 
     it('should have the property description (base name: "description")', function() {
       // uncomment below and update the code to test the property description
-      //var instance = new OpenApiDefinition.TaskDto();
+      //var instance = new OpenApiDefinition.RuleDto();
       //expect(instance).to.be();
     });
 
     it('should have the property status (base name: "status")', function() {
       // uncomment below and update the code to test the property status
-      //var instance = new OpenApiDefinition.TaskDto();
+      //var instance = new OpenApiDefinition.RuleDto();
       //expect(instance).to.be();
     });
 
-    it('should have the property scheduledAt (base name: "scheduledAt")', function() {
-      // uncomment below and update the code to test the property scheduledAt
-      //var instance = new OpenApiDefinition.TaskDto();
+    it('should have the property penaltyAmount (base name: "penaltyAmount")', function() {
+      // uncomment below and update the code to test the property penaltyAmount
+      //var instance = new OpenApiDefinition.RuleDto();
       //expect(instance).to.be();
     });
 
-    it('should have the property apartmentId (base name: "apartmentId")', function() {
-      // uncomment below and update the code to test the property apartmentId
-      //var instance = new OpenApiDefinition.TaskDto();
+    it('should have the property cronExpression (base name: "cronExpression")', function() {
+      // uncomment below and update the code to test the property cronExpression
+      //var instance = new OpenApiDefinition.RuleDto();
       //expect(instance).to.be();
     });
 
-    it('should have the property assignedTo (base name: "assignedTo")', function() {
-      // uncomment below and update the code to test the property assignedTo
-      //var instance = new OpenApiDefinition.TaskDto();
-      //expect(instance).to.be();
-    });
-
-    it('should have the property ruleId (base name: "ruleId")', function() {
-      // uncomment below and update the code to test the property ruleId
-      //var instance = new OpenApiDefinition.TaskDto();
-      //expect(instance).to.be();
-    });
-
-    it('should have the property isPenaltyCreated (base name: "isPenaltyCreated")', function() {
-      // uncomment below and update the code to test the property isPenaltyCreated
-      //var instance = new OpenApiDefinition.TaskDto();
+    it('should have the property timeZone (base name: "timeZone")', function() {
+      // uncomment below and update the code to test the property timeZone
+      //var instance = new OpenApiDefinition.RuleDto();
       //expect(instance).to.be();
     });
 

@@ -1,5 +1,6 @@
 .babelrc
 .gitignore
+.openapi-generator-ignore
 .travis.yml
 README.md
 docs/ChangeStatusResponse.md
@@ -15,3 +16,7 @@ src/index.js
 src/model/ChangeStatusResponse.js
 src/model/CreateTaskRequest.js
 src/model/TaskDto.js
+test/api/DefaultApi.spec.js
+test/model/ChangeStatusResponse.spec.js
+test/model/CreateTaskRequest.spec.js
+test/model/TaskDto.spec.js

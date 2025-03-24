@@ -1,32 +1,62 @@
+import { useState, useEffect } from "react";
 import DashboardHeader from "../../components/Dashboard/DashboardHeader";
 import PenaltyTable from "../../components/Penalty/PenaltyTable";
 import StatCardsGrid from "../../components/Tasks/TaskStats";
 import Heading from "../../components/Universal/Heading";
+import DefaultApi from "../../generated-penalty-client-js/src/api/DefaultApi";
+import penaltyApiClient from "../../api/setupPenaltiesApi";
 
-function PenaltyPage() {
+const PenaltyPage = () => {
+  const [penalties, setPenalties] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const defaultApi = new DefaultApi(penaltyApiClient);
+    const apartmentId = localStorage.getItem("apartmentId");
+
+    if (!apartmentId) {
+      console.error("Apartment ID not found in localStorage");
+      setLoading(false);
+      return;
+    }
+
+    defaultApi.getApartmentPenalties(apartmentId, {}, (error, data) => {
+      setLoading(false);
+      if (error) {
+        console.error("Ошибка получения штрафов:", error);
+      } else {
+        setPenalties(data);
+      }
+    });
+  }, []);
+
+  if (loading) {
+    return <div>Загрузка...</div>;
+  }
+
   const sampleCardsData = [
     {
       title: "Всего штрафов",
-      value: "53",
-      changeText: "3 добавлено",
+      value: penalties.length,
+      changeText: `${penalties.length} штрафов на текущий момент`,
       isIncrease: false,
     },
     {
       title: "Оплаченные штрафы",
-      value: "51",
-      changeText: "2 новых оплачено",
+      value: penalties.filter((p) => p.status === "PAID").length,
+      changeText: "Оплачено",
       isIncrease: true,
     },
     {
       title: "Неоплаченные штрафы",
-      value: "4",
-      changeText: "1 новый штраф",
+      value: penalties.filter((p) => p.status === "UNPAID").length,
+      changeText: "Неоплачено",
       isIncrease: false,
     },
     {
       title: "Общая сумма штрафов",
-      value: "12400₽",
-      changeText: "новые штрафы на 400₽",
+      value: `${penalties.reduce((acc, p) => acc + p.fineAmount, 0)}₽`,
+      changeText: "Общая сумма",
       isIncrease: true,
     },
   ];
@@ -38,10 +68,10 @@ function PenaltyPage() {
         <Heading>Статистика выполнения</Heading>
         <StatCardsGrid cardsData={sampleCardsData} />
         <Heading>История штрафов</Heading>
-        <PenaltyTable />
+        <PenaltyTable penalties={penalties} />
       </div>
     </div>
   );
-}
+};
 
 export default PenaltyPage;

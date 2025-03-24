@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import Dashboard from "../../components/Dashboard/Dashboard";
 import DefaultApi from "../../generated-client-js/src/api/DefaultApi";
-import apiClient from "../../api/setupApi";
+import userApiClient from "../../api/setupUserApi";
 
 const Main = () => {
   const [apartment, setApartment] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const defaultApi = new DefaultApi(apiClient);
+    const defaultApi = new DefaultApi(userApiClient);
     defaultApi.findApartmentByUser((error, data) => {
       setLoading(false);
       if (error) {

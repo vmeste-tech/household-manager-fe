@@ -107,7 +107,7 @@ var bearerAuth = defaultClient.authentications['bearerAuth'];
 bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 var api = new OpenApiDefinition.DefaultApi()
-var taskId = "taskId_example"; // {String} 
+var penaltyId = "penaltyId_example"; // {String} 
 var status = "status_example"; // {String} 
 var callback = function(error, data, response) {
   if (error) {
@@ -116,28 +116,30 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.changeStatus(taskId, status, callback);
+api.changeStatus(penaltyId, status, callback);
 
 ```
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *http://localhost:8083*
+All URIs are relative to *http://localhost:8085*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*OpenApiDefinition.DefaultApi* | [**changeStatus**](docs/DefaultApi.md#changeStatus) | **PATCH** /api/v1/tasks/{taskId}/status | Изменение статуса задачи
-*OpenApiDefinition.DefaultApi* | [**create**](docs/DefaultApi.md#create) | **POST** /api/v1/tasks | Создание задачи
-*OpenApiDefinition.DefaultApi* | [**deleteTask**](docs/DefaultApi.md#deleteTask) | **DELETE** /api/v1/tasks/{taskId} | Удаление задачи
-*OpenApiDefinition.DefaultApi* | [**getOverdueTasks**](docs/DefaultApi.md#getOverdueTasks) | **GET** /api/v1/tasks/{apartmentId}/overdue | Получение списка просроченных задач
-*OpenApiDefinition.DefaultApi* | [**getTasks**](docs/DefaultApi.md#getTasks) | **GET** /api/v1/tasks/{apartmentId}/all | Получение списка задач
+*OpenApiDefinition.DefaultApi* | [**changeStatus**](docs/DefaultApi.md#changeStatus) | **PATCH** /api/v1/penalties/{penaltyId} | Изменение статуса штрафа
+*OpenApiDefinition.DefaultApi* | [**createPenalty**](docs/DefaultApi.md#createPenalty) | **POST** /api/v1/penalties | Создание штрафа
+*OpenApiDefinition.DefaultApi* | [**deletePenalty**](docs/DefaultApi.md#deletePenalty) | **DELETE** /api/v1/penalties/{penaltyId} | Удаление штрафа
+*OpenApiDefinition.DefaultApi* | [**getApartmentPenalties**](docs/DefaultApi.md#getApartmentPenalties) | **GET** /api/v1/penalties/{apartmentId} | Получение штрафов по квартире
 
 
 ## Documentation for Models
 
- - [OpenApiDefinition.ChangeStatusResponse](docs/ChangeStatusResponse.md)
- - [OpenApiDefinition.CreateTaskRequest](docs/CreateTaskRequest.md)
- - [OpenApiDefinition.TaskDto](docs/TaskDto.md)
+ - [OpenApiDefinition.CreatePenaltyRequest](docs/CreatePenaltyRequest.md)
+ - [OpenApiDefinition.PenaltyDto](docs/PenaltyDto.md)
+ - [OpenApiDefinition.PenaltyResponse](docs/PenaltyResponse.md)
+ - [OpenApiDefinition.Response](docs/Response.md)
+ - [OpenApiDefinition.RuleDto](docs/RuleDto.md)
+ - [OpenApiDefinition.UserInfoDto](docs/UserInfoDto.md)
 
 
 ## Documentation for Authorization

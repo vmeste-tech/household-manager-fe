@@ -71,6 +71,9 @@ class TaskDto {
             if (data.hasOwnProperty('ruleId')) {
                 obj['ruleId'] = ApiClient.convertToType(data['ruleId'], 'String');
             }
+            if (data.hasOwnProperty('isPenaltyCreated')) {
+                obj['isPenaltyCreated'] = ApiClient.convertToType(data['isPenaltyCreated'], 'Boolean');
+            }
         }
         return obj;
     }
@@ -157,6 +160,11 @@ TaskDto.prototype['assignedTo'] = undefined;
  * @member {String} ruleId
  */
 TaskDto.prototype['ruleId'] = undefined;
+
+/**
+ * @member {Boolean} isPenaltyCreated
+ */
+TaskDto.prototype['isPenaltyCreated'] = undefined;
 
 
 

@@ -1,97 +1,32 @@
+import PropTypes from "prop-types";
 import { useState } from "react";
 import Pagination from "../Universal/Pagination";
 
-const violations = [
-  {
-    id: 1,
-    assignedTo: "Егор",
-    violation: "Нарушение регламента",
-    date: "12.03.2025",
-    amount: "100",
-    status: "Оплачен",
-  },
-  {
-    id: 2,
-    assignedTo: "Алексей",
-    violation: "Просрочка платежа",
-    date: "15.03.2025",
-    amount: "200",
-    status: "Не оплачен",
-  },
-  {
-    id: 3,
-    assignedTo: "Тимур",
-    violation: "Невыполнение обязанностей",
-    date: "18.03.2025",
-    amount: "150",
-    status: "Оплачен",
-  },
-  {
-    id: 4,
-    assignedTo: "Егор",
-    violation: "Нарушение правил",
-    date: "20.03.2025",
-    amount: "120",
-    status: "Не оплачен",
-  },
-  {
-    id: 5,
-    assignedTo: "Алексей",
-    violation: "Задержка платежа",
-    date: "22.03.2025",
-    amount: "180",
-    status: "Оплачен",
-  },
-  {
-    id: 6,
-    assignedTo: "Тимур",
-    violation: "Нарушение регламента",
-    date: "25.03.2025",
-    amount: "130",
-    status: "Не оплачен",
-  },
-  {
-    id: 7,
-    assignedTo: "Егор",
-    violation: "Невыполнение обязанностей",
-    date: "28.03.2025",
-    amount: "160",
-    status: "Оплачен",
-  },
-  {
-    id: 8,
-    assignedTo: "Алексей",
-    violation: "Просрочка платежа",
-    date: "30.03.2025",
-    amount: "210",
-    status: "Не оплачен",
-  },
-  {
-    id: 9,
-    assignedTo: "Тимур",
-    violation: "Нарушение правил",
-    date: "02.04.2025",
-    amount: "140",
-    status: "Оплачен",
-  },
-  {
-    id: 10,
-    assignedTo: "Егор",
-    violation: "Задержка платежа",
-    date: "05.04.2025",
-    amount: "170",
-    status: "Не оплачен",
-  },
-];
+const transformPenalties = (backendData) => {
+  return backendData.map((item) => ({
+    id: item.id,
+    assignedTo: `${item.user.name} ${item.user.lastname}`,
+    violation: item.rule.name,
+    date: new Date(item.assignedDate).toLocaleDateString("ru-RU"),
+    amount: item.fineAmount || "0",
+    status: item.status === "UNPAID" ? "Не оплачен" : "Оплачен",
+  }));
+};
 
-const PenaltyTable = () => {
+const PenaltyTable = ({ penalties }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-  const totalPages = Math.ceil(violations.length / itemsPerPage);
+
+  // Преобразуем данные с помощью функции transformPenalties
+  const transformedPenalties = transformPenalties(penalties);
+  const totalPages = Math.ceil(transformedPenalties.length / itemsPerPage);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentViolations = violations.slice(indexOfFirstItem, indexOfLastItem);
+  const currentViolations = transformedPenalties.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
 
   return (
     <div>
@@ -155,7 +90,6 @@ const PenaltyTable = () => {
           </tbody>
         </table>
       </div>
-      {/* Пагинация вне таблицы */}
       <div className="mt-2">
         <Pagination
           currentPage={currentPage}
@@ -165,6 +99,43 @@ const PenaltyTable = () => {
       </div>
     </div>
   );
+};
+
+// Типизация пропсов с использованием PropTypes
+PenaltyTable.propTypes = {
+  penalties: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      user: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+        lastname: PropTypes.string.isRequired,
+        photoUrl: PropTypes.string,
+        type: PropTypes.string.isRequired,
+        joinedAt: PropTypes.oneOfType([
+          PropTypes.string,
+          PropTypes.instanceOf(Date),
+        ]).isRequired,
+        status: PropTypes.string.isRequired,
+      }).isRequired,
+      rule: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+        description: PropTypes.string.isRequired,
+        status: PropTypes.string.isRequired,
+        penaltyAmount: PropTypes.number.isRequired,
+        cronExpression: PropTypes.string.isRequired,
+        timeZone: PropTypes.string.isRequired,
+      }).isRequired,
+      fineAmount: PropTypes.number.isRequired,
+      assignedDate: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.instanceOf(Date),
+      ]).isRequired,
+
+      status: PropTypes.string.isRequired,
+    })
+  ).isRequired,
 };
 
 export default PenaltyTable;

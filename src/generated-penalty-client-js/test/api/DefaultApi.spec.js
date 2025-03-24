@@ -58,40 +58,30 @@
         done();
       });
     });
-    describe('create', function() {
-      it('should call create successfully', function(done) {
-        //uncomment below and update the code to test create
-        //instance.create(function(error) {
+    describe('createPenalty', function() {
+      it('should call createPenalty successfully', function(done) {
+        //uncomment below and update the code to test createPenalty
+        //instance.createPenalty(function(error) {
         //  if (error) throw error;
         //expect().to.be();
         //});
         done();
       });
     });
-    describe('deleteTask', function() {
-      it('should call deleteTask successfully', function(done) {
-        //uncomment below and update the code to test deleteTask
-        //instance.deleteTask(function(error) {
+    describe('deletePenalty', function() {
+      it('should call deletePenalty successfully', function(done) {
+        //uncomment below and update the code to test deletePenalty
+        //instance.deletePenalty(function(error) {
         //  if (error) throw error;
         //expect().to.be();
         //});
         done();
       });
     });
-    describe('getOverdueTasks', function() {
-      it('should call getOverdueTasks successfully', function(done) {
-        //uncomment below and update the code to test getOverdueTasks
-        //instance.getOverdueTasks(function(error) {
-        //  if (error) throw error;
-        //expect().to.be();
-        //});
-        done();
-      });
-    });
-    describe('getTasks', function() {
-      it('should call getTasks successfully', function(done) {
-        //uncomment below and update the code to test getTasks
-        //instance.getTasks(function(error) {
+    describe('getApartmentPenalties', function() {
+      it('should call getApartmentPenalties successfully', function(done) {
+        //uncomment below and update the code to test getApartmentPenalties
+        //instance.getApartmentPenalties(function(error) {
         //  if (error) throw error;
         //expect().to.be();
         //});

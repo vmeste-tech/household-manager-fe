@@ -4,7 +4,7 @@ import FileDropZone from "./FileDropZone";
 import Modal from "../Universal/Modal";
 
 import DefaultApi from "../../generated-client-js/src/api/DefaultApi";
-import apiClient from "../../api/setupApi";
+import userApiClient from "../../api/setupUserApi";
 
 export default function AccountSettings() {
   const [showFileDropZone, setShowFileDropZone] = useState(false);
@@ -12,9 +12,9 @@ export default function AccountSettings() {
   const [loading, setLoading] = useState(true); // состояние загрузки
 
   useEffect(() => {
-    const defaultApi = new DefaultApi(apiClient);
+    const defaultApi = new DefaultApi(userApiClient);
 
-    defaultApi.getUser((error, data, response) => {
+    defaultApi.getUser((error, data) => {
       setLoading(false);
       if (error) {
         console.error("Ошибка получения данных пользователя:", error);

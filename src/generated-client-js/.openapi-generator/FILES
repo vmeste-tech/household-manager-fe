@@ -1,5 +1,6 @@
 .babelrc
 .gitignore
+.openapi-generator-ignore
 .travis.yml
 README.md
 docs/AddToApartmentResponse.md
@@ -41,3 +42,20 @@ src/model/UpdateApartmentResponse.js
 src/model/UserInfoDto.js
 src/model/UserRegistrationRequest.js
 src/model/UserResponse.js
+test/api/DefaultApi.spec.js
+test/model/AddToApartmentResponse.spec.js
+test/model/ApartmentInfo.spec.js
+test/model/AuthRequest.spec.js
+test/model/ChangePasswordRequest.spec.js
+test/model/CreateApartmentRequest.spec.js
+test/model/CreateApartmentResponse.spec.js
+test/model/GetApartmentResponse.spec.js
+test/model/GetUserResponse.spec.js
+test/model/RefreshTokenRequest.spec.js
+test/model/Response.spec.js
+test/model/TokenResponse.spec.js
+test/model/UpdateApartmentRequest.spec.js
+test/model/UpdateApartmentResponse.spec.js
+test/model/UserInfoDto.spec.js
+test/model/UserRegistrationRequest.spec.js
+test/model/UserResponse.spec.js
