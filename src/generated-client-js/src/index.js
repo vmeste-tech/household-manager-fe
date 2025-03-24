@@ -22,6 +22,7 @@ import CreateApartmentResponse from './model/CreateApartmentResponse';
 import GetApartmentResponse from './model/GetApartmentResponse';
 import GetUserResponse from './model/GetUserResponse';
 import RefreshTokenRequest from './model/RefreshTokenRequest';
+import Response from './model/Response';
 import TokenResponse from './model/TokenResponse';
 import UpdateApartmentRequest from './model/UpdateApartmentRequest';
 import UpdateApartmentResponse from './model/UpdateApartmentResponse';
@@ -122,6 +123,12 @@ export {
      * @property {module:model/RefreshTokenRequest}
      */
     RefreshTokenRequest,
+
+    /**
+     * The Response model constructor.
+     * @property {module:model/Response}
+     */
+    Response,
 
     /**
      * The TokenResponse model constructor.

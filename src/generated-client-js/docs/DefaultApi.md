@@ -9,6 +9,7 @@ Method | HTTP request | Description
 [**createApartment**](DefaultApi.md#createApartment) | **POST** /api/v1/apartments | Создание квартиры
 [**deleteApartment**](DefaultApi.md#deleteApartment) | **DELETE** /api/v1/apartments/{apartmentId} | Удаление квартиры
 [**deleteFromApartment**](DefaultApi.md#deleteFromApartment) | **DELETE** /api/v1/apartments/{apartmentId}/users/{userId} | Удаление пользователя из квартиры
+[**deleteUser**](DefaultApi.md#deleteUser) | **DELETE** /api/v1/users/{userId} | 
 [**findApartmentByUser**](DefaultApi.md#findApartmentByUser) | **GET** /api/v1/apartments/by-user | Получение квартиры по JWT токену пользователя
 [**getApartment**](DefaultApi.md#getApartment) | **GET** /api/v1/apartments/{apartmentId} | Получение квартиры идентификатору
 [**getApartmentUsers**](DefaultApi.md#getApartmentUsers) | **GET** /api/v1/apartments/{apartmentId}/users | Получение пользователей, проживающих в квартире
@@ -32,6 +33,10 @@ Method | HTTP request | Description
 
 ```javascript
 import OpenApiDefinition from 'open_api_definition';
+let defaultClient = OpenApiDefinition.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new OpenApiDefinition.DefaultApi();
 let apartmentId = "apartmentId_example"; // String | 
@@ -59,7 +64,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -111,7 +116,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: application/json
-- **Accept**: Not defined
+- **Accept**: */*
 
 
 ## createApartment
@@ -126,6 +131,10 @@ No authorization required
 
 ```javascript
 import OpenApiDefinition from 'open_api_definition';
+let defaultClient = OpenApiDefinition.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new OpenApiDefinition.DefaultApi();
 let createApartmentRequest = new OpenApiDefinition.CreateApartmentRequest(); // CreateApartmentRequest | 
@@ -151,7 +160,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -171,6 +180,10 @@ No authorization required
 
 ```javascript
 import OpenApiDefinition from 'open_api_definition';
+let defaultClient = OpenApiDefinition.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new OpenApiDefinition.DefaultApi();
 let apartmentId = "apartmentId_example"; // String | 
@@ -196,12 +209,12 @@ null (empty response body)
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: */*
 
 
 ## deleteFromApartment
@@ -216,6 +229,10 @@ No authorization required
 
 ```javascript
 import OpenApiDefinition from 'open_api_definition';
+let defaultClient = OpenApiDefinition.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new OpenApiDefinition.DefaultApi();
 let apartmentId = "apartmentId_example"; // String | 
@@ -243,12 +260,55 @@ null (empty response body)
 
 ### Authorization
 
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: */*
+
+
+## deleteUser
+
+> deleteUser(userId)
+
+
+
+### Example
+
+```javascript
+import OpenApiDefinition from 'open_api_definition';
+
+let apiInstance = new OpenApiDefinition.DefaultApi();
+let userId = "userId_example"; // String | 
+apiInstance.deleteUser(userId, (error, data, response) => {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully.');
+  }
+});
+```
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **userId** | **String**|  | 
+
+### Return type
+
+null (empty response body)
+
+### Authorization
+
 No authorization required
 
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: */*
 
 
 ## findApartmentByUser
@@ -263,6 +323,10 @@ No authorization required
 
 ```javascript
 import OpenApiDefinition from 'open_api_definition';
+let defaultClient = OpenApiDefinition.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new OpenApiDefinition.DefaultApi();
 apiInstance.findApartmentByUser((error, data, response) => {
@@ -284,7 +348,7 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -304,6 +368,10 @@ No authorization required
 
 ```javascript
 import OpenApiDefinition from 'open_api_definition';
+let defaultClient = OpenApiDefinition.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new OpenApiDefinition.DefaultApi();
 let apartmentId = "apartmentId_example"; // String | 
@@ -329,7 +397,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -349,6 +417,10 @@ No authorization required
 
 ```javascript
 import OpenApiDefinition from 'open_api_definition';
+let defaultClient = OpenApiDefinition.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new OpenApiDefinition.DefaultApi();
 let apartmentId = "apartmentId_example"; // String | 
@@ -374,7 +446,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -570,6 +642,10 @@ No authorization required
 
 ```javascript
 import OpenApiDefinition from 'open_api_definition';
+let defaultClient = OpenApiDefinition.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new OpenApiDefinition.DefaultApi();
 let apartmentId = "apartmentId_example"; // String | 
@@ -597,7 +673,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 

@@ -128,6 +128,48 @@ export default class DefaultApi {
     }
 
     /**
+     * Callback function to receive the result of the deleteTask operation.
+     * @callback module:api/DefaultApi~deleteTaskCallback
+     * @param {String} error Error message, if any.
+     * @param data This operation does not return a value.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * Удаление задачи
+     * Позволяет удалить задачу
+     * @param {String} taskId 
+     * @param {module:api/DefaultApi~deleteTaskCallback} callback The callback function, accepting three arguments: error, data, response
+     */
+    deleteTask(taskId, callback) {
+      let postBody = null;
+      // verify the required parameter 'taskId' is set
+      if (taskId === undefined || taskId === null) {
+        throw new Error("Missing the required parameter 'taskId' when calling deleteTask");
+      }
+
+      let pathParams = {
+        'taskId': taskId
+      };
+      let queryParams = {
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = [];
+      let contentTypes = [];
+      let accepts = [];
+      let returnType = null;
+      return this.apiClient.callApi(
+        '/api/v1/tasks/{taskId}', 'DELETE',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
      * Callback function to receive the result of the getTasks operation.
      * @callback module:api/DefaultApi~getTasksCallback
      * @param {String} error Error message, if any.

@@ -22,6 +22,7 @@ import CreateApartmentResponse from '../model/CreateApartmentResponse';
 import GetApartmentResponse from '../model/GetApartmentResponse';
 import GetUserResponse from '../model/GetUserResponse';
 import RefreshTokenRequest from '../model/RefreshTokenRequest';
+import Response from '../model/Response';
 import TokenResponse from '../model/TokenResponse';
 import UpdateApartmentRequest from '../model/UpdateApartmentRequest';
 import UpdateApartmentResponse from '../model/UpdateApartmentResponse';
@@ -85,7 +86,7 @@ export default class DefaultApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = AddToApartmentResponse;
@@ -134,7 +135,7 @@ export default class DefaultApi {
 
       let authNames = [];
       let contentTypes = ['application/json'];
-      let accepts = [];
+      let accepts = ['*/*'];
       let returnType = null;
       return this.apiClient.callApi(
         '/api/v1/users/{userId}/password', 'PATCH',
@@ -174,7 +175,7 @@ export default class DefaultApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = ['application/json'];
       let accepts = ['*/*'];
       let returnType = CreateApartmentResponse;
@@ -216,9 +217,9 @@ export default class DefaultApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = [];
-      let accepts = [];
+      let accepts = ['*/*'];
       let returnType = null;
       return this.apiClient.callApi(
         '/api/v1/apartments/{apartmentId}', 'DELETE',
@@ -264,12 +265,52 @@ export default class DefaultApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = [];
-      let accepts = [];
+      let accepts = ['*/*'];
       let returnType = null;
       return this.apiClient.callApi(
         '/api/v1/apartments/{apartmentId}/users/{userId}', 'DELETE',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the deleteUser operation.
+     * @callback module:api/DefaultApi~deleteUserCallback
+     * @param {String} error Error message, if any.
+     * @param data This operation does not return a value.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {String} userId 
+     * @param {module:api/DefaultApi~deleteUserCallback} callback The callback function, accepting three arguments: error, data, response
+     */
+    deleteUser(userId, callback) {
+      let postBody = null;
+      // verify the required parameter 'userId' is set
+      if (userId === undefined || userId === null) {
+        throw new Error("Missing the required parameter 'userId' when calling deleteUser");
+      }
+
+      let pathParams = {
+        'userId': userId
+      };
+      let queryParams = {
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = [];
+      let contentTypes = [];
+      let accepts = ['*/*'];
+      let returnType = null;
+      return this.apiClient.callApi(
+        '/api/v1/users/{userId}', 'DELETE',
         pathParams, queryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, null, callback
       );
@@ -301,7 +342,7 @@ export default class DefaultApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = ApartmentInfo;
@@ -344,7 +385,7 @@ export default class DefaultApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = GetApartmentResponse;
@@ -387,7 +428,7 @@ export default class DefaultApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = [GetUserResponse];
@@ -598,7 +639,7 @@ export default class DefaultApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = ['application/json'];
       let accepts = ['*/*'];
       let returnType = UpdateApartmentResponse;

@@ -12,6 +12,7 @@ docs/DefaultApi.md
 docs/GetApartmentResponse.md
 docs/GetUserResponse.md
 docs/RefreshTokenRequest.md
+docs/Response.md
 docs/TokenResponse.md
 docs/UpdateApartmentRequest.md
 docs/UpdateApartmentResponse.md
@@ -33,6 +34,7 @@ src/model/CreateApartmentResponse.js
 src/model/GetApartmentResponse.js
 src/model/GetUserResponse.js
 src/model/RefreshTokenRequest.js
+src/model/Response.js
 src/model/TokenResponse.js
 src/model/UpdateApartmentRequest.js
 src/model/UpdateApartmentResponse.js

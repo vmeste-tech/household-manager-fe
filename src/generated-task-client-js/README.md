@@ -124,6 +124,7 @@ Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *OpenApiDefinition.DefaultApi* | [**changeStatus**](docs/DefaultApi.md#changeStatus) | **PATCH** /api/v1/tasks/{taskId}/status | Изменение статуса задачи
 *OpenApiDefinition.DefaultApi* | [**create**](docs/DefaultApi.md#create) | **POST** /api/v1/tasks | Создание задачи
+*OpenApiDefinition.DefaultApi* | [**deleteTask**](docs/DefaultApi.md#deleteTask) | **DELETE** /api/v1/tasks/{taskId} | Удаление задачи
 *OpenApiDefinition.DefaultApi* | [**getTasks**](docs/DefaultApi.md#getTasks) | **GET** /api/v1/tasks/{apartmentId} | Получение списка задач
 
 

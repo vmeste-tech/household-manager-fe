@@ -25,7 +25,7 @@ const SignInPage = () => {
       password: password,
     };
 
-    defaultApi.login(authRequest, (error, data, response) => {
+    defaultApi.login(authRequest, (error, data) => {
       if (error) {
         console.error("Ошибка аутентификации:", error);
         alert("Ошибка при входе. Проверьте введенные данные.");

@@ -101,6 +101,10 @@ Please follow the [installation](#installation) instruction and execute the foll
 ```javascript
 var OpenApiDefinition = require('open_api_definition');
 
+var defaultClient = OpenApiDefinition.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+var bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 var api = new OpenApiDefinition.DefaultApi()
 var apartmentId = "apartmentId_example"; // {String} 
@@ -127,6 +131,7 @@ Class | Method | HTTP request | Description
 *OpenApiDefinition.DefaultApi* | [**createApartment**](docs/DefaultApi.md#createApartment) | **POST** /api/v1/apartments | Создание квартиры
 *OpenApiDefinition.DefaultApi* | [**deleteApartment**](docs/DefaultApi.md#deleteApartment) | **DELETE** /api/v1/apartments/{apartmentId} | Удаление квартиры
 *OpenApiDefinition.DefaultApi* | [**deleteFromApartment**](docs/DefaultApi.md#deleteFromApartment) | **DELETE** /api/v1/apartments/{apartmentId}/users/{userId} | Удаление пользователя из квартиры
+*OpenApiDefinition.DefaultApi* | [**deleteUser**](docs/DefaultApi.md#deleteUser) | **DELETE** /api/v1/users/{userId} | 
 *OpenApiDefinition.DefaultApi* | [**findApartmentByUser**](docs/DefaultApi.md#findApartmentByUser) | **GET** /api/v1/apartments/by-user | Получение квартиры по JWT токену пользователя
 *OpenApiDefinition.DefaultApi* | [**getApartment**](docs/DefaultApi.md#getApartment) | **GET** /api/v1/apartments/{apartmentId} | Получение квартиры идентификатору
 *OpenApiDefinition.DefaultApi* | [**getApartmentUsers**](docs/DefaultApi.md#getApartmentUsers) | **GET** /api/v1/apartments/{apartmentId}/users | Получение пользователей, проживающих в квартире
@@ -148,6 +153,7 @@ Class | Method | HTTP request | Description
  - [OpenApiDefinition.GetApartmentResponse](docs/GetApartmentResponse.md)
  - [OpenApiDefinition.GetUserResponse](docs/GetUserResponse.md)
  - [OpenApiDefinition.RefreshTokenRequest](docs/RefreshTokenRequest.md)
+ - [OpenApiDefinition.Response](docs/Response.md)
  - [OpenApiDefinition.TokenResponse](docs/TokenResponse.md)
  - [OpenApiDefinition.UpdateApartmentRequest](docs/UpdateApartmentRequest.md)
  - [OpenApiDefinition.UpdateApartmentResponse](docs/UpdateApartmentResponse.md)
@@ -158,5 +164,9 @@ Class | Method | HTTP request | Description
 
 ## Documentation for Authorization
 
-Endpoints do not require authorization.
+
+Authentication schemes defined for the API:
+### bearerAuth
+
+- **Type**: Bearer authentication (JWT)
 
