@@ -107,7 +107,7 @@ var bearerAuth = defaultClient.authentications['bearerAuth'];
 bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 var api = new OpenApiDefinition.DefaultApi()
-var createExpenseRequest = new OpenApiDefinition.CreateExpenseRequest(); // {CreateExpenseRequest} 
+var expenseItemCreateDto = new OpenApiDefinition.ExpenseItemCreateDto(); // {ExpenseItemCreateDto} 
 var callback = function(error, data, response) {
   if (error) {
     console.error(error);
@@ -115,7 +115,7 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.createExpenses(createExpenseRequest, callback);
+api.createExpenseItem(expenseItemCreateDto, callback);
 
 ```
 
@@ -125,17 +125,25 @@ All URIs are relative to *http://localhost:8086*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*OpenApiDefinition.DefaultApi* | [**createExpenseItem**](docs/DefaultApi.md#createExpenseItem) | **POST** /api/v1/expense-items | Создать новую статью затрат
 *OpenApiDefinition.DefaultApi* | [**createExpenses**](docs/DefaultApi.md#createExpenses) | **POST** /api/v1/expenses | Создание нового расхода
+*OpenApiDefinition.DefaultApi* | [**deleteExpenseItem**](docs/DefaultApi.md#deleteExpenseItem) | **DELETE** /api/v1/expense-items/{id} | Удалить статью затрат
+*OpenApiDefinition.DefaultApi* | [**getApartmentExpenseItem**](docs/DefaultApi.md#getApartmentExpenseItem) | **GET** /api/v1/expense-items/{apartmentId} | Получить статьи затрат по квартире
 *OpenApiDefinition.DefaultApi* | [**getDebts**](docs/DefaultApi.md#getDebts) | **GET** /api/v1/finance/debts/{apartmentId} | Получение списка долгов
 *OpenApiDefinition.DefaultApi* | [**getExpenses**](docs/DefaultApi.md#getExpenses) | **GET** /api/v1/expenses | Получение расходов за указанный период
 *OpenApiDefinition.DefaultApi* | [**getUserFinances**](docs/DefaultApi.md#getUserFinances) | **GET** /api/v1/finance/{apartmentId} | Получение финансов пользователей
 *OpenApiDefinition.DefaultApi* | [**payDebt**](docs/DefaultApi.md#payDebt) | **PATCH** /api/v1/finance/debts/{debtId}/pay | Оплата долга
+*OpenApiDefinition.DefaultApi* | [**updateExpenseItem**](docs/DefaultApi.md#updateExpenseItem) | **PUT** /api/v1/expense-items/{id} | Обновить статью затрат
 
 
 ## Documentation for Models
 
  - [OpenApiDefinition.CreateExpenseRequest](docs/CreateExpenseRequest.md)
  - [OpenApiDefinition.DebtDto](docs/DebtDto.md)
+ - [OpenApiDefinition.ErrorResponse](docs/ErrorResponse.md)
+ - [OpenApiDefinition.ExpenseItemCreateDto](docs/ExpenseItemCreateDto.md)
+ - [OpenApiDefinition.ExpenseItemDto](docs/ExpenseItemDto.md)
+ - [OpenApiDefinition.ExpenseItemUpdateDto](docs/ExpenseItemUpdateDto.md)
  - [OpenApiDefinition.ExpensesDto](docs/ExpensesDto.md)
  - [OpenApiDefinition.Participant](docs/Participant.md)
 

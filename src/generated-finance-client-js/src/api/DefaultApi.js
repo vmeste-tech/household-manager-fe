@@ -15,6 +15,10 @@
 import ApiClient from "../ApiClient";
 import CreateExpenseRequest from '../model/CreateExpenseRequest';
 import DebtDto from '../model/DebtDto';
+import ErrorResponse from '../model/ErrorResponse';
+import ExpenseItemCreateDto from '../model/ExpenseItemCreateDto';
+import ExpenseItemDto from '../model/ExpenseItemDto';
+import ExpenseItemUpdateDto from '../model/ExpenseItemUpdateDto';
 import ExpensesDto from '../model/ExpensesDto';
 import Participant from '../model/Participant';
 
@@ -36,6 +40,48 @@ export default class DefaultApi {
         this.apiClient = apiClient || ApiClient.instance;
     }
 
+
+    /**
+     * Callback function to receive the result of the createExpenseItem operation.
+     * @callback module:api/DefaultApi~createExpenseItemCallback
+     * @param {String} error Error message, if any.
+     * @param {module:model/ExpenseItemDto} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * Создать новую статью затрат
+     * Добавляет новую статью затрат в систему.
+     * @param {module:model/ExpenseItemCreateDto} expenseItemCreateDto 
+     * @param {module:api/DefaultApi~createExpenseItemCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/ExpenseItemDto}
+     */
+    createExpenseItem(expenseItemCreateDto, callback) {
+      let postBody = expenseItemCreateDto;
+      // verify the required parameter 'expenseItemCreateDto' is set
+      if (expenseItemCreateDto === undefined || expenseItemCreateDto === null) {
+        throw new Error("Missing the required parameter 'expenseItemCreateDto' when calling createExpenseItem");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['bearerAuth'];
+      let contentTypes = ['application/json'];
+      let accepts = ['*/*'];
+      let returnType = ExpenseItemDto;
+      return this.apiClient.callApi(
+        '/api/v1/expense-items', 'POST',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
 
     /**
      * Callback function to receive the result of the createExpenses operation.
@@ -74,6 +120,91 @@ export default class DefaultApi {
       let returnType = ExpensesDto;
       return this.apiClient.callApi(
         '/api/v1/expenses', 'POST',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the deleteExpenseItem operation.
+     * @callback module:api/DefaultApi~deleteExpenseItemCallback
+     * @param {String} error Error message, if any.
+     * @param data This operation does not return a value.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * Удалить статью затрат
+     * Удаляет статью затрат по её ID.
+     * @param {String} id Идентификатор статьи затрат
+     * @param {module:api/DefaultApi~deleteExpenseItemCallback} callback The callback function, accepting three arguments: error, data, response
+     */
+    deleteExpenseItem(id, callback) {
+      let postBody = null;
+      // verify the required parameter 'id' is set
+      if (id === undefined || id === null) {
+        throw new Error("Missing the required parameter 'id' when calling deleteExpenseItem");
+      }
+
+      let pathParams = {
+        'id': id
+      };
+      let queryParams = {
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['bearerAuth'];
+      let contentTypes = [];
+      let accepts = ['*/*'];
+      let returnType = null;
+      return this.apiClient.callApi(
+        '/api/v1/expense-items/{id}', 'DELETE',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the getApartmentExpenseItem operation.
+     * @callback module:api/DefaultApi~getApartmentExpenseItemCallback
+     * @param {String} error Error message, if any.
+     * @param {Array.<module:model/ExpenseItemDto>} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * Получить статьи затрат по квартире
+     * Возвращает список всех статей затрат, связанных с указанной квартирой.
+     * @param {String} apartmentId Идентификатор квартиры
+     * @param {module:api/DefaultApi~getApartmentExpenseItemCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link Array.<module:model/ExpenseItemDto>}
+     */
+    getApartmentExpenseItem(apartmentId, callback) {
+      let postBody = null;
+      // verify the required parameter 'apartmentId' is set
+      if (apartmentId === undefined || apartmentId === null) {
+        throw new Error("Missing the required parameter 'apartmentId' when calling getApartmentExpenseItem");
+      }
+
+      let pathParams = {
+        'apartmentId': apartmentId
+      };
+      let queryParams = {
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['bearerAuth'];
+      let contentTypes = [];
+      let accepts = ['*/*'];
+      let returnType = [ExpenseItemDto];
+      return this.apiClient.callApi(
+        '/api/v1/expense-items/{apartmentId}', 'GET',
         pathParams, queryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, null, callback
       );
@@ -258,6 +389,54 @@ export default class DefaultApi {
       let returnType = DebtDto;
       return this.apiClient.callApi(
         '/api/v1/finance/debts/{debtId}/pay', 'PATCH',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the updateExpenseItem operation.
+     * @callback module:api/DefaultApi~updateExpenseItemCallback
+     * @param {String} error Error message, if any.
+     * @param {module:model/ExpenseItemDto} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * Обновить статью затрат
+     * Обновляет данные существующей статьи затрат по её ID.
+     * @param {String} id Идентификатор статьи затрат
+     * @param {module:model/ExpenseItemUpdateDto} expenseItemUpdateDto 
+     * @param {module:api/DefaultApi~updateExpenseItemCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/ExpenseItemDto}
+     */
+    updateExpenseItem(id, expenseItemUpdateDto, callback) {
+      let postBody = expenseItemUpdateDto;
+      // verify the required parameter 'id' is set
+      if (id === undefined || id === null) {
+        throw new Error("Missing the required parameter 'id' when calling updateExpenseItem");
+      }
+      // verify the required parameter 'expenseItemUpdateDto' is set
+      if (expenseItemUpdateDto === undefined || expenseItemUpdateDto === null) {
+        throw new Error("Missing the required parameter 'expenseItemUpdateDto' when calling updateExpenseItem");
+      }
+
+      let pathParams = {
+        'id': id
+      };
+      let queryParams = {
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['bearerAuth'];
+      let contentTypes = ['application/json'];
+      let accepts = ['*/*'];
+      let returnType = ExpenseItemDto;
+      return this.apiClient.callApi(
+        '/api/v1/expense-items/{id}', 'PUT',
         pathParams, queryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, null, callback
       );

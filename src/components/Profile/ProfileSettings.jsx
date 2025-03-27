@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import CustomButton from "../Universal/CustomButton";
-import FileDropZone from "./FileDropZone";
+import FileDropZone from "../Universal/FileDropZone";
 import Modal from "../Universal/Modal";
 
 import DefaultApi from "../../generated-client-js/src/api/DefaultApi";

@@ -1,6 +1,36 @@
+import { useState } from "react";
 import PropTypes from "prop-types";
+import EditUserModal from "../Modal/EditUserModal";
 
-const UsersTable = ({ users }) => {
+const UsersTable = ({ users, onUserUpdate }) => {
+  const [editingUser, setEditingUser] = useState(null);
+
+  const handleEditClick = (user) => {
+    setEditingUser(user);
+  };
+
+  const handleSaveUser = (updatedUser) => {
+    onUserUpdate(updatedUser);
+    setEditingUser(null);
+  };
+
+  // Функция для форматирования даты в русском формате
+  const formatDate = (dateString) => {
+    const options = {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    };
+
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString("ru-RU", options);
+    } catch (error) {
+      console.error("Ошибка при форматировании даты:", error);
+      return dateString;
+    }
+  };
+
   const getStatusBadge = (status) => {
     switch (status) {
       case "Активен":
@@ -84,7 +114,7 @@ const UsersTable = ({ users }) => {
                 {user.type}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                {user.joinTime}
+                {formatDate(user.joinTime)}
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 {getStatusBadge(user.status)}
@@ -94,6 +124,12 @@ const UsersTable = ({ users }) => {
                   role="button"
                   tabIndex={0}
                   className="inline-block px-4 py-2 text-sm font-medium text-indigo-600 border rounded-md hover:bg-indigo-50 cursor-pointer transition duration-150 ease-in-out"
+                  onClick={() => handleEditClick(user)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      handleEditClick(user);
+                    }
+                  }}
                 >
                   Редактировать
                 </div>
@@ -102,6 +138,14 @@ const UsersTable = ({ users }) => {
           ))}
         </tbody>
       </table>
+
+      {editingUser && (
+        <EditUserModal
+          user={editingUser}
+          onClose={() => setEditingUser(null)}
+          onSave={handleSaveUser}
+        />
+      )}
     </div>
   );
 };
@@ -118,6 +162,11 @@ UsersTable.propTypes = {
       status: PropTypes.string.isRequired,
     })
   ).isRequired,
+  onUserUpdate: PropTypes.func,
+};
+
+UsersTable.defaultProps = {
+  onUserUpdate: () => {},
 };
 
 export default UsersTable;

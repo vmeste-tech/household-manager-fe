@@ -1,11 +1,16 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
+import Pagination from "../Universal/Pagination";
 
-const SharedExpensesList = ({ expenses, initialItemsToShow = 10 }) => {
-  const [showAll, setShowAll] = useState(false);
-  const displayedExpenses = showAll
-    ? expenses
-    : expenses.slice(0, initialItemsToShow);
+const PurchaseTables = ({ expenses, initialItemsToShow = 6 }) => {
+  const itemsPerPage = initialItemsToShow;
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil(expenses.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const displayedExpenses = expenses.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
 
   return (
     <div>
@@ -42,22 +47,21 @@ const SharedExpensesList = ({ expenses, initialItemsToShow = 10 }) => {
         </table>
       </div>
 
-      {/* Элемент "Показать все" по центру */}
-      {expenses.length > initialItemsToShow && !showAll && (
+      {/* Пагинация */}
+      {totalPages > 1 && (
         <div className="mt-2 flex justify-center">
-          <div
-            className="inline-block cursor-pointer px-4 py-2 text-sm font-medium bg-indigo-600 text-white border rounded-md hover:bg-indigo-700 duration-150 ease-in-out"
-            onClick={() => setShowAll(true)}
-          >
-            Показать все
-          </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
         </div>
       )}
     </div>
   );
 };
 
-SharedExpensesList.propTypes = {
+PurchaseTables.propTypes = {
   expenses: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
@@ -68,4 +72,4 @@ SharedExpensesList.propTypes = {
   initialItemsToShow: PropTypes.number,
 };
 
-export default SharedExpensesList;
+export default PurchaseTables;

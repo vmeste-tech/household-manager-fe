@@ -1,10 +1,11 @@
+import { useState } from "react";
 import AddUserButton from "../../components/Apartments/AddUserButton";
 import ApartmentInfo from "../../components/Apartments/ApartmentCard";
 import UserTable from "../../components/Apartments/UserTable";
 import DashboardHeader from "../../components/Dashboard/DashboardHeader";
 
 function ApartmentPage() {
-  const sampleUsers = [
+  const [users, setUsers] = useState([
     {
       id: 1,
       firstName: "Иван",
@@ -34,13 +35,20 @@ function ApartmentPage() {
       joinTime: "2023-08-20",
       status: "Заболел",
     },
-  ];
+  ]);
+
+  const handleUserUpdate = (updatedUser) => {
+    setUsers(
+      users.map((user) => (user.id === updatedUser.id ? updatedUser : user))
+    );
+  };
+
   return (
     <div className="bg-indigo-50 min-h-screen overflow-x-hidden">
       <DashboardHeader />
       <div className="pt-20 max-w-7xl mx-auto flex flex-col gap-8">
         <ApartmentInfo />
-        <UserTable users={sampleUsers} />
+        <UserTable users={users} onUserUpdate={handleUserUpdate} />
         <div className="flex justify-center">
           <AddUserButton />
         </div>

@@ -1,6 +1,16 @@
+import { useState } from "react";
 import PropTypes from "prop-types";
+import Pagination from "../Universal/Pagination";
 
 const PurchaseHistory = ({ purchases }) => {
+  const itemsPerPage = 4; // Количество записей на страницу
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil(purchases.length / itemsPerPage);
+  const currentPurchases = purchases.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   const totalExpenses = purchases.reduce(
     (sum, purchase) => sum + purchase.amount,
     0
@@ -12,7 +22,7 @@ const PurchaseHistory = ({ purchases }) => {
         История покупок и затрат
       </div>
 
-      {purchases.map((purchase, index) => (
+      {currentPurchases.map((purchase, index) => (
         <div key={index} className="flex">
           <div className="mr-4 flex flex-col items-center">
             <div>
@@ -40,17 +50,24 @@ const PurchaseHistory = ({ purchases }) => {
             <div className="mb-1 text-sm font-bold text-gray-900">
               {purchase.item} — {purchase.amount}₽
             </div>
-            <div className="mb-1 text-sm text-gray-600">
-              {purchase.date}
-            </div>
-            <div className="text-sm text-gray-600">
-              {purchase.description}
-            </div>
+            <div className="mb-1 text-sm text-gray-600">{purchase.date}</div>
+            <div className="text-sm text-gray-600">{purchase.description}</div>
           </div>
         </div>
       ))}
 
-      <div className="flex">
+      {/* Пагинация */}
+      {totalPages > 1 && (
+        <div className="mt-4">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={(page) => setCurrentPage(page)}
+          />
+        </div>
+      )}
+
+      <div className="flex mt-4">
         <div className="mr-4 flex flex-col items-center">
           <div>
             <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-blue-900 bg-blue-900">

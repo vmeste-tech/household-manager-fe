@@ -15,6 +15,10 @@
 import ApiClient from './ApiClient';
 import CreateExpenseRequest from './model/CreateExpenseRequest';
 import DebtDto from './model/DebtDto';
+import ErrorResponse from './model/ErrorResponse';
+import ExpenseItemCreateDto from './model/ExpenseItemCreateDto';
+import ExpenseItemDto from './model/ExpenseItemDto';
+import ExpenseItemUpdateDto from './model/ExpenseItemUpdateDto';
 import ExpensesDto from './model/ExpensesDto';
 import Participant from './model/Participant';
 import DefaultApi from './api/DefaultApi';
@@ -69,6 +73,30 @@ export {
      * @property {module:model/DebtDto}
      */
     DebtDto,
+
+    /**
+     * The ErrorResponse model constructor.
+     * @property {module:model/ErrorResponse}
+     */
+    ErrorResponse,
+
+    /**
+     * The ExpenseItemCreateDto model constructor.
+     * @property {module:model/ExpenseItemCreateDto}
+     */
+    ExpenseItemCreateDto,
+
+    /**
+     * The ExpenseItemDto model constructor.
+     * @property {module:model/ExpenseItemDto}
+     */
+    ExpenseItemDto,
+
+    /**
+     * The ExpenseItemUpdateDto model constructor.
+     * @property {module:model/ExpenseItemUpdateDto}
+     */
+    ExpenseItemUpdateDto,
 
     /**
      * The ExpensesDto model constructor.

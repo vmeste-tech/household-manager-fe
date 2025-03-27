@@ -1,6 +1,36 @@
+import { useState } from "react";
+import PropTypes from "prop-types";
 import CustomButton from "../Universal/CustomButton";
 
-export default function FileDropZone() {
+export default function FileDropZone({ onFileSelect }) {
+  const [selectedFileName, setSelectedFileName] = useState("");
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedFileName(file.name);
+      if (onFileSelect) {
+        onFileSelect(file);
+      }
+    }
+  };
+
+  // Функция для сокращения имени файла, если оно превышает maxLength символов
+  const getTruncatedFileName = (name, maxLength = 20) => {
+    if (name.length <= maxLength) return name;
+    // Попытка сохранить расширение файла, если оно есть
+    const extensionIndex = name.lastIndexOf(".");
+    const extension =
+      extensionIndex !== -1 ? name.substring(extensionIndex) : "";
+    const baseNameMaxLength = maxLength - extension.length - 3; // 3 символа для "..."
+    const truncatedBaseName = name.substring(0, baseNameMaxLength);
+    return truncatedBaseName + "..." + extension;
+  };
+
+  const displayFileName = selectedFileName
+    ? getTruncatedFileName(selectedFileName)
+    : "";
+
   return (
     <div className="w-full py-9 bg-gray-50 rounded-2xl border border-gray-300 gap-3 grid border-dashed">
       <div className="grid gap-1">
@@ -27,22 +57,24 @@ export default function FileDropZone() {
 
       <div className="grid gap-2">
         <label className="block text-center text-gray-900 text-xs font-medium uppercase tracking-wider">
-          ПЕРЕТАЩИТЕ ВАШ ФАЙЛ СЮДА ИЛИ
+          {selectedFileName
+            ? `Выбран файл: ${displayFileName}`
+            : "ПЕРЕТАЩИТЕ ВАШ ФАЙЛ СЮДА ИЛИ"}
         </label>
         <div className="flex items-center justify-center">
-          <label>
-            <input
-              type="file"
-              hidden
-              onChange={(e) => {
-                const file = e.target.files[0];
-                console.log("Выбранный файл:", file);
-              }}
+          <label className="cursor-pointer">
+            <input type="file" hidden onChange={handleFileChange} />
+            <CustomButton
+              text={selectedFileName ? "Перевыбрать файл" : "Выберите файл"}
+              variant="filled"
             />
-            <CustomButton text="Выберите файл" variant="filled" />
           </label>
         </div>
       </div>
     </div>
   );
 }
+
+FileDropZone.propTypes = {
+  onFileSelect: PropTypes.func,
+};

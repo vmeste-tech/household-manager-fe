@@ -1,8 +1,20 @@
+import { useState } from "react";
+import CustomButton from "../Universal/CustomButton";
+import InviteCodeModal from "./InviteCodeModal";
+
 const AddUserButton = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
-    <div className="inline-block px-3 py-2 text-xs font-medium text-white uppercase tracking-wider border rounded-md hover:bg-indigo-800 bg-indigo-700 cursor-pointer duration-150 ease-in-out">
-      + Добавить жильца
-    </div>
+    <>
+      <CustomButton
+        text="+ Добавить жильца"
+        variant="filled"
+        onClick={() => setIsModalOpen(true)}
+      />
+
+      {isModalOpen && <InviteCodeModal onClose={() => setIsModalOpen(false)} />}
+    </>
   );
 };
 
