@@ -4,20 +4,21 @@ const Tabs = ({ activeFilter, setActiveFilter }) => {
   const filters = ["Все", "На голосовании", "Принятые", "Отклонённые"];
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
-      <div className="flex justify-evenly border rounded-md overflow-hidden">
+    <div className="bg-white rounded-xl p-4 shadow-sm">
+      <div className="flex flex-wrap gap-2">
         {filters.map((filter) => (
-          <button
+          <div
             key={filter}
             onClick={() => setActiveFilter(filter)}
-            className={`flex-1 px-2 py-1 transition-colors text-center ${
+            type="button"
+            className={
               activeFilter === filter
-                ? "bg-indigo-800 text-white rounded-lg"
-                : "hover:text-indigo-700"
-            }`}
+                ? "px-4 py-2 rounded-md text-sm font-medium transition-colors bg-indigo-600 text-white shadow-sm"
+                : "px-4 py-2 rounded-md text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
+            }
           >
             {filter}
-          </button>
+          </div>
         ))}
       </div>
     </div>
