@@ -23,4 +23,4 @@ RUN npm install -g serve
 EXPOSE 4173
 
 # Запускаем приложение в продакшене
-CMD ["npm", "run", "preview"]
+CMD ["serve", "-s", "dist", "-l", "4173"]
