@@ -168,13 +168,13 @@ function NotificationPage() {
   return (
     <div className="bg-indigo-50 min-h-screen overflow-hidden">
       <DashboardHeader />
-      <div className="pt-20 max-w-7xl mx-auto">
+      <div className="pt-20 px-4 max-w-7xl mx-auto">
         <NotificationFilter
           filter={filter}
           onChangeFilter={(newFilter) => setFilter(newFilter)}
         />
         {/* Мобильная версия */}
-        <div className="block md:hidden bg-white">
+        <div className="block md:hidden bg-white rounded-xl shadow-sm overflow-hidden">
           {selectedNotification ? (
             <NotificationDetails
               notification={selectedNotification}
@@ -188,7 +188,7 @@ function NotificationPage() {
           )}
         </div>
         {/* Десктопная версия */}
-        <div className="hidden md:flex h-[calc(100vh-80px)] bg-white rounded-xl">
+        <div className="hidden md:flex h-[calc(100vh-80px)] bg-white rounded-xl shadow-sm overflow-hidden">
           {/* Левая колонка со списком уведомлений с независимой прокруткой */}
           <div className="w-1/2 border-r border-gray-200 overflow-y-auto">
             <NotificationList
@@ -197,14 +197,8 @@ function NotificationPage() {
             />
           </div>
           {/* Правая колонка – подробности уведомления */}
-          <div className="w-1/2">
-            {selectedNotification ? (
-              <NotificationDetails notification={selectedNotification} />
-            ) : (
-              <div className="p-4 text-gray-500">
-                Выберите уведомление для просмотра подробностей.
-              </div>
-            )}
+          <div className="w-1/2 overflow-y-auto">
+            <NotificationDetails notification={selectedNotification} />
           </div>
         </div>
       </div>
