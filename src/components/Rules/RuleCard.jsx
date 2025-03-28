@@ -1,74 +1,124 @@
 import PropTypes from "prop-types";
 
-const RuleCard = ({
-  gradientClass,
-  title,
-  subtitle,
-  fine,
-  description,
-  svgClass,
-  svgPath,
-  svgViewBox = "0 0 24 24",
-}) => {
+const RuleCard = ({ rule, styleConfig, onClick }) => {
+  const style = styleConfig || {
+    gradientClass: "from-gray-400 to-gray-600",
+    svgPath: "M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z",
+    svgViewBox: "0 0 24 24",
+    badgeClass: "bg-gray-100 text-gray-800",
+  };
+
+  const getStatusBadge = (status) => {
+    return (
+      <span
+        className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${style.badgeClass}`}
+      >
+        {status}
+      </span>
+    );
+  };
+
   return (
     <div
-      className={`pricing-wrapper w-full relative rounded-2xl bg-gradient-to-t ${gradientClass} p-0.5 shadow-[0_0px_25px_0px_rgba(0,0,0,0.1)] transition-all duration-300 ease-in-out hover:shadow-[0_0px_25px_0px_rgba(0,0,0,0.2)]`}
+      onClick={onClick}
+      className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-200 cursor-pointer"
     >
-      {/* Родительский контейнер без p-8 */}
-      <div className="relative h-full bg-white rounded-2xl w-full z-0 overflow-hidden hover:-translate-y-1 transition-all duration-300 ease-in-out flex flex-col">
-        {/* Блок с отступами (для заголовка, описания и т.д.) */}
-        <div className="p-4 text-center flex-1">
-          <h3 className="plan-title text-xl text-gray-800">{title}</h3>
-          <span className="plan-title text-xs relative -top-2 m-0 text-gray-600">
-            {subtitle}
-          </span>
-          <p className="plan-price text-3xl my-2 font-extrabold text-indigo-500">
-            {fine}₽
-          </p>
-          <p className="text-gray-800 mt-4 text-balance">{description}</p>
+      <div className={`h-2 bg-gradient-to-r ${style.gradientClass}`}></div>
+      <div className="p-6">
+        <div className="flex justify-between items-start mb-4">
+          <div className="flex-shrink-0 w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 text-indigo-600"
+              fill="none"
+              viewBox={style.svgViewBox}
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d={style.svgPath}
+              />
+            </svg>
+          </div>
+          <div>{getStatusBadge(rule.status)}</div>
         </div>
 
-        {/* Если subtitle равен "на голосовании", отображаем кнопки без p-8 */}
-        {subtitle === "на голосовании" && (
-          <div className="w-full border-t border-gray-200 flex">
-            <button className="w-1/2 bg-transparent border-none text-indigo-500 py-3 hover:text-indigo-700 transition-colors">
-              Принять
-            </button>
-            <button className="w-1/2 bg-transparent border-l border-gray-200 text-indigo-500 py-3 hover:text-indigo-700 transition-colors">
-              Отклонить
-            </button>
-          </div>
-        )}
+        <h3 className="text-lg font-semibold text-gray-800 mb-2">
+          {rule.title}
+        </h3>
+        <p className="text-gray-600 mb-4 text-sm line-clamp-3">
+          {rule.description}
+        </p>
 
-        {/* Декоративный SVG */}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className={`${svgClass} absolute bottom-2 right-2 opacity-10`}
-          width="1em"
-          height="1em"
-          viewBox={svgViewBox}
-        >
-          <path
-            fill="currentColor"
-            fillRule="evenodd"
-            d={svgPath}
-            clipRule="evenodd"
-          />
-        </svg>
+        <div className="flex justify-between items-center pt-3 border-t border-gray-100">
+          <div className="text-sm text-gray-500">
+            Штраф:{" "}
+            <span className="font-semibold text-indigo-600">{rule.fine}</span>
+          </div>
+
+          {rule.status === "На голосовании" && (
+            <div className="flex items-center">
+              <span className="text-sm text-green-600 mr-2">
+                {rule.votesFor}
+              </span>
+              <svg
+                className="h-4 w-4 text-green-600"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <span className="text-sm text-red-600 mx-2">
+                {rule.votesAgainst}
+              </span>
+              <svg
+                className="h-4 w-4 text-red-600"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+          )}
+
+          <div className="text-xs text-gray-500">
+            {new Date(rule.createdAt).toLocaleDateString()}
+          </div>
+        </div>
       </div>
     </div>
   );
 };
 
 RuleCard.propTypes = {
-  gradientClass: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  subtitle: PropTypes.string.isRequired, // "на голосовании", "принято", "отклонено"
-  fine: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  description: PropTypes.string.isRequired,
-  svgClass: PropTypes.string.isRequired,
-  svgPath: PropTypes.string.isRequired,
-  svgViewBox: PropTypes.string,
+  rule: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    status: PropTypes.string.isRequired,
+    fine: PropTypes.string.isRequired,
+    votesFor: PropTypes.number.isRequired,
+    votesAgainst: PropTypes.number.isRequired,
+    createdBy: PropTypes.string.isRequired,
+    createdAt: PropTypes.string.isRequired,
+  }).isRequired,
+  styleConfig: PropTypes.shape({
+    gradientClass: PropTypes.string.isRequired,
+    svgPath: PropTypes.string.isRequired,
+    svgViewBox: PropTypes.string.isRequired,
+    badgeClass: PropTypes.string.isRequired,
+  }),
+  onClick: PropTypes.func.isRequired,
 };
 
 export default RuleCard;

@@ -1,6 +1,34 @@
+import { useState } from "react";
 import PropTypes from "prop-types";
+import RuleCard from "./RuleCard";
+import RuleDetails from "./RuleDetails";
 
 const RuleCards = ({ activeFilter }) => {
+  const [selectedRule, setSelectedRule] = useState(null);
+
+  // Status-based styling configuration
+  const statusStyles = {
+    Принятые: {
+      gradientClass: "from-green-500 to-teal-600",
+      svgPath: "M5 13l4 4L19 7",
+      svgViewBox: "0 0 24 24",
+      badgeClass: "bg-green-100 text-green-800",
+    },
+    "На голосовании": {
+      gradientClass: "from-amber-400 to-orange-500",
+      svgPath:
+        "M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z",
+      svgViewBox: "0 0 24 24",
+      badgeClass: "bg-amber-100 text-amber-800",
+    },
+    Отклонённые: {
+      gradientClass: "from-red-400 to-red-600",
+      svgPath: "M6 18L18 6M6 6l12 12",
+      svgViewBox: "0 0 24 24",
+      badgeClass: "bg-red-100 text-red-800",
+    },
+  };
+
   const rules = [
     {
       id: 1,
@@ -13,10 +41,8 @@ const RuleCards = ({ activeFilter }) => {
       votesAgainst: 1,
       createdBy: "Иван Иванов",
       createdAt: "2023-09-15",
-      gradientClass: "from-blue-500 to-indigo-600",
-      svgPath:
-        "M6 2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7.414A2 2 0 0 0 15.414 6L12 2.586A2 2 0 0 0 10.586 2zm5 6a1 1 0 1 0-2 0v3.586l-1.293-1.293a1 1 0 1 0-1.414 1.414l3 3a1 1 0 0 0 1.414 0l3-3a1 1 0 0 0-1.414-1.414L11 11.586z",
-      svgViewBox: "0 0 20 20",
+      cronExpression: "0 22 * * *",
+      timeZone: "Europe/Moscow",
     },
     {
       id: 2,
@@ -29,10 +55,8 @@ const RuleCards = ({ activeFilter }) => {
       votesAgainst: 0,
       createdBy: "Анна Смирнова",
       createdAt: "2023-09-10",
-      gradientClass: "from-teal-400 to-green-500",
-      svgPath:
-        "M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2zm0 8a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2zm6-6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2zm0 8a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2z",
-      svgViewBox: "0 0 20 20",
+      cronExpression: "0 10 * * MON,WED,FRI",
+      timeZone: "Europe/Moscow",
     },
     {
       id: 3,
@@ -45,10 +69,8 @@ const RuleCards = ({ activeFilter }) => {
       votesAgainst: 1,
       createdBy: "Петр Петров",
       createdAt: "2023-09-20",
-      gradientClass: "from-amber-400 to-orange-500",
-      svgPath:
-        "M11 3a1 1 0 10-2 0v1a1 1 0 102 0zm4 8a4 4 0 11-8 0 4 4 0 018 0m-4 8a8 8 0 008-8 1 1 0 00-2 0 6 6 0 01-6 6c-1.66 0-3.16-.67-4.24-1.76l1.41-1.41A4.993 4.993 0 0019 13a1 1 0 01-2 0 3 3 0 01-3-3 1 1 0 00-2 0 5 5 0 01-5 5 1 1 0 000 2",
-      svgViewBox: "0 0 20 20",
+      cronExpression: "0 7,19 * * *",
+      timeZone: "Europe/Moscow",
     },
     {
       id: 4,
@@ -61,9 +83,8 @@ const RuleCards = ({ activeFilter }) => {
       votesAgainst: 2,
       createdBy: "Мария Иванова",
       createdAt: "2023-08-15",
-      gradientClass: "from-red-400 to-pink-500",
-      svgPath: "M13 10V3L4 14h7v7l9-11h-7z",
-      svgViewBox: "0 0 20 20",
+      cronExpression: "0 0 * * *",
+      timeZone: "Europe/Moscow",
     },
     {
       id: 5,
@@ -76,9 +97,8 @@ const RuleCards = ({ activeFilter }) => {
       votesAgainst: 4,
       createdBy: "Алексей Сидоров",
       createdAt: "2023-09-01",
-      gradientClass: "from-purple-400 to-indigo-500",
-      svgPath: "M10 2a8 8 0 100 16 8 8 0 000-16M8 8a1 1 0 100 2h4a1 1 0 100-2z",
-      svgViewBox: "0 0 20 20",
+      cronExpression: "0 23 * * *",
+      timeZone: "Europe/Moscow",
     },
   ];
 
@@ -87,112 +107,40 @@ const RuleCards = ({ activeFilter }) => {
       ? rules
       : rules.filter((rule) => rule.status === activeFilter);
 
-  const getStatusBadge = (status) => {
-    switch (status) {
-      case "Принятые":
-        return (
-          <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-            {status}
-          </span>
-        );
-      case "На голосовании":
-        return (
-          <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-amber-100 text-amber-800">
-            {status}
-          </span>
-        );
-      case "Отклонённые":
-        return (
-          <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-            {status}
-          </span>
-        );
-      default:
-        return (
-          <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
-            {status}
-          </span>
-        );
-    }
+  const handleVote = (ruleId, voteType) => {
+    // Здесь будет логика обработки голосования
+    console.log(`Проголосовал ${voteType} за правило ${ruleId}`);
+
+    // В реальном приложении здесь был бы API-запрос
+    // и обновление состояния после успешного ответа
+  };
+
+  const closeDetails = () => {
+    setSelectedRule(null);
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {filteredRules.map((rule) => (
-        <div
-          key={rule.id}
-          className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-200"
-        >
-          <div className={`h-2 bg-gradient-to-r ${rule.gradientClass}`}></div>
-          <div className="p-6">
-            <div className="flex justify-between items-start mb-4">
-              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 text-indigo-600"
-                  fill="none"
-                  viewBox={rule.svgViewBox}
-                >
-                  <path d={rule.svgPath} fill="currentColor" />
-                </svg>
-              </div>
-              <div>{getStatusBadge(rule.status)}</div>
-            </div>
+    <>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {filteredRules.map((rule) => (
+          <RuleCard
+            key={rule.id}
+            rule={rule}
+            styleConfig={statusStyles[rule.status]}
+            onClick={() => setSelectedRule(rule)}
+          />
+        ))}
+      </div>
 
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">
-              {rule.title}
-            </h3>
-            <p className="text-gray-600 mb-4 text-sm">{rule.description}</p>
-
-            <div className="flex justify-between items-center pt-3 border-t border-gray-100">
-              <div className="text-sm text-gray-500">
-                Штраф:{" "}
-                <span className="font-semibold text-indigo-600">
-                  {rule.fine}
-                </span>
-              </div>
-
-              {rule.status === "На голосовании" && (
-                <div className="flex items-center">
-                  <span className="text-sm text-green-600 mr-2">
-                    {rule.votesFor}
-                  </span>
-                  <svg
-                    className="h-4 w-4 text-green-600"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span className="text-sm text-red-600 mx-2">
-                    {rule.votesAgainst}
-                  </span>
-                  <svg
-                    className="h-4 w-4 text-red-600"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-              )}
-
-              <div className="text-xs text-gray-500">
-                {new Date(rule.createdAt).toLocaleDateString()}
-              </div>
-            </div>
-          </div>
-        </div>
-      ))}
-    </div>
+      {selectedRule && (
+        <RuleDetails
+          rule={selectedRule}
+          styleConfig={statusStyles[selectedRule.status]}
+          onClose={closeDetails}
+          onVote={handleVote}
+        />
+      )}
+    </>
   );
 };
 
