@@ -11,7 +11,7 @@ console.log("Using API base URL:", API_BASE_URL); // Добавим для от�
 export const apiConfig = {
   // Основной клиент (User, Apartment и т.д.)
   main: {
-    baseUrl: `${API_BASE_URL}:8082`,
+    baseUrl: `${API_BASE_URL}`,
   },
   // Финансовый сервис
   finance: {
