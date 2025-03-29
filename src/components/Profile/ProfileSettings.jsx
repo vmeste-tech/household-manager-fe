@@ -3,7 +3,7 @@ import PasswordChangeModal from "../Modal/PasswordChangeModal";
 import AvatarDisplay from "./AvatarDisplay";
 import ProfileForm from "./ProfileForm";
 import AvatarUploadModal from "./AvatarUploadModal";
-import { clientApi } from "../../api";
+import { userApi } from "../../api";
 
 export default function AccountSettings() {
   const [showFileDropZone, setShowFileDropZone] = useState(false);
@@ -55,7 +55,7 @@ export default function AccountSettings() {
   useEffect(() => {
     setLoading(true);
 
-    clientApi.getUser((error, data) => {
+    userApi.getUser((error, data) => {
       setLoading(false);
       if (error) {
         console.error("Ошибка получения данных пользователя:", error);
