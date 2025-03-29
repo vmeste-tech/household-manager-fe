@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import ApiClient from "../../generated-client-js/src/ApiClient";
-import DefaultApi from "../../generated-client-js/src/api/DefaultApi";
+import { userApi } from "../../api";
 
 const SignInPage = () => {
   const navigate = useNavigate();
@@ -13,19 +12,13 @@ const SignInPage = () => {
     const email = form.elements.email.value;
     const password = form.elements.password.value;
 
-    // Создаем экземпляр ApiClient и задаем базовый URL (измените на ваш)
-    const apiClient = new ApiClient();
-
-    // Создаем экземпляр DefaultApi
-    const defaultApi = new DefaultApi(apiClient);
-
     // Формируем объект запроса. В сгенерированном клиенте AuthRequest ожидает поля "username" и "password"
     const authRequest = {
       username: email, // используем email в качестве имени пользователя
       password: password,
     };
 
-    defaultApi.login(authRequest, (error, data) => {
+    userApi.login(authRequest, (error, data) => {
       if (error) {
         console.error("Ошибка аутентификации:", error);
         alert("Ошибка при входе. Проверьте введенные данные.");

@@ -1,8 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import ApiClient from "../../generated-client-js/src/ApiClient";
-import DefaultApi from "../../generated-client-js/src/api/DefaultApi";
 import { useState } from "react";
 import Alert from "../../components/Toasts/Alert";
+import { userApi } from "../../api";
 
 const SignUpPage = () => {
   const navigate = useNavigate();
@@ -29,14 +28,6 @@ const SignUpPage = () => {
     const [firstName, ...rest] = fullName.split(" ");
     const lastName = rest.join(" ");
 
-    // Создаём экземпляр ApiClient
-    const apiClient = new ApiClient();
-    // Задаём базовый URL для запросов
-    apiClient.basePath = "http://localhost:8082";
-
-    // Создаём экземпляр DefaultApi
-    const defaultApi = new DefaultApi(apiClient);
-
     // Формируем объект запроса
     const userRegistrationRequest = {
       email: email,
@@ -46,7 +37,7 @@ const SignUpPage = () => {
     };
 
     // Вызываем метод register из DefaultApi
-    defaultApi.register(userRegistrationRequest, (error, data) => {
+    userApi.register(userRegistrationRequest, (error, data) => {
       if (error) {
         console.error("Ошибка при регистрации:", error);
         setToast({
