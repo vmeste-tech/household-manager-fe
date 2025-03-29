@@ -13,6 +13,10 @@ RUN npm install
 # Копируем остальные файлы проекта в контейнер
 COPY . .
 
+# Аргумент для базового URL API при сборке
+ARG VITE_API_BASE_URL
+ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
+
 # Собираем приложение для продакшена
 RUN npm run build
 
