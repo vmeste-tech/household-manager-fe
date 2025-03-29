@@ -1,11 +1,11 @@
-import ApiClient from "../generated-finance-client-js/src/ApiClient";
+import ApiClient from "../generated-task-client-js/src/ApiClient";
 import { tokenInterceptor } from "./tokenInterceptor";
 import { apiConfig } from "./apiConfig";
 
 // Создаем экземпляр ApiClient и задаем базовый URL из конфигурации
-const financeApiClient = new ApiClient(apiConfig.finance.baseUrl);
+const taskApiClient = new ApiClient(apiConfig.task.baseUrl);
 
 // Добавляем плагин для авторизации
-financeApiClient.plugins = [tokenInterceptor];
+taskApiClient.plugins = [tokenInterceptor];
 
-export default financeApiClient;
+export default taskApiClient;

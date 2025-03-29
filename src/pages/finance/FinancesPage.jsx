@@ -5,8 +5,7 @@ import DebtsTable from "../../components/Finances/DebtsTable";
 import FilterDropdown from "../../components/Finances/FilterDropdown";
 import ProgressTable from "../../components/Finances/ProgressTable";
 import Heading from "../../components/Universal/Heading";
-import financeApiClient from "../../api/setupFinanceApi";
-import DefaultApi from "../../generated-finance-client-js/src/api/DefaultApi";
+import { financeApi } from "../../api";
 
 // Функция для красивого отображения периода (YYYYMM -> "Март 2025")
 function formatPeriod(period) {
@@ -69,7 +68,6 @@ function FinancesPage() {
 
   // Создаем экземпляр API-клиента
   useEffect(() => {
-    const defaultApi = new DefaultApi(financeApiClient);
     const apartmentId = localStorage.getItem("apartmentId");
     if (!apartmentId || !selectedPeriod) {
       console.error("Не найден apartmentId или не выбран период");
@@ -78,7 +76,7 @@ function FinancesPage() {
     }
 
     // Запрашиваем финансовые данные пользователей (participants)
-    defaultApi.getUserFinances(
+    financeApi.getUserFinances(
       apartmentId,
       parseInt(selectedPeriod),
       (error, data) => {
@@ -101,7 +99,7 @@ function FinancesPage() {
     );
 
     // Запрашиваем список долгов
-    defaultApi.getDebts(
+    financeApi.getDebts(
       apartmentId,
       parseInt(selectedPeriod),
       (error, data) => {

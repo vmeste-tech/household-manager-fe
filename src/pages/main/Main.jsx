@@ -1,15 +1,13 @@
 import { useState, useEffect } from "react";
 import Dashboard from "../../components/Dashboard/Dashboard";
-import DefaultApi from "../../generated-client-js/src/api/DefaultApi";
-import userApiClient from "../../api/setupUserApi";
+import { userApi } from "../../api";
 
 const Main = () => {
   const [apartment, setApartment] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const defaultApi = new DefaultApi(userApiClient);
-    defaultApi.findApartmentByUser((error, data) => {
+    userApi.findApartmentByUser((error, data) => {
       setLoading(false);
       if (error) {
         console.error("Ошибка получения квартиры:", error);

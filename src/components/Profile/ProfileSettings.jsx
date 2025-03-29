@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
-import DefaultApi from "../../generated-client-js/src/api/DefaultApi";
-import userApiClient from "../../api/setupUserApi";
 import PasswordChangeModal from "../Modal/PasswordChangeModal";
 import AvatarDisplay from "./AvatarDisplay";
 import ProfileForm from "./ProfileForm";
 import AvatarUploadModal from "./AvatarUploadModal";
+import { clientApi } from "../../api";
 
 export default function AccountSettings() {
   const [showFileDropZone, setShowFileDropZone] = useState(false);
@@ -54,10 +53,9 @@ export default function AccountSettings() {
 
   // Раскомментируем и модифицируем запрос API для отображения данных по умолчанию
   useEffect(() => {
-    const defaultApi = new DefaultApi(userApiClient);
     setLoading(true);
 
-    defaultApi.getUser((error, data) => {
+    clientApi.getUser((error, data) => {
       setLoading(false);
       if (error) {
         console.error("Ошибка получения данных пользователя:", error);

@@ -2,13 +2,7 @@ import { useState, useEffect } from "react";
 import { DragDropContext } from "@hello-pangea/dnd";
 import Filter from "./Filter";
 import KanbanColumn from "./KanbanColumn";
-import TasksDefaultApi from "../../generated-task-client-js/src/api/DefaultApi";
-import tasksApiClient from "../../api/setupTasksApi";
-import userApiClient from "../../api/setupUserApi";
-import DefaultApi from "../../generated-client-js/src/api/DefaultApi";
-
-const tasksApi = new TasksDefaultApi(tasksApiClient);
-const userApi = new DefaultApi(userApiClient);
+import { taskApi, userApi } from "../../api";
 
 const columns = ["CREATED", "IN_PROGRESS", "COMPLETED"];
 
@@ -30,7 +24,7 @@ const mapUserData = (user) => {
 
 const fetchTasks = (apartmentId, startDate, endDate) => {
   return new Promise((resolve, reject) => {
-    tasksApi.getTasks(apartmentId, startDate, endDate, (error, data) => {
+    taskApi.getTasks(apartmentId, startDate, endDate, (error, data) => {
       if (error) {
         console.error("Ошибка при получении задач:", error);
         reject(error);

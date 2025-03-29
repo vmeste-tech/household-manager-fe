@@ -1,8 +1,7 @@
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import Pagination from "../Universal/Pagination";
-import financeApiClient from "../../api/setupFinanceApi";
-import DefaultApi from "../../generated-finance-client-js/src/api/DefaultApi";
+import { financeApi } from "../../api";
 
 // Функция для получения текущего периода в формате YYYYMM
 const getCurrentPeriod = () => {
@@ -26,8 +25,7 @@ const DebtsTable = ({ debts }) => {
 
   // Обработчик нажатия "Оплатить"
   const handlePayDebt = (debtId) => {
-    const api = new DefaultApi(financeApiClient);
-    api.payDebt(debtId, (error, data) => {
+    financeApi.payDebt(debtId, (error, data) => {
       if (error) {
         console.error("Ошибка оплаты:", error);
         // Можно показать уведомление об ошибке пользователю

@@ -3,15 +3,13 @@ import DashboardHeader from "../../components/Dashboard/DashboardHeader";
 import PenaltyTable from "../../components/Penalty/PenaltyTable";
 import StatCardsGrid from "../../components/Tasks/TaskStats";
 import Heading from "../../components/Universal/Heading";
-import DefaultApi from "../../generated-penalty-client-js/src/api/DefaultApi";
-import penaltyApiClient from "../../api/setupPenaltiesApi";
+import { penaltyApi } from "../../api";
 
 const PenaltyPage = () => {
   const [penalties, setPenalties] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const defaultApi = new DefaultApi(penaltyApiClient);
     const apartmentId = localStorage.getItem("apartmentId");
 
     if (!apartmentId) {
@@ -20,7 +18,7 @@ const PenaltyPage = () => {
       return;
     }
 
-    defaultApi.getApartmentPenalties(apartmentId, {}, (error, data) => {
+    penaltyApi.getApartmentPenalties(apartmentId, {}, (error, data) => {
       setLoading(false);
       if (error) {
         console.error("Ошибка получения штрафов:", error);
