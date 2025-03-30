@@ -1,11 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import { userApi } from "../../api";
+import { useState } from "react";
 
 const SignInPage = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    setError(null);
 
     // Получаем значения полей формы
     const form = e.currentTarget;
@@ -18,16 +23,37 @@ const SignInPage = () => {
       password: password,
     };
 
-    userApi.login(authRequest, (error, data) => {
-      if (error) {
-        console.error("Ошибка аутентификации:", error);
-        alert("Ошибка при входе. Проверьте введенные данные.");
-      } else {
-        localStorage.setItem("access_token", data.access_token);
-        localStorage.setItem("refresh_token", data.refresh_token);
-        navigate("/main");
-      }
-    });
+    try {
+      const loginPromise = new Promise((resolve, reject) => {
+        userApi.login(authRequest, (error, data) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(data);
+          }
+        });
+      });
+
+      const data = await loginPromise;
+      localStorage.setItem("access_token", data.access_token);
+      localStorage.setItem("refresh_token", data.refresh_token);
+
+      console.log("Authentication successful, redirecting...");
+      // Redirect to the stored path or default to /main
+      const redirectPath = sessionStorage.getItem("redirectPath") || "/main";
+      // Clear the stored path
+      sessionStorage.removeItem("redirectPath");
+
+      // Используем setTimeout, чтобы дать время localStorage обновиться
+      setTimeout(() => {
+        navigate(redirectPath, { replace: true });
+      }, 100);
+    } catch (err) {
+      console.error("Ошибка аутентификации:", err);
+      setError("Ошибка при входе. Проверьте введенные данные.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -49,6 +75,12 @@ const SignInPage = () => {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+          {error && (
+            <div className="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+              {error}
+            </div>
+          )}
+          
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label
@@ -119,9 +151,20 @@ const SignInPage = () => {
             <div>
               <button
                 type="submit"
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                disabled={isLoading}
+                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-indigo-400"
               >
-                Войти
+                {isLoading ? (
+                  <span className="flex items-center">
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Загрузка...
+                  </span>
+                ) : (
+                  "Войти"
+                )}
               </button>
             </div>
           </form>

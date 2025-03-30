@@ -1,6 +1,6 @@
 # OpenApiDefinition.DefaultApi
 
-All URIs are relative to *http://localhost:8082*
+All URIs are relative to *http://51.250.27.57:8082*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

@@ -23,36 +23,53 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [email, setEmail] = useState("");
   const [hasApartment, setHasApartment] = useState(null); // null означает "загрузка"
+  const [isLoading, setIsLoading] = useState(true); // Add loading state
 
   useEffect(() => {
     // Проверяем состояние авторизации при загрузке приложения
-    const token = localStorage.getItem("access_token");
-    if (token) {
-      setLoggedIn(true);
+    const checkAuth = async () => {
+      setIsLoading(true);
+      const token = localStorage.getItem("access_token");
 
-      // Здесь должен быть запрос к API для проверки наличия квартиры
-      // Имитация API-запроса
-      setTimeout(() => {
-        // В реальном приложении здесь должен быть запрос к API
-        const hasApt = localStorage.getItem("apartmentId") !== null;
-        setHasApartment(hasApt);
-      }, 500);
-    } else {
-      setLoggedIn(false);
-      setHasApartment(false);
-    }
-  }, []);
+      if (token) {
+        setLoggedIn(true);
+
+        try {
+          // Имитация API-запроса
+          await new Promise((resolve) => setTimeout(resolve, 500));
+          const hasApt = localStorage.getItem("apartmentId") !== null;
+          setHasApartment(hasApt);
+        } catch (error) {
+          console.error("Error checking apartment:", error);
+          setHasApartment(false);
+        }
+      } else {
+        setLoggedIn(false);
+        setHasApartment(false);
+      }
+
+      setIsLoading(false);
+    };
+
+    checkAuth();
+  }, []); // Empty dependency array so this only runs once
 
   // Функция для проверки, должен ли пользователь иметь доступ к защищенным маршрутам
-  const checkAuth = (element) => {
+  const checkAuth = (element, path) => {
+    if (isLoading) {
+      return <LoadingScreen />;
+    }
+
     if (!loggedIn) {
+      // Store the path the user was trying to access
+      sessionStorage.setItem("redirectPath", path);
       return <Navigate to="/signin" />;
     }
     return element;
   };
 
-  // Отображаем загрузку, пока не определили, есть ли у пользователя квартира
-  if (loggedIn && hasApartment === null) {
+  // Показываем загрузку только при инициализации
+  if (isLoading) {
     return <LoadingScreen />;
   }
 
@@ -74,7 +91,8 @@ function App() {
             path="/signin"
             element={
               loggedIn ? (
-                <Navigate to="/main" />
+                // Redirect to the stored path or main if none exists
+                <Navigate to={sessionStorage.getItem("redirectPath") || "/main"} />
               ) : (
                 <Login setLoggedIn={setLoggedIn} setEmail={setEmail} />
               )
@@ -82,25 +100,26 @@ function App() {
           />
           <Route
             path="/signup"
-            element={loggedIn ? <Navigate to="/main" /> : <SignUp />}
+            element={loggedIn ? <Navigate to={sessionStorage.getItem("redirectPath") || "/main"} /> : <SignUp />}
           />
-          <Route path="/main" element={checkAuth(<Main />)} />
-          <Route path="/tasks" element={checkAuth(<TaskPage />)} />
-          <Route path="/rules" element={checkAuth(<RulePage />)} />
-          <Route path="/penalties" element={checkAuth(<PenaltyPage />)} />
-          <Route path="/finances" element={checkAuth(<FinancesPage />)} />
-          <Route path="/purchases" element={checkAuth(<PurchasesPage />)} />
+          <Route path="/main" element={checkAuth(<Main />, "/main")} />
+          <Route path="/tasks" element={checkAuth(<TaskPage />, "/tasks")} />
+          <Route path="/rules" element={checkAuth(<RulePage />, "/rules")} />
+          <Route path="/penalties" element={checkAuth(<PenaltyPage />, "/penalties")} />
+          <Route path="/finances" element={checkAuth(<FinancesPage />, "/finances")} />
+          <Route path="/purchases" element={checkAuth(<PurchasesPage />, "/purchases")} />
           <Route
             path="/apartments"
             element={checkAuth(
-              hasApartment ? <ApartmentPage /> : <NoApartmentPage />
+              hasApartment ? <ApartmentPage /> : <NoApartmentPage />,
+              "/apartments"
             )}
           />
           <Route
             path="/notifications"
-            element={checkAuth(<NotificationPage />)}
+            element={checkAuth(<NotificationPage />, "/notifications")}
           />
-          <Route path="/profile" element={checkAuth(<ProfilePage />)} />
+          <Route path="/profile" element={checkAuth(<ProfilePage />, "/profile")} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -122,7 +122,7 @@ api.addToApartment(apartmentId, userId, callback);
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *http://localhost:8082*
+All URIs are relative to *http://51.250.27.57:8082*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
