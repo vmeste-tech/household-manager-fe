@@ -200,21 +200,20 @@ export default class DefaultApi {
     /**
      * Создание приглашения
      * Позволяет создать приглашение для добавления нового соседа
-     * @param {module:model/CreateInviteCodeRequest} request 
+     * @param {module:model/CreateInviteCodeRequest} createInviteCodeRequest 
      * @param {module:api/DefaultApi~createInviteCodeCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link module:model/InviteCodeDto}
      */
-    createInviteCode(request, callback) {
-      let postBody = null;
-      // verify the required parameter 'request' is set
-      if (request === undefined || request === null) {
-        throw new Error("Missing the required parameter 'request' when calling createInviteCode");
+    createInviteCode(createInviteCodeRequest, callback) {
+      let postBody = createInviteCodeRequest;
+      // verify the required parameter 'createInviteCodeRequest' is set
+      if (createInviteCodeRequest === undefined || createInviteCodeRequest === null) {
+        throw new Error("Missing the required parameter 'createInviteCodeRequest' when calling createInviteCode");
       }
 
       let pathParams = {
       };
       let queryParams = {
-        'request': request
       };
       let headerParams = {
       };
@@ -222,7 +221,7 @@ export default class DefaultApi {
       };
 
       let authNames = [];
-      let contentTypes = [];
+      let contentTypes = ['application/json'];
       let accepts = ['*/*'];
       let returnType = InviteCodeDto;
       return this.apiClient.callApi(
@@ -707,21 +706,20 @@ export default class DefaultApi {
     /**
      * Использование приглашения
      * Позволяет использовать приглашение вступления в квартиру
-     * @param {module:model/UseInviteCodeRequest} request 
+     * @param {module:model/UseInviteCodeRequest} useInviteCodeRequest 
      * @param {module:api/DefaultApi~useInviteCodeCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link module:model/ApartmentInfo}
      */
-    useInviteCode(request, callback) {
-      let postBody = null;
-      // verify the required parameter 'request' is set
-      if (request === undefined || request === null) {
-        throw new Error("Missing the required parameter 'request' when calling useInviteCode");
+    useInviteCode(useInviteCodeRequest, callback) {
+      let postBody = useInviteCodeRequest;
+      // verify the required parameter 'useInviteCodeRequest' is set
+      if (useInviteCodeRequest === undefined || useInviteCodeRequest === null) {
+        throw new Error("Missing the required parameter 'useInviteCodeRequest' when calling useInviteCode");
       }
 
       let pathParams = {
       };
       let queryParams = {
-        'request': request
       };
       let headerParams = {
       };
@@ -729,7 +727,7 @@ export default class DefaultApi {
       };
 
       let authNames = [];
-      let contentTypes = [];
+      let contentTypes = ['application/json'];
       let accepts = ['*/*'];
       let returnType = ApartmentInfo;
       return this.apiClient.callApi(

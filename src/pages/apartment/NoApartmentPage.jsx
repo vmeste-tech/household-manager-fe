@@ -5,15 +5,42 @@ import CustomButton from "../../components/Universal/CustomButton";
 import Modal from "../../components/Universal/Modal";
 import Heading from "../../components/Universal/Heading";
 import { userApi } from "../../api";
+import UseInviteCodeRequest from "../../generated-client-js/src/model/UseInviteCodeRequest";
 
 function NoApartmentPage() {
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [accessCode, setAccessCode] = useState("");
   const [apartmentName, setApartmentName] = useState("");
   const [apartmentAddress, setApartmentAddress] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  // Для 6-клеточного ввода кода
+  const [codeDigits, setCodeDigits] = useState(["", "", "", "", "", ""]);
+
+  // Фокусировка на следующем input при вводе
+  const handleCodeInput = (e, idx) => {
+    const val = e.target.value.replace(/[^0-9A-Za-z]/g, "").toUpperCase();
+    if (val.length > 1) return;
+    const newDigits = [...codeDigits];
+    newDigits[idx] = val;
+    setCodeDigits(newDigits);
+
+    // Автоматический переход к следующему input
+    if (val && idx < 5) {
+      document.getElementById(`code-input-${idx + 1}`)?.focus();
+    }
+  };
+
+  // Backspace: переход к предыдущему input
+  const handleCodeKeyDown = (e, idx) => {
+    if (e.key === "Backspace" && !codeDigits[idx] && idx > 0) {
+      document.getElementById(`code-input-${idx - 1}`)?.focus();
+    }
+  };
+
+  // Собираем код из клеточек
+  const accessCode = codeDigits.join("");
 
   const navigate = useNavigate();
 
@@ -23,9 +50,14 @@ function NoApartmentPage() {
     setError("");
 
     try {
+      // Создаем объект запроса
+      const request = new UseInviteCodeRequest();
+      request.code = accessCode;
+      
+      // Вызываем API для использования кода приглашения
       const joinPromise = new Promise((resolve, reject) => {
-        userApi.joinApartment(
-          { accessCode },
+        userApi.useInviteCode(
+          request,
           (error, data) => {
             if (error) {
               reject(error);
@@ -38,14 +70,16 @@ function NoApartmentPage() {
       
       const data = await joinPromise;
       
-      // Store the apartment ID in localStorage
-      localStorage.setItem("apartmentId", data.apartmentId);
+      // Сохраняем ID квартиры в localStorage
+      if (data && data.apartmentId) {
+        localStorage.setItem("apartmentId", data.apartmentId);
+      }
       
-      // После успешного присоединения
-      navigate("/apartments");
+      // Обновляем страницу после успешного присоединения
+      window.location.reload();
     } catch (err) {
       console.error("Ошибка при присоединении к квартире:", err);
-      setError("Ошибка при присоединении к квартире. Проверьте код доступа.");
+      setError("Некорректный код приглашения или он уже был использован");
     } finally {
       setIsLoading(false);
     }
@@ -194,15 +228,22 @@ function NoApartmentPage() {
               >
                 Код доступа
               </label>
-              <input
-                id="accessCode"
-                type="text"
-                value={accessCode}
-                onChange={(e) => setAccessCode(e.target.value)}
-                required
-                className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-                placeholder="Введите код доступа"
-              />
+              <div className="flex gap-2 justify-center mt-2">
+                {codeDigits.map((digit, idx) => (
+                  <input
+                    key={idx}
+                    id={`code-input-${idx}`}
+                    type="text"
+                    inputMode="text"
+                    maxLength={1}
+                    autoFocus={idx === 0}
+                    value={digit}
+                    onChange={(e) => handleCodeInput(e, idx)}
+                    onKeyDown={(e) => handleCodeKeyDown(e, idx)}
+                    className="w-12 h-12 text-center text-2xl border border-gray-300 rounded-md focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition"
+                  />
+                ))}
+              </div>
             </div>
 
             {error && <p className="text-red-500 text-sm">{error}</p>}
@@ -216,7 +257,8 @@ function NoApartmentPage() {
               <CustomButton
                 text={isLoading ? "Присоединение..." : "Присоединиться"}
                 type="submit"
-                disabled={isLoading || !accessCode}
+                onClick={handleJoinApartment}
+                disabled={isLoading || accessCode.length !== 6}
               />
             </div>
           </form>

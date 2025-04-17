@@ -172,7 +172,7 @@ Name | Type | Description  | Notes
 
 ## createInviteCode
 
-> InviteCodeDto createInviteCode(request)
+> InviteCodeDto createInviteCode(createInviteCodeRequest)
 
 Создание приглашения
 
@@ -184,8 +184,8 @@ Name | Type | Description  | Notes
 import OpenApiDefinition from 'open_api_definition';
 
 let apiInstance = new OpenApiDefinition.DefaultApi();
-let request = new OpenApiDefinition.CreateInviteCodeRequest(); // CreateInviteCodeRequest | 
-apiInstance.createInviteCode(request, (error, data, response) => {
+let createInviteCodeRequest = new OpenApiDefinition.CreateInviteCodeRequest(); // CreateInviteCodeRequest | 
+apiInstance.createInviteCode(createInviteCodeRequest, (error, data, response) => {
   if (error) {
     console.error(error);
   } else {
@@ -199,7 +199,7 @@ apiInstance.createInviteCode(request, (error, data, response) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **request** | [**CreateInviteCodeRequest**](.md)|  | 
+ **createInviteCodeRequest** | [**CreateInviteCodeRequest**](CreateInviteCodeRequest.md)|  | 
 
 ### Return type
 
@@ -211,7 +211,7 @@ No authorization required
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
+- **Content-Type**: application/json
 - **Accept**: */*
 
 
@@ -730,7 +730,7 @@ Name | Type | Description  | Notes
 
 ## useInviteCode
 
-> ApartmentInfo useInviteCode(request)
+> ApartmentInfo useInviteCode(useInviteCodeRequest)
 
 Использование приглашения
 
@@ -742,8 +742,8 @@ Name | Type | Description  | Notes
 import OpenApiDefinition from 'open_api_definition';
 
 let apiInstance = new OpenApiDefinition.DefaultApi();
-let request = new OpenApiDefinition.UseInviteCodeRequest(); // UseInviteCodeRequest | 
-apiInstance.useInviteCode(request, (error, data, response) => {
+let useInviteCodeRequest = new OpenApiDefinition.UseInviteCodeRequest(); // UseInviteCodeRequest | 
+apiInstance.useInviteCode(useInviteCodeRequest, (error, data, response) => {
   if (error) {
     console.error(error);
   } else {
@@ -757,7 +757,7 @@ apiInstance.useInviteCode(request, (error, data, response) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **request** | [**UseInviteCodeRequest**](.md)|  | 
+ **useInviteCodeRequest** | [**UseInviteCodeRequest**](UseInviteCodeRequest.md)|  | 
 
 ### Return type
 
@@ -769,6 +769,6 @@ No authorization required
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
+- **Content-Type**: application/json
 - **Accept**: */*
 

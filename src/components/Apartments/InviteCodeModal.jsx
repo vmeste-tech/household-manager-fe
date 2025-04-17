@@ -3,19 +3,42 @@ import PropTypes from "prop-types";
 import Modal from "../Universal/Modal";
 import Heading from "../Universal/Heading";
 import CustomButton from "../Universal/CustomButton";
+import { userApi } from "../../api";
+import CreateInviteCodeRequest from "../../generated-client-js/src/model/CreateInviteCodeRequest";
 
 const InviteCodeModal = ({ onClose }) => {
   const [inviteCode, setInviteCode] = useState("");
   const [copied, setCopied] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const generateInviteCode = () => {
+    setIsLoading(true);
+    setError(null);
+    
+    const apartmentId = localStorage.getItem('apartmentId');
+    if (!apartmentId) {
+      setIsLoading(false);
+      setError("Квартира не найдена");
+      return;
+    }
+    
+    const request = new CreateInviteCodeRequest();
+    request.apartmentId = apartmentId;
+    
+    userApi.createInviteCode(request, (error, data) => {
+      setIsLoading(false);
+      if (error) {
+        console.error("Error generating invite code:", error);
+        setError("Не удалось создать код приглашения");
+      } else {
+        setInviteCode(data.code);
+      }
+    });
+  };
 
   useEffect(() => {
-    // В реальном приложении здесь будет API-запрос для получения кода
-    // Симулируем генерацию кода
-    const generatedCode = Math.random()
-      .toString(36)
-      .substring(2, 10)
-      .toUpperCase();
-    setInviteCode(generatedCode);
+    generateInviteCode();
   }, []);
 
   const handleCopyCode = () => {
@@ -34,13 +57,24 @@ const InviteCodeModal = ({ onClose }) => {
         </p>
 
         <div className="flex items-center justify-between bg-gray-100 p-4 rounded-md">
-          <div className="font-mono text-lg font-bold tracking-wider">
-            {inviteCode}
-          </div>
+          {isLoading ? (
+            <div className="font-mono text-lg font-bold tracking-wider text-gray-400">
+              Загрузка...
+            </div>
+          ) : error ? (
+            <div className="font-mono text-lg font-bold tracking-wider text-red-500">
+              {error}
+            </div>
+          ) : (
+            <div className="font-mono text-lg font-bold tracking-wider">
+              {inviteCode}
+            </div>
+          )}
           <CustomButton
             text={copied ? "Скопировано!" : "Копировать"}
             onClick={handleCopyCode}
             variant={copied ? "filled" : "outlined"}
+            disabled={isLoading || error}
           />
         </div>
 
@@ -49,17 +83,18 @@ const InviteCodeModal = ({ onClose }) => {
           вам нужно будет создать новый код.
         </p>
 
+        {error && (
+          <p className="text-sm text-red-500">
+            Произошла ошибка при создании кода. Пожалуйста, попробуйте снова.
+          </p>
+        )}
+
         <div className="flex justify-end space-x-2 mt-6">
           <CustomButton text="Закрыть" onClick={onClose} variant="outlined" />
           <CustomButton
             text="Создать новый код"
-            onClick={() => {
-              const newCode = Math.random()
-                .toString(36)
-                .substring(2, 10)
-                .toUpperCase();
-              setInviteCode(newCode);
-            }}
+            onClick={generateInviteCode}
+            disabled={isLoading}
           />
         </div>
       </div>

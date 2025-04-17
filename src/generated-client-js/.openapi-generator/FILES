@@ -47,6 +47,3 @@ src/model/UseInviteCodeRequest.js
 src/model/UserInfoDto.js
 src/model/UserRegistrationRequest.js
 src/model/UserResponse.js
-test/model/CreateInviteCodeRequest.spec.js
-test/model/InviteCodeDto.spec.js
-test/model/UseInviteCodeRequest.spec.js
