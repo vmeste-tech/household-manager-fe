@@ -32,11 +32,11 @@ class ApiClient {
      * Overrides the default value set in spec file if present
      * @param {String} basePath
      */
-    constructor(basePath = 'http://51.250.27.57:8082') {
+    constructor(basePath = 'http://localhost:8082') {
         /**
          * The base URL against which to resolve every API call's (relative) path.
          * @type {String}
-         * @default http://51.250.27.57:8082
+         * @default http://localhost:8082
          */
         this.basePath = basePath.replace(/\/+$/, '');
 
@@ -595,7 +595,7 @@ class ApiClient {
     hostSettings() {
         return [
             {
-              'url': "http://51.250.27.57:8082",
+              'url': "http://localhost:8082",
               'description': "Generated server url",
             }
       ];

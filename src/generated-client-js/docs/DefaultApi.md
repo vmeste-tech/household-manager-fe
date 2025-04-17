@@ -1,12 +1,13 @@
 # OpenApiDefinition.DefaultApi
 
-All URIs are relative to *http://51.250.27.57:8082*
+All URIs are relative to *http://localhost:8082*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**addToApartment**](DefaultApi.md#addToApartment) | **POST** /api/v1/apartments/{apartmentId}/users/{userId} | Добавление пользователя в квартиру
 [**changePassword**](DefaultApi.md#changePassword) | **PATCH** /api/v1/users/{userId}/password | Обновление пароля
 [**createApartment**](DefaultApi.md#createApartment) | **POST** /api/v1/apartments | Создание квартиры
+[**createInviteCode**](DefaultApi.md#createInviteCode) | **POST** /api/v1/invite/create | Создание приглашения
 [**deleteApartment**](DefaultApi.md#deleteApartment) | **DELETE** /api/v1/apartments/{apartmentId} | Удаление квартиры
 [**deleteFromApartment**](DefaultApi.md#deleteFromApartment) | **DELETE** /api/v1/apartments/{apartmentId}/users/{userId} | Удаление пользователя из квартиры
 [**deleteUser**](DefaultApi.md#deleteUser) | **DELETE** /api/v1/users/{userId} | 
@@ -18,6 +19,7 @@ Method | HTTP request | Description
 [**refreshToken**](DefaultApi.md#refreshToken) | **POST** /api/v1/auth/refresh | Обновление JWT токена
 [**register**](DefaultApi.md#register) | **POST** /api/v1/users/register | Регистрация пользователя
 [**updateApartment**](DefaultApi.md#updateApartment) | **PUT** /api/v1/apartments/{apartmentId} | Обновление квартиры
+[**useInviteCode**](DefaultApi.md#useInviteCode) | **POST** /api/v1/invite/use | Использование приглашения
 
 
 
@@ -165,6 +167,51 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
+- **Accept**: */*
+
+
+## createInviteCode
+
+> InviteCodeDto createInviteCode(request)
+
+Создание приглашения
+
+Позволяет создать приглашение для добавления нового соседа
+
+### Example
+
+```javascript
+import OpenApiDefinition from 'open_api_definition';
+
+let apiInstance = new OpenApiDefinition.DefaultApi();
+let request = new OpenApiDefinition.CreateInviteCodeRequest(); // CreateInviteCodeRequest | 
+apiInstance.createInviteCode(request, (error, data, response) => {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+});
+```
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **request** | [**CreateInviteCodeRequest**](.md)|  | 
+
+### Return type
+
+[**InviteCodeDto**](InviteCodeDto.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
 - **Accept**: */*
 
 
@@ -678,5 +725,50 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
+- **Accept**: */*
+
+
+## useInviteCode
+
+> ApartmentInfo useInviteCode(request)
+
+Использование приглашения
+
+Позволяет использовать приглашение вступления в квартиру
+
+### Example
+
+```javascript
+import OpenApiDefinition from 'open_api_definition';
+
+let apiInstance = new OpenApiDefinition.DefaultApi();
+let request = new OpenApiDefinition.UseInviteCodeRequest(); // UseInviteCodeRequest | 
+apiInstance.useInviteCode(request, (error, data, response) => {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+});
+```
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **request** | [**UseInviteCodeRequest**](.md)|  | 
+
+### Return type
+
+[**ApartmentInfo**](ApartmentInfo.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
 - **Accept**: */*
 

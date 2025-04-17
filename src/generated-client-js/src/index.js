@@ -19,13 +19,16 @@ import AuthRequest from './model/AuthRequest';
 import ChangePasswordRequest from './model/ChangePasswordRequest';
 import CreateApartmentRequest from './model/CreateApartmentRequest';
 import CreateApartmentResponse from './model/CreateApartmentResponse';
+import CreateInviteCodeRequest from './model/CreateInviteCodeRequest';
 import GetApartmentResponse from './model/GetApartmentResponse';
 import GetUserResponse from './model/GetUserResponse';
+import InviteCodeDto from './model/InviteCodeDto';
 import RefreshTokenRequest from './model/RefreshTokenRequest';
 import Response from './model/Response';
 import TokenResponse from './model/TokenResponse';
 import UpdateApartmentRequest from './model/UpdateApartmentRequest';
 import UpdateApartmentResponse from './model/UpdateApartmentResponse';
+import UseInviteCodeRequest from './model/UseInviteCodeRequest';
 import UserInfoDto from './model/UserInfoDto';
 import UserRegistrationRequest from './model/UserRegistrationRequest';
 import UserResponse from './model/UserResponse';
@@ -107,6 +110,12 @@ export {
     CreateApartmentResponse,
 
     /**
+     * The CreateInviteCodeRequest model constructor.
+     * @property {module:model/CreateInviteCodeRequest}
+     */
+    CreateInviteCodeRequest,
+
+    /**
      * The GetApartmentResponse model constructor.
      * @property {module:model/GetApartmentResponse}
      */
@@ -117,6 +126,12 @@ export {
      * @property {module:model/GetUserResponse}
      */
     GetUserResponse,
+
+    /**
+     * The InviteCodeDto model constructor.
+     * @property {module:model/InviteCodeDto}
+     */
+    InviteCodeDto,
 
     /**
      * The RefreshTokenRequest model constructor.
@@ -147,6 +162,12 @@ export {
      * @property {module:model/UpdateApartmentResponse}
      */
     UpdateApartmentResponse,
+
+    /**
+     * The UseInviteCodeRequest model constructor.
+     * @property {module:model/UseInviteCodeRequest}
+     */
+    UseInviteCodeRequest,
 
     /**
      * The UserInfoDto model constructor.

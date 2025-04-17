@@ -19,13 +19,16 @@ import AuthRequest from '../model/AuthRequest';
 import ChangePasswordRequest from '../model/ChangePasswordRequest';
 import CreateApartmentRequest from '../model/CreateApartmentRequest';
 import CreateApartmentResponse from '../model/CreateApartmentResponse';
+import CreateInviteCodeRequest from '../model/CreateInviteCodeRequest';
 import GetApartmentResponse from '../model/GetApartmentResponse';
 import GetUserResponse from '../model/GetUserResponse';
+import InviteCodeDto from '../model/InviteCodeDto';
 import RefreshTokenRequest from '../model/RefreshTokenRequest';
 import Response from '../model/Response';
 import TokenResponse from '../model/TokenResponse';
 import UpdateApartmentRequest from '../model/UpdateApartmentRequest';
 import UpdateApartmentResponse from '../model/UpdateApartmentResponse';
+import UseInviteCodeRequest from '../model/UseInviteCodeRequest';
 import UserRegistrationRequest from '../model/UserRegistrationRequest';
 import UserResponse from '../model/UserResponse';
 
@@ -181,6 +184,49 @@ export default class DefaultApi {
       let returnType = CreateApartmentResponse;
       return this.apiClient.callApi(
         '/api/v1/apartments', 'POST',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the createInviteCode operation.
+     * @callback module:api/DefaultApi~createInviteCodeCallback
+     * @param {String} error Error message, if any.
+     * @param {module:model/InviteCodeDto} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * Создание приглашения
+     * Позволяет создать приглашение для добавления нового соседа
+     * @param {module:model/CreateInviteCodeRequest} request 
+     * @param {module:api/DefaultApi~createInviteCodeCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/InviteCodeDto}
+     */
+    createInviteCode(request, callback) {
+      let postBody = null;
+      // verify the required parameter 'request' is set
+      if (request === undefined || request === null) {
+        throw new Error("Missing the required parameter 'request' when calling createInviteCode");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+        'request': request
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = [];
+      let contentTypes = [];
+      let accepts = ['*/*'];
+      let returnType = InviteCodeDto;
+      return this.apiClient.callApi(
+        '/api/v1/invite/create', 'POST',
         pathParams, queryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, null, callback
       );
@@ -645,6 +691,49 @@ export default class DefaultApi {
       let returnType = UpdateApartmentResponse;
       return this.apiClient.callApi(
         '/api/v1/apartments/{apartmentId}', 'PUT',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the useInviteCode operation.
+     * @callback module:api/DefaultApi~useInviteCodeCallback
+     * @param {String} error Error message, if any.
+     * @param {module:model/ApartmentInfo} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * Использование приглашения
+     * Позволяет использовать приглашение вступления в квартиру
+     * @param {module:model/UseInviteCodeRequest} request 
+     * @param {module:api/DefaultApi~useInviteCodeCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/ApartmentInfo}
+     */
+    useInviteCode(request, callback) {
+      let postBody = null;
+      // verify the required parameter 'request' is set
+      if (request === undefined || request === null) {
+        throw new Error("Missing the required parameter 'request' when calling useInviteCode");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+        'request': request
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = [];
+      let contentTypes = [];
+      let accepts = ['*/*'];
+      let returnType = ApartmentInfo;
+      return this.apiClient.callApi(
+        '/api/v1/invite/use', 'POST',
         pathParams, queryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, null, callback
       );

@@ -122,13 +122,14 @@ api.addToApartment(apartmentId, userId, callback);
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *http://51.250.27.57:8082*
+All URIs are relative to *http://localhost:8082*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *OpenApiDefinition.DefaultApi* | [**addToApartment**](docs/DefaultApi.md#addToApartment) | **POST** /api/v1/apartments/{apartmentId}/users/{userId} | Добавление пользователя в квартиру
 *OpenApiDefinition.DefaultApi* | [**changePassword**](docs/DefaultApi.md#changePassword) | **PATCH** /api/v1/users/{userId}/password | Обновление пароля
 *OpenApiDefinition.DefaultApi* | [**createApartment**](docs/DefaultApi.md#createApartment) | **POST** /api/v1/apartments | Создание квартиры
+*OpenApiDefinition.DefaultApi* | [**createInviteCode**](docs/DefaultApi.md#createInviteCode) | **POST** /api/v1/invite/create | Создание приглашения
 *OpenApiDefinition.DefaultApi* | [**deleteApartment**](docs/DefaultApi.md#deleteApartment) | **DELETE** /api/v1/apartments/{apartmentId} | Удаление квартиры
 *OpenApiDefinition.DefaultApi* | [**deleteFromApartment**](docs/DefaultApi.md#deleteFromApartment) | **DELETE** /api/v1/apartments/{apartmentId}/users/{userId} | Удаление пользователя из квартиры
 *OpenApiDefinition.DefaultApi* | [**deleteUser**](docs/DefaultApi.md#deleteUser) | **DELETE** /api/v1/users/{userId} | 
@@ -140,6 +141,7 @@ Class | Method | HTTP request | Description
 *OpenApiDefinition.DefaultApi* | [**refreshToken**](docs/DefaultApi.md#refreshToken) | **POST** /api/v1/auth/refresh | Обновление JWT токена
 *OpenApiDefinition.DefaultApi* | [**register**](docs/DefaultApi.md#register) | **POST** /api/v1/users/register | Регистрация пользователя
 *OpenApiDefinition.DefaultApi* | [**updateApartment**](docs/DefaultApi.md#updateApartment) | **PUT** /api/v1/apartments/{apartmentId} | Обновление квартиры
+*OpenApiDefinition.DefaultApi* | [**useInviteCode**](docs/DefaultApi.md#useInviteCode) | **POST** /api/v1/invite/use | Использование приглашения
 
 
 ## Documentation for Models
@@ -150,13 +152,16 @@ Class | Method | HTTP request | Description
  - [OpenApiDefinition.ChangePasswordRequest](docs/ChangePasswordRequest.md)
  - [OpenApiDefinition.CreateApartmentRequest](docs/CreateApartmentRequest.md)
  - [OpenApiDefinition.CreateApartmentResponse](docs/CreateApartmentResponse.md)
+ - [OpenApiDefinition.CreateInviteCodeRequest](docs/CreateInviteCodeRequest.md)
  - [OpenApiDefinition.GetApartmentResponse](docs/GetApartmentResponse.md)
  - [OpenApiDefinition.GetUserResponse](docs/GetUserResponse.md)
+ - [OpenApiDefinition.InviteCodeDto](docs/InviteCodeDto.md)
  - [OpenApiDefinition.RefreshTokenRequest](docs/RefreshTokenRequest.md)
  - [OpenApiDefinition.Response](docs/Response.md)
  - [OpenApiDefinition.TokenResponse](docs/TokenResponse.md)
  - [OpenApiDefinition.UpdateApartmentRequest](docs/UpdateApartmentRequest.md)
  - [OpenApiDefinition.UpdateApartmentResponse](docs/UpdateApartmentResponse.md)
+ - [OpenApiDefinition.UseInviteCodeRequest](docs/UseInviteCodeRequest.md)
  - [OpenApiDefinition.UserInfoDto](docs/UserInfoDto.md)
  - [OpenApiDefinition.UserRegistrationRequest](docs/UserRegistrationRequest.md)
  - [OpenApiDefinition.UserResponse](docs/UserResponse.md)
