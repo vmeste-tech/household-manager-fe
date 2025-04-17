@@ -1,6 +1,7 @@
 import DefaultApi from "../generated-client-js/src/api/DefaultApi";
 import ApiClient from "../generated-client-js/src/ApiClient";
 import RefreshTokenRequest from "../generated-client-js/src/model/RefreshTokenRequest";
+import { apiConfig } from "./apiConfig";
 
 let isRefreshing = false;
 let failedQueue = [];
@@ -63,7 +64,7 @@ export function tokenInterceptor(req) {
 
         isRefreshing = true;
 
-        const refreshApiClient = new ApiClient();
+        const refreshApiClient = new ApiClient(apiConfig.main.baseUrl);
         const defaultApi = new DefaultApi(refreshApiClient);
         const refreshRequest = new RefreshTokenRequest(refreshToken);
 

@@ -5,7 +5,6 @@
 
 // Получаем базовый URL из переменной окружения или используем значение по умолчанию
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost";
-console.log("Using API base URL:", API_BASE_URL); // Добавим для отладки
 
 // Конфигурация для каждого отдельного сервиса
 export const apiConfig = {

@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { userApi } from "../../api";
 import { useState } from "react";
+import PropTypes from "prop-types";
 
-const SignInPage = () => {
+const SignInPage = ({ setLoggedIn, setEmail }) => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -38,16 +39,12 @@ const SignInPage = () => {
       localStorage.setItem("access_token", data.access_token);
       localStorage.setItem("refresh_token", data.refresh_token);
 
-      console.log("Authentication successful, redirecting...");
-      // Redirect to the stored path or default to /main
-      const redirectPath = sessionStorage.getItem("redirectPath") || "/main";
-      // Clear the stored path
-      sessionStorage.removeItem("redirectPath");
+      // Обновляем состояние авторизации в App
+      setLoggedIn(true);
+      setEmail(email);
 
-      // Используем setTimeout, чтобы дать время localStorage обновиться
-      setTimeout(() => {
-        navigate(redirectPath, { replace: true });
-      }, 100);
+      console.log("Authentication successful, redirecting...");
+      navigate('/main', { replace: true });
     } catch (err) {
       console.error("Ошибка аутентификации:", err);
       setError("Ошибка при входе. Проверьте введенные данные.");
@@ -172,6 +169,11 @@ const SignInPage = () => {
       </div>
     </div>
   );
+};
+
+SignInPage.propTypes = {
+  setLoggedIn: PropTypes.func.isRequired,
+  setEmail: PropTypes.func.isRequired
 };
 
 export default SignInPage;

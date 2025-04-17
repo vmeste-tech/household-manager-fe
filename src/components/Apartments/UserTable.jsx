@@ -2,6 +2,20 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import EditUserModal from "../Modal/EditUserModal";
 
+// Mapping between backend enum and frontend display values
+const STATUS_MAPPING = {
+  // Backend to frontend
+  ACTIVE: "Активен",
+  AWAY: "В отпуске",
+  SICK: "Заболел",
+  
+  // Frontend to backend
+  "Активен": "ACTIVE",
+  "В отпуске": "AWAY",
+  "Заболел": "SICK",
+  "Выселился": null // Note: This status doesn't have a backend equivalent
+};
+
 const UsersTable = ({ users, onUserUpdate }) => {
   const [editingUser, setEditingUser] = useState(null);
 
@@ -13,7 +27,7 @@ const UsersTable = ({ users, onUserUpdate }) => {
     onUserUpdate(updatedUser);
     setEditingUser(null);
   };
-
+  
   // Функция для форматирования даты в русском формате
   const formatDate = (dateString) => {
     const options = {
@@ -32,35 +46,37 @@ const UsersTable = ({ users, onUserUpdate }) => {
   };
 
   const getStatusBadge = (status) => {
-    switch (status) {
+    const displayStatus = STATUS_MAPPING[status];
+    
+    switch (displayStatus) {
       case "Активен":
         return (
           <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-            {status}
+            {displayStatus}
           </span>
         );
       case "В отпуске":
         return (
           <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-amber-100 text-amber-800">
-            {status}
+            {displayStatus}
           </span>
         );
       case "Заболел":
         return (
           <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-            {status}
+            {displayStatus}
           </span>
         );
       case "Выселился":
         return (
           <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
-            {status}
+            {displayStatus}
           </span>
         );
       default:
         return (
           <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
-            {status}
+            {displayStatus}
           </span>
         );
     }
@@ -163,10 +179,6 @@ UsersTable.propTypes = {
     })
   ).isRequired,
   onUserUpdate: PropTypes.func,
-};
-
-UsersTable.defaultProps = {
-  onUserUpdate: () => {},
 };
 
 export default UsersTable;

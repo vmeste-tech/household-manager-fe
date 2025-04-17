@@ -92,8 +92,4 @@ DashboardHeader.propTypes = {
   avatarUrl: PropTypes.string,
 };
 
-DashboardHeader.defaultProps = {
-  avatarUrl: "",
-};
-
 export default DashboardHeader;

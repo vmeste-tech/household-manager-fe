@@ -4,6 +4,7 @@ import DashboardHeader from "../../components/Dashboard/DashboardHeader";
 import CustomButton from "../../components/Universal/CustomButton";
 import Modal from "../../components/Universal/Modal";
 import Heading from "../../components/Universal/Heading";
+import { userApi } from "../../api";
 
 function NoApartmentPage() {
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
@@ -22,12 +23,28 @@ function NoApartmentPage() {
     setError("");
 
     try {
-      // Здесь будет API-запрос для присоединения к квартире по коду
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Имитация запроса
-
+      const joinPromise = new Promise((resolve, reject) => {
+        userApi.joinApartment(
+          { accessCode },
+          (error, data) => {
+            if (error) {
+              reject(error);
+            } else {
+              resolve(data);
+            }
+          }
+        );
+      });
+      
+      const data = await joinPromise;
+      
+      // Store the apartment ID in localStorage
+      localStorage.setItem("apartmentId", data.apartmentId);
+      
       // После успешного присоединения
       navigate("/apartments");
-    } catch {
+    } catch (err) {
+      console.error("Ошибка при присоединении к квартире:", err);
       setError("Ошибка при присоединении к квартире. Проверьте код доступа.");
     } finally {
       setIsLoading(false);
@@ -35,6 +52,7 @@ function NoApartmentPage() {
   };
 
   const handleCreateApartment = async (e) => {
+    console.info("Creating apartment with name:", apartmentName);
     e.preventDefault();
     setIsLoading(true);
     setError("");
@@ -46,12 +64,31 @@ function NoApartmentPage() {
     }
 
     try {
-      // Здесь будет API-запрос для создания новой квартиры
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Имитация запроса
-
+      const createPromise = new Promise((resolve, reject) => {
+        userApi.createApartment(
+          { 
+            name: apartmentName, 
+            address: apartmentAddress 
+          },
+          (error, data) => {
+            if (error) {
+              reject(error);
+            } else {
+              resolve(data);
+            }
+          }
+        );
+      });
+      
+      const data = await createPromise;
+      
+      // Store the apartment ID in localStorage
+      localStorage.setItem("apartmentId", data.apartmentId);
+      
       // После успешного создания
       navigate("/apartments");
-    } catch {
+    } catch (err) {
+      console.error("Ошибка при создании квартиры:", err);
       setError("Ошибка при создании квартиры. Пожалуйста, попробуйте еще раз.");
     } finally {
       setIsLoading(false);
@@ -237,7 +274,7 @@ function NoApartmentPage() {
               />
               <CustomButton
                 text={isLoading ? "Создание..." : "Создать"}
-                type="submit"
+                onClick={handleCreateApartment}
                 disabled={isLoading || !apartmentName || !apartmentAddress}
               />
             </div>
