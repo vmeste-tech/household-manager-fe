@@ -43,8 +43,7 @@ const SignInPage = ({ setLoggedIn, setEmail }) => {
       setLoggedIn(true);
       setEmail(email);
 
-      console.log("Authentication successful, redirecting...");
-      navigate('/main', { replace: true });
+      navigate('/main');
     } catch (err) {
       console.error("Ошибка аутентификации:", err);
       setError("Ошибка при входе. Проверьте введенные данные.");

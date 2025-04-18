@@ -17,6 +17,15 @@ const DashboardHeader = ({ avatarUrl }) => {
   const handleProfileClick = () => {
     navigate("/profile");
   };
+  
+  const handleLogout = () => {
+    // Clear auth tokens and apartmentId from localStorage
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+    localStorage.removeItem("apartmentId");
+    // Redirect to signin page
+    navigate("/signin");
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -59,7 +68,7 @@ const DashboardHeader = ({ avatarUrl }) => {
         >
           Vmeste<span className="text-indigo-800">.tech</span>
         </div>
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-4">
           <span
             ref={notificationRef}
             onClick={handleNotificationClick}
@@ -67,6 +76,7 @@ const DashboardHeader = ({ avatarUrl }) => {
           >
             уведомления
           </span>
+          
           {avatarUrl ? (
             <img
               onClick={handleProfileClick}
@@ -82,6 +92,27 @@ const DashboardHeader = ({ avatarUrl }) => {
               {defaultAvatarSvg}
             </div>
           )}
+          
+          {/* Logout Button */}
+          <button
+            onClick={handleLogout}
+            className="flex items-center text-gray-600 hover:text-indigo-800 transition-transform duration-300 hover:scale-110"
+          >
+            <svg 
+              className="w-6 h-6" 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24" 
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                strokeWidth="2" 
+                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+              />
+            </svg>
+          </button>
         </div>
       </div>
     </header>

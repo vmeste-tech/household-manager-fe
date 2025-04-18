@@ -9,7 +9,7 @@ import WelcomeCard from "./WelcomeCard";
 
 const MainContent = () => {
   return (
-    <main className="flex-1 p-4">
+    <main className="flex-1 p-4 sm:px-6 lg:px-8">
       <div className="flex flex-col lg:flex-row gap-4 mb-6">
         <WelcomeCard />
         <InboxCard />

@@ -53,7 +53,7 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative">
+    <div className="min-h-screen bg-gray-100 flex flex-col justify-center px-4 sm:px-6 lg:px-8 py-12 relative">
       {/* Отображение toast-сообщения */}
       {toast && (
         <div className="absolute top-5 left-1/2 transform -translate-x-1/2 z-50">

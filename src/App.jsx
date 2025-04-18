@@ -22,8 +22,8 @@ import LoadingScreen from "./components/Loading/LoadingScreen";
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [email, setEmail] = useState("");
-  const [hasApartment, setHasApartment] = useState(null); // null означает "загрузка"
   const [isLoading, setIsLoading] = useState(true); // Add loading state
+  const [hasApartment, setHasApartment] = useState(!!localStorage.getItem("apartmentId"));
 
   useEffect(() => {
     // Проверяем состояние авторизации при загрузке приложения
@@ -33,19 +33,8 @@ function App() {
 
       if (token) {
         setLoggedIn(true);
-
-        try {
-          // Имитация API-запроса
-          await new Promise((resolve) => setTimeout(resolve, 500));
-          const hasApt = localStorage.getItem("apartmentId") !== null;
-          setHasApartment(hasApt);
-        } catch (error) {
-          console.error("Error checking apartment:", error);
-          setHasApartment(false);
-        }
       } else {
         setLoggedIn(false);
-        setHasApartment(false);
       }
 
       setIsLoading(false);
@@ -92,7 +81,7 @@ function App() {
             element={
               loggedIn ? (
                 // Redirect to the stored path or main if none exists
-                <Navigate to={sessionStorage.getItem("redirectPath") || "/main"} />
+                <Navigate to={"/main"} />
               ) : (
                 <Login setLoggedIn={setLoggedIn} setEmail={setEmail} />
               )
@@ -100,7 +89,7 @@ function App() {
           />
           <Route
             path="/signup"
-            element={loggedIn ? <Navigate to={sessionStorage.getItem("redirectPath") || "/main"} /> : <SignUp />}
+            element={loggedIn ? <Navigate to={"/main"} /> : <SignUp />}
           />
           <Route path="/main" element={checkAuth(<Main />, "/main")} />
           <Route path="/tasks" element={checkAuth(<TaskPage />, "/tasks")} />
@@ -111,7 +100,7 @@ function App() {
           <Route
             path="/apartments"
             element={checkAuth(
-              hasApartment ? <ApartmentPage /> : <NoApartmentPage />,
+              hasApartment ? <ApartmentPage /> : <NoApartmentPage setHasApartment={setHasApartment} />,
               "/apartments"
             )}
           />

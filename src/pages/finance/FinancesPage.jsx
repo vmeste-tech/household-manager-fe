@@ -154,7 +154,7 @@ function FinancesPage() {
   return (
     <div className="bg-indigo-50 min-h-screen overflow-x-hidden">
       <DashboardHeader />
-      <div className="pt-20 max-w-7xl mx-auto flex flex-col gap-8">
+      <div className="pt-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col gap-8">
         <Heading>Статистика расходов</Heading>
         <FilterDropdown
           filters={filters}
