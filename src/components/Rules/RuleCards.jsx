@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import RuleCard from "./RuleCard";
 import RuleDetails from "./RuleDetails";
+import { ruleApi } from "../../api";
 
 const RuleCards = ({ activeFilter }) => {
   const [selectedRule, setSelectedRule] = useState(null);
+  const [rules, setRules] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // Status-based styling configuration
   const statusStyles = {
@@ -29,78 +33,58 @@ const RuleCards = ({ activeFilter }) => {
     },
   };
 
-  const rules = [
-    {
-      id: 1,
-      title: "Тишина после 22:00",
-      description:
-        "Запрещается шуметь после 22:00, чтобы не мешать другим жильцам отдыхать перед следующим рабочим днем.",
-      status: "Принятые",
-      fine: "500₽",
-      votesFor: 4,
-      votesAgainst: 1,
-      createdBy: "Иван Иванов",
-      createdAt: "2023-09-15",
-      cronExpression: "0 22 * * *",
-      timeZone: "Europe/Moscow",
-    },
-    {
-      id: 2,
-      title: "График уборки",
-      description:
-        "Ежедневная уборка общественных зон согласно установленному графику. Каждый жилец обязан следовать своему расписанию.",
-      status: "Принятые",
-      fine: "300₽",
-      votesFor: 5,
-      votesAgainst: 0,
-      createdBy: "Анна Смирнова",
-      createdAt: "2023-09-10",
-      cronExpression: "0 10 * * MON,WED,FRI",
-      timeZone: "Europe/Moscow",
-    },
-    {
-      id: 3,
-      title: "Ограничение на использование ванной",
-      description:
-        "Максимальное время использования ванной в часы пик (утром с 7:00 до 9:00 и вечером с 19:00 до 21:00) - 30 минут.",
-      status: "На голосовании",
-      fine: "200₽",
-      votesFor: 2,
-      votesAgainst: 1,
-      createdBy: "Петр Петров",
-      createdAt: "2023-09-20",
-      cronExpression: "0 7,19 * * *",
-      timeZone: "Europe/Moscow",
-    },
-    {
-      id: 4,
-      title: "Запрет на курение в помещении",
-      description:
-        "Запрещается курение в квартире. Для курения необходимо выходить на балкон или улицу.",
-      status: "Принятые",
-      fine: "1000₽",
-      votesFor: 3,
-      votesAgainst: 2,
-      createdBy: "Мария Иванова",
-      createdAt: "2023-08-15",
-      cronExpression: "0 0 * * *",
-      timeZone: "Europe/Moscow",
-    },
-    {
-      id: 5,
-      title: "Использование стиральной машины",
-      description:
-        "Запрещается использовать стиральную машину после 23:00, чтобы не мешать соседям спать.",
-      status: "Отклонённые",
-      fine: "300₽",
-      votesFor: 1,
-      votesAgainst: 4,
-      createdBy: "Алексей Сидоров",
-      createdAt: "2023-09-01",
-      cronExpression: "0 23 * * *",
-      timeZone: "Europe/Moscow",
-    },
-  ];
+  // Map API status values to UI status values
+  const statusMapping = {
+    "ACCEPTED": "Принятые",
+    "VOTING": "На голосовании",
+    "REJECTED": "Отклонённые"
+  };
+
+  useEffect(() => {
+    const fetchRules = async () => {
+      try {
+        setLoading(true);
+        const apartmentId = localStorage.getItem("apartmentId");
+        
+        if (!apartmentId) {
+          throw new Error("Идентификатор квартиры не найден");
+        }
+        
+        ruleApi.getApartmentRules(apartmentId, (error, data) => {
+          if (error) {
+            console.error("Error fetching rules:", error);
+            setError("Не удалось загрузить правила");
+            setLoading(false);
+            return;
+          }
+          
+          // Transform API data to match our component's expected format
+          const transformedRules = data.map(rule => ({
+            id: rule.id,
+            title: rule.name,
+            description: rule.description,
+            status: statusMapping[rule.status] || "На голосовании",
+            fine: `${rule.penaltyAmount}₽`,
+            votesFor: rule.votesFor || 0,
+            votesAgainst: rule.votesAgainst || 0,
+            createdBy: rule.createdBy || "Система",
+            createdAt: rule.createdAt || new Date().toISOString(),
+            cronExpression: rule.cronExpression || "",
+            timeZone: rule.timeZone || "Europe/Moscow"
+          }));
+          
+          setRules(transformedRules);
+          setLoading(false);
+        });
+      } catch (err) {
+        console.error("Failed to fetch rules:", err);
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchRules();
+  }, []);
 
   const filteredRules =
     activeFilter === "Все"
@@ -119,18 +103,46 @@ const RuleCards = ({ activeFilter }) => {
     setSelectedRule(null);
   };
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+        <p>{error}</p>
+        <button 
+          className="mt-2 text-sm text-red-700 hover:text-red-900 underline"
+          onClick={() => window.location.reload()}
+        >
+          Попробовать снова
+        </button>
+      </div>
+    );
+  }
+
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredRules.map((rule) => (
-          <RuleCard
-            key={rule.id}
-            rule={rule}
-            styleConfig={statusStyles[rule.status]}
-            onClick={() => setSelectedRule(rule)}
-          />
-        ))}
-      </div>
+      {filteredRules.length === 0 ? (
+        <div className="text-center p-8 bg-gray-50 rounded-lg">
+          <p className="text-gray-600">Правила не найдены</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredRules.map((rule) => (
+            <RuleCard
+              key={rule.id}
+              rule={rule}
+              styleConfig={statusStyles[rule.status]}
+              onClick={() => setSelectedRule(rule)}
+            />
+          ))}
+        </div>
+      )}
 
       {selectedRule && (
         <RuleDetails
