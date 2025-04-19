@@ -1,6 +1,8 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import CustomButton from "../Universal/CustomButton";
+import CreateVoteRequest from "../../generated-rules-client-js/src/model/CreateVoteRequest";
+import { ruleApi } from "../../api";
 
 // Добавим функцию для преобразования CRON-выражения в читаемый формат
 const formatCronExpression = (cronExpression) => {
@@ -50,10 +52,41 @@ const formatCronExpression = (cronExpression) => {
 
 const RuleDetails = ({ rule, styleConfig, onClose, onVote }) => {
   const [userVote, setUserVote] = useState(null);
+  const [isVoting, setIsVoting] = useState(false);
+  const [voteError, setVoteError] = useState(null);
 
-  const handleVote = (voteType) => {
-    setUserVote(voteType);
-    onVote(rule.id, voteType);
+  const handleVote = async (voteType) => {
+    try {
+      setIsVoting(true);
+      setVoteError(null);
+      
+      // Create vote request
+      const createVoteRequest = new CreateVoteRequest();
+      createVoteRequest.ruleId = rule.id.toString();
+      createVoteRequest.status = voteType === "за" ? "FOR" : "AGAINST";
+      
+      // Make API call
+      await new Promise((resolve, reject) => {
+        ruleApi.vote(createVoteRequest, (error, data) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(data);
+          }
+        });
+      });
+      
+      // Update local state
+      setUserVote(voteType);
+      
+      // Notify parent component
+      onVote(rule.id, voteType);
+    } catch (error) {
+      console.error("Error voting:", error);
+      setVoteError("Не удалось проголосовать. Попробуйте позже.");
+    } finally {
+      setIsVoting(false);
+    }
   };
 
   return (
@@ -239,17 +272,23 @@ const RuleDetails = ({ rule, styleConfig, onClose, onVote }) => {
                   </span>
                 </div>
               ) : (
-                <div className="flex justify-center space-x-3">
-                  <CustomButton
-                    text="За"
-                    onClick={() => handleVote("за")}
-                    variant="filled"
-                  />
-                  <CustomButton
-                    text="Против"
-                    onClick={() => handleVote("против")}
-                    variant="outlined"
-                  />
+                <div className="flex flex-col items-center">
+                  <div className="flex justify-center space-x-3 mb-2">
+                    <CustomButton
+                      text="За"
+                      onClick={() => handleVote("за")}
+                      variant="filled"
+                      disabled={isVoting}
+                    />
+                    <CustomButton
+                      text="Против"
+                      onClick={() => handleVote("против")}
+                      variant="outlined"
+                      disabled={isVoting}
+                    />
+                  </div>
+                  {isVoting && <p className="text-sm text-gray-500">Отправка голоса...</p>}
+                  {voteError && <p className="text-sm text-red-500">{voteError}</p>}
                 </div>
               )}
             </div>
@@ -262,7 +301,7 @@ const RuleDetails = ({ rule, styleConfig, onClose, onVote }) => {
 
 RuleDetails.propTypes = {
   rule: PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     status: PropTypes.string.isRequired,

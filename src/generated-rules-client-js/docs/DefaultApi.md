@@ -7,7 +7,9 @@ Method | HTTP request | Description
 [**createRule**](DefaultApi.md#createRule) | **POST** /api/v1/rules | Создание правила
 [**deleteRule**](DefaultApi.md#deleteRule) | **DELETE** /api/v1/rules/{ruleId} | Удаление правила правила
 [**getApartmentRules**](DefaultApi.md#getApartmentRules) | **GET** /api/v1/rules/{apartmentId} | Получение правил по идентификатору квартиры
+[**getRule**](DefaultApi.md#getRule) | **GET** /api/v1/rules/by-id/{ruleId} | Получение информации о правиле
 [**updateRule**](DefaultApi.md#updateRule) | **PUT** /api/v1/rules | Обновление правила
+[**vote**](DefaultApi.md#vote) | **POST** /api/v1/vote | 
 
 
 
@@ -158,6 +160,55 @@ Name | Type | Description  | Notes
 - **Accept**: */*
 
 
+## getRule
+
+> RuleInfo getRule(ruleId)
+
+Получение информации о правиле
+
+Позволяет получить информацию о правиле
+
+### Example
+
+```javascript
+import OpenApiDefinition from 'open_api_definition';
+let defaultClient = OpenApiDefinition.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
+
+let apiInstance = new OpenApiDefinition.DefaultApi();
+let ruleId = "ruleId_example"; // String | 
+apiInstance.getRule(ruleId, (error, data, response) => {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+});
+```
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **ruleId** | **String**|  | 
+
+### Return type
+
+[**RuleInfo**](RuleInfo.md)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: */*
+
+
 ## updateRule
 
 > RuleDto updateRule(updateRuleRequest)
@@ -196,6 +247,53 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**RuleDto**](RuleDto.md)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: */*
+
+
+## vote
+
+> VoteDto vote(createVoteRequest)
+
+
+
+### Example
+
+```javascript
+import OpenApiDefinition from 'open_api_definition';
+let defaultClient = OpenApiDefinition.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
+
+let apiInstance = new OpenApiDefinition.DefaultApi();
+let createVoteRequest = new OpenApiDefinition.CreateVoteRequest(); // CreateVoteRequest | 
+apiInstance.vote(createVoteRequest, (error, data, response) => {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+});
+```
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **createVoteRequest** | [**CreateVoteRequest**](CreateVoteRequest.md)|  | 
+
+### Return type
+
+[**VoteDto**](VoteDto.md)
 
 ### Authorization
 

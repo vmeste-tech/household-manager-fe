@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DashboardHeader from "../../components/Dashboard/DashboardHeader";
 import RuleCards from "../../components/Rules/RuleCards";
 import Tabs from "../../components/Rules/Tabs";
@@ -14,18 +14,61 @@ function RulePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  // Add state for rule statistics
+  const [ruleStats, setRuleStats] = useState({
+    activeRules: 0,
+    votingRules: 0
+  });
 
-  // Статистика для правил
+  // Fetch rule statistics on component mount
+  useEffect(() => {
+    const fetchRuleStats = () => {
+      try {
+        const apartmentId = localStorage.getItem("apartmentId");
+        
+        if (!apartmentId) {
+          console.error("Идентификатор квартиры не найден");
+          return;
+        }
+        
+        setIsLoading(true);
+        ruleApi.getApartmentRules(apartmentId, (error, data) => {
+          setIsLoading(false);
+          
+          if (error) {
+            console.error("Error fetching rules:", error);
+            return;
+          }
+          
+          // Count rules by status
+          const activeRules = data.filter(rule => rule.status === "ACCEPTED").length;
+          const votingRules = data.filter(rule => rule.status === "VOTING").length;
+          
+          setRuleStats({
+            activeRules,
+            votingRules
+          });
+        });
+      } catch (err) {
+        console.error("Failed to fetch rule stats:", err);
+        setIsLoading(false);
+      }
+    };
+    
+    fetchRuleStats();
+  }, []);
+
+  // Update statsData to use real statistics
   const statsData = [
     {
       title: "Активные правила",
-      value: "5",
+      value: String(ruleStats.activeRules),
       changeText: "с прошлой недели",
       isIncrease: true,
     },
     {
       title: "На голосовании",
-      value: "2",
+      value: String(ruleStats.votingRules),
       changeText: "новых предложений",
       isIncrease: true,
     },

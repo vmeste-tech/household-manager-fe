@@ -128,14 +128,19 @@ Class | Method | HTTP request | Description
 *OpenApiDefinition.DefaultApi* | [**createRule**](docs/DefaultApi.md#createRule) | **POST** /api/v1/rules | Создание правила
 *OpenApiDefinition.DefaultApi* | [**deleteRule**](docs/DefaultApi.md#deleteRule) | **DELETE** /api/v1/rules/{ruleId} | Удаление правила правила
 *OpenApiDefinition.DefaultApi* | [**getApartmentRules**](docs/DefaultApi.md#getApartmentRules) | **GET** /api/v1/rules/{apartmentId} | Получение правил по идентификатору квартиры
+*OpenApiDefinition.DefaultApi* | [**getRule**](docs/DefaultApi.md#getRule) | **GET** /api/v1/rules/by-id/{ruleId} | Получение информации о правиле
 *OpenApiDefinition.DefaultApi* | [**updateRule**](docs/DefaultApi.md#updateRule) | **PUT** /api/v1/rules | Обновление правила
+*OpenApiDefinition.DefaultApi* | [**vote**](docs/DefaultApi.md#vote) | **POST** /api/v1/vote | 
 
 
 ## Documentation for Models
 
  - [OpenApiDefinition.CreateRuleRequest](docs/CreateRuleRequest.md)
+ - [OpenApiDefinition.CreateVoteRequest](docs/CreateVoteRequest.md)
  - [OpenApiDefinition.RuleDto](docs/RuleDto.md)
+ - [OpenApiDefinition.RuleInfo](docs/RuleInfo.md)
  - [OpenApiDefinition.UpdateRuleRequest](docs/UpdateRuleRequest.md)
+ - [OpenApiDefinition.VoteDto](docs/VoteDto.md)
 
 
 ## Documentation for Authorization

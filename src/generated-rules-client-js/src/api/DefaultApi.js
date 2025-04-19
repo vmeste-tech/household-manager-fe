@@ -14,8 +14,11 @@
 
 import ApiClient from "../ApiClient";
 import CreateRuleRequest from '../model/CreateRuleRequest';
+import CreateVoteRequest from '../model/CreateVoteRequest';
 import RuleDto from '../model/RuleDto';
+import RuleInfo from '../model/RuleInfo';
 import UpdateRuleRequest from '../model/UpdateRuleRequest';
+import VoteDto from '../model/VoteDto';
 
 /**
 *  service.
@@ -164,6 +167,49 @@ export default class DefaultApi {
     }
 
     /**
+     * Callback function to receive the result of the getRule operation.
+     * @callback module:api/DefaultApi~getRuleCallback
+     * @param {String} error Error message, if any.
+     * @param {module:model/RuleInfo} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * Получение информации о правиле
+     * Позволяет получить информацию о правиле
+     * @param {String} ruleId 
+     * @param {module:api/DefaultApi~getRuleCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/RuleInfo}
+     */
+    getRule(ruleId, callback) {
+      let postBody = null;
+      // verify the required parameter 'ruleId' is set
+      if (ruleId === undefined || ruleId === null) {
+        throw new Error("Missing the required parameter 'ruleId' when calling getRule");
+      }
+
+      let pathParams = {
+        'ruleId': ruleId
+      };
+      let queryParams = {
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['bearerAuth'];
+      let contentTypes = [];
+      let accepts = ['*/*'];
+      let returnType = RuleInfo;
+      return this.apiClient.callApi(
+        '/api/v1/rules/by-id/{ruleId}', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
      * Callback function to receive the result of the updateRule operation.
      * @callback module:api/DefaultApi~updateRuleCallback
      * @param {String} error Error message, if any.
@@ -200,6 +246,46 @@ export default class DefaultApi {
       let returnType = RuleDto;
       return this.apiClient.callApi(
         '/api/v1/rules', 'PUT',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the vote operation.
+     * @callback module:api/DefaultApi~voteCallback
+     * @param {String} error Error message, if any.
+     * @param {module:model/VoteDto} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {module:model/CreateVoteRequest} createVoteRequest 
+     * @param {module:api/DefaultApi~voteCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/VoteDto}
+     */
+    vote(createVoteRequest, callback) {
+      let postBody = createVoteRequest;
+      // verify the required parameter 'createVoteRequest' is set
+      if (createVoteRequest === undefined || createVoteRequest === null) {
+        throw new Error("Missing the required parameter 'createVoteRequest' when calling vote");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['bearerAuth'];
+      let contentTypes = ['application/json'];
+      let accepts = ['*/*'];
+      let returnType = VoteDto;
+      return this.apiClient.callApi(
+        '/api/v1/vote', 'POST',
         pathParams, queryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, null, callback
       );

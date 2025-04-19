@@ -14,8 +14,11 @@
 
 import ApiClient from './ApiClient';
 import CreateRuleRequest from './model/CreateRuleRequest';
+import CreateVoteRequest from './model/CreateVoteRequest';
 import RuleDto from './model/RuleDto';
+import RuleInfo from './model/RuleInfo';
 import UpdateRuleRequest from './model/UpdateRuleRequest';
+import VoteDto from './model/VoteDto';
 import DefaultApi from './api/DefaultApi';
 
 
@@ -64,16 +67,34 @@ export {
     CreateRuleRequest,
 
     /**
+     * The CreateVoteRequest model constructor.
+     * @property {module:model/CreateVoteRequest}
+     */
+    CreateVoteRequest,
+
+    /**
      * The RuleDto model constructor.
      * @property {module:model/RuleDto}
      */
     RuleDto,
 
     /**
+     * The RuleInfo model constructor.
+     * @property {module:model/RuleInfo}
+     */
+    RuleInfo,
+
+    /**
      * The UpdateRuleRequest model constructor.
      * @property {module:model/UpdateRuleRequest}
      */
     UpdateRuleRequest,
+
+    /**
+     * The VoteDto model constructor.
+     * @property {module:model/VoteDto}
+     */
+    VoteDto,
 
     /**
     * The DefaultApi service constructor.
