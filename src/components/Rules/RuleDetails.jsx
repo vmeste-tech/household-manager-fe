@@ -9,7 +9,7 @@ const formatCronExpression = (cronExpression) => {
   const parts = cronExpression.split(" ");
   if (parts.length !== 5) return "Неверный формат";
 
-  const [minute, hour, dayOfMonth, dayOfWeek] = parts;
+  const [minute, hour, dayOfMonth, month, dayOfWeek] = parts;
 
   // Форматируем время
   const timeStr = `${hour.padStart(2, "0")}:${minute.padStart(2, "0")}`;
@@ -36,6 +36,13 @@ const formatCronExpression = (cronExpression) => {
     return `Еженедельно в ${timeStr} (${days})`;
   } else if (dayOfMonth !== "*" && dayOfWeek === "*") {
     return `Ежемесячно ${dayOfMonth} числа в ${timeStr}`;
+  } else if (month !== "*") {
+    const months = {
+      1: "Янв", 2: "Фев", 3: "Мар", 4: "Апр", 5: "Май", 6: "Июн", 
+      7: "Июл", 8: "Авг", 9: "Сен", 10: "Окт", 11: "Ноя", 12: "Дек"
+    };
+    const monthNames = month.split(",").map(m => months[m] || m).join(", ");
+    return `${timeStr} (только ${monthNames})`;
   }
 
   return `${timeStr}, ${cronExpression}`;

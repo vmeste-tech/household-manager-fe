@@ -33,14 +33,13 @@ const RuleCards = ({ activeFilter }) => {
     },
   };
 
-  // Map API status values to UI status values
-  const statusMapping = {
-    "ACCEPTED": "Принятые",
-    "VOTING": "На голосовании",
-    "REJECTED": "Отклонённые"
-  };
-
   useEffect(() => {
+    const statusMapping = {
+      "ACCEPTED": "Принятые",
+      "VOTING": "На голосовании",
+      "REJECTED": "Отклонённые"
+    };
+    
     const fetchRules = async () => {
       try {
         setLoading(true);
