@@ -8,6 +8,11 @@ const SignInPage = ({ setLoggedIn, setEmail }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // Добавляем функцию для закрытия сообщения об ошибке
+  const clearError = () => {
+    setError(null);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -28,6 +33,7 @@ const SignInPage = ({ setLoggedIn, setEmail }) => {
       const loginPromise = new Promise((resolve, reject) => {
         userApi.login(authRequest, (error, data) => {
           if (error) {
+            // Сохраняем дополнительную информацию об ошибке
             reject(error);
           } else {
             resolve(data);
@@ -46,7 +52,30 @@ const SignInPage = ({ setLoggedIn, setEmail }) => {
       navigate('/main');
     } catch (err) {
       console.error("Ошибка аутентификации:", err);
-      setError("Ошибка при входе. Проверьте введенные данные.");
+      
+      // Определяем тип ошибки и устанавливаем соответствующее сообщение
+      if (err.status) {
+        switch (err.status) {
+          case 400:
+            setError("Некорректные данные. Проверьте правильность введённого email и пароля.");
+            break;
+          case 401:
+            setError("Неверный email или пароль. Пожалуйста, проверьте введённые данные.");
+            break;
+          case 403:
+            setError("Доступ запрещён. Ваша учётная запись может быть заблокирована.");
+            break;
+          case 404:
+            setError("Пользователь с таким email не найден.");
+            break;
+          default:
+            setError(`Ошибка сервера (${err.status}). Пожалуйста, попробуйте позже.`);
+        }
+      } else if (err.message && err.message.includes("Network Error")) {
+        setError("Ошибка подключения к серверу. Проверьте подключение к интернету.");
+      } else {
+        setError("Не удалось выполнить вход. Пожалуйста, попробуйте позже.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -72,8 +101,27 @@ const SignInPage = ({ setLoggedIn, setEmail }) => {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           {error && (
-            <div className="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-              {error}
+            <div className="mb-4 bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded relative" role="alert">
+              <div className="flex">
+                <div className="flex-shrink-0">
+                  <svg className="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div className="ml-3 flex-grow">
+                  <p className="font-medium">Ошибка входа</p>
+                  <p className="text-sm">{error}</p>
+                </div>
+                <button 
+                  onClick={clearError} 
+                  className="text-red-700 hover:text-red-900"
+                  aria-label="Закрыть"
+                >
+                  <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                </button>
+              </div>
             </div>
           )}
           

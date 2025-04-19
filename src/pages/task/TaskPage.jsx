@@ -39,7 +39,7 @@ function TaskPage() {
   return (
     <div className="bg-indigo-50 min-h-screen overflow-x-hidden">
       <DashboardHeader />
-      <div className="pt-20 max-w-7xl mx-auto flex flex-col gap-8">
+      <div className="pt-20 max-w-7xl mx-auto flex flex-col gap-8 px-4 sm:px-6 lg:px-8">
         <KanbanBoard />
         <div className="flex justify-center">
           <CustomButton

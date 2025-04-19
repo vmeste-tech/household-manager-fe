@@ -7,7 +7,8 @@ const SignUpPage = () => {
   const navigate = useNavigate();
 
   // Локальные стейты для значений формы
-  const [fullName, setFullName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -23,10 +24,6 @@ const SignUpPage = () => {
       setToast({ type: "danger", message: "Пароли не совпадают!" });
       return;
     }
-
-    // Разделяем fullName на firstName и lastName (по желанию)
-    const [firstName, ...rest] = fullName.split(" ");
-    const lastName = rest.join(" ");
 
     // Формируем объект запроса
     const userRegistrationRequest = {
@@ -84,22 +81,44 @@ const SignUpPage = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label
-                htmlFor="name"
+                htmlFor="firstName"
                 className="block text-sm font-medium text-gray-700"
               >
-                Полное имя
+                Имя
               </label>
               <div className="mt-1">
                 <input
-                  id="name"
-                  name="name"
+                  id="firstName"
+                  name="firstName"
                   type="text"
                   required
-                  placeholder="Введите ваше полное имя"
+                  placeholder="Введите ваше имя"
                   className="appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 
                              focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="lastName"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Фамилия
+              </label>
+              <div className="mt-1">
+                <input
+                  id="lastName"
+                  name="lastName"
+                  type="text"
+                  required
+                  placeholder="Введите вашу фамилию"
+                  className="appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 
+                             focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
                 />
               </div>
             </div>
