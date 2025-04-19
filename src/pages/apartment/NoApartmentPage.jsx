@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import DashboardHeader from "../../components/Dashboard/DashboardHeader";
 import CustomButton from "../../components/Universal/CustomButton";
 import Modal from "../../components/Universal/Modal";
 import Heading from "../../components/Universal/Heading";
 import { userApi } from "../../api";
 import UseInviteCodeRequest from "../../generated-client-js/src/model/UseInviteCodeRequest";
+import PropTypes from "prop-types";
 
-function NoApartmentPage() {
+function NoApartmentPage({ setHasApartment }) {
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [apartmentName, setApartmentName] = useState("");
@@ -42,8 +42,6 @@ function NoApartmentPage() {
   // Собираем код из клеточек
   const accessCode = codeDigits.join("");
 
-  const navigate = useNavigate();
-
   const handleJoinApartment = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -73,6 +71,8 @@ function NoApartmentPage() {
       // Сохраняем ID квартиры в localStorage
       if (data && data.apartmentId) {
         localStorage.setItem("apartmentId", data.apartmentId);
+        // Update the parent component state
+        if (setHasApartment) setHasApartment(true);
       }
       
       // Обновляем страницу после успешного присоединения
@@ -118,9 +118,11 @@ function NoApartmentPage() {
       
       // Store the apartment ID in localStorage
       localStorage.setItem("apartmentId", data.apartmentId);
+      // Update the parent component state
+      if (setHasApartment) setHasApartment(true);
       
       // После успешного создания
-      navigate("/apartments");
+      window.location.reload();
     } catch (err) {
       console.error("Ошибка при создании квартиры:", err);
       setError("Ошибка при создании квартиры. Пожалуйста, попробуйте еще раз.");
@@ -326,5 +328,13 @@ function NoApartmentPage() {
     </div>
   );
 }
+
+NoApartmentPage.propTypes = {
+  setHasApartment: PropTypes.func
+};
+
+NoApartmentPage.defaultProps = {
+  setHasApartment: () => {}
+};
 
 export default NoApartmentPage;
