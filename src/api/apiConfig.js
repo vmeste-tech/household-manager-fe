@@ -28,4 +28,8 @@ export const apiConfig = {
   finance: {
     baseUrl: `${API_BASE_URL}:8086`,
   },
+  // Сервис уведомлений
+  notification: {
+    baseUrl: `${API_BASE_URL}:8087`,
+  }
 };

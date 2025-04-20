@@ -1,161 +1,85 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DashboardHeader from "../../components/Dashboard/DashboardHeader";
 import NotificationList from "../../components/Notification/NotificationList";
 import NotificationDetails from "../../components/Notification/NotificationDetails";
 import NotificationFilter from "../../components/Notification/NotificationFilter";
+import { notifApi } from "../../api";
 
 function NotificationPage() {
-  const initialNotifications = [
-    {
-      id: 1,
-      category: "задачи",
-      description: "Выполните ежедневное обновление данных.",
-      datetime: "2023-03-01T10:00:00Z",
-    },
-    {
-      id: 2,
-      category: "правила",
-      description: "Обновлены правила использования платформы.",
-      datetime: "2023-03-01T11:15:00Z",
-    },
-    {
-      id: 3,
-      category: "штрафы",
-      description: "Штраф за несоблюдение сроков.",
-      datetime: "2023-03-01T12:30:00Z",
-    },
-    {
-      id: 4,
-      category: "затраты",
-      description: "Затраты на обслуживание системы увеличились.",
-      datetime: "2023-03-01T13:45:00Z",
-    },
-    {
-      id: 5,
-      category: "финансы",
-      description: "Финансовый отчёт за первый квартал готов.",
-      datetime: "2023-03-01T14:00:00Z",
-    },
-    {
-      id: 6,
-      category: "квартира",
-      description: "Объявление о продаже квартиры в центре города.",
-      datetime: "2023-03-01T15:20:00Z",
-      read: true,
-    },
-    {
-      id: 7,
-      category: "задачи",
-      description: "Новая задача: обновить базу данных.",
-      datetime: "2023-03-01T16:30:00Z",
-      read: true,
-    },
-    {
-      id: 8,
-      category: "правила",
-      description: "Пересмотр правил работы с документами.",
-      datetime: "2023-03-01T17:00:00Z",
-      read: true,
-    },
-    {
-      id: 9,
-      category: "штрафы",
-      description: "Штраф за нарушение графика работ.",
-      datetime: "2023-03-01T18:15:00Z",
-      read: true,
-    },
-    {
-      id: 10,
-      category: "затраты",
-      description: "Снижение затрат на обслуживание серверов.",
-      datetime: "2023-03-01T19:30:00Z",
-      read: true,
-    },
-    {
-      id: 11,
-      category: "финансы",
-      description: "Новый финансовый план утверждён.",
-      datetime: "2023-03-02T09:00:00Z",
-      read: true,
-    },
-    {
-      id: 12,
-      category: "квартира",
-      description: "Скидки на покупку квартиры только сегодня.",
-      datetime: "2023-03-02T10:15:00Z",
-      read: true,
-    },
-    {
-      id: 13,
-      category: "задачи",
-      description: "Проведите ревизию оборудования.",
-      datetime: "2023-03-02T11:30:00Z",
-      read: true,
-    },
-    {
-      id: 14,
-      category: "правила",
-      description: "Новые правила проведения собраний.",
-      datetime: "2023-03-02T12:45:00Z",
-      read: true,
-    },
-    {
-      id: 15,
-      category: "штрафы",
-      description: "Штраф за опоздание на встречу.",
-      datetime: "2023-03-02T14:00:00Z",
-      read: true,
-    },
-    {
-      id: 16,
-      category: "затраты",
-      description: "Увеличение затрат на ремонт оборудования.",
-      datetime: "2023-03-02T15:15:00Z",
-      read: true,
-    },
-    {
-      id: 17,
-      category: "финансы",
-      description: "Финансовая отчетность за февраль.",
-      datetime: "2023-03-02T16:30:00Z",
-      read: true,
-    },
-    {
-      id: 18,
-      category: "квартира",
-      description: "Новая квартира в жилом комплексе.",
-      datetime: "2023-03-02T17:45:00Z",
-      read: true,
-    },
-    {
-      id: 19,
-      category: "задачи",
-      description: "Подготовьте презентацию для клиентов.",
-      datetime: "2023-03-02T19:00:00Z",
-      read: true,
-    },
-    {
-      id: 20,
-      category: "правила",
-      description: "Обновление правил внутреннего распорядка.",
-      datetime: "2023-03-02T20:15:00Z",
-      read: true,
-    },
-  ];
-
-  const [notifications, setNotifications] = useState(initialNotifications);
+  // Заменяем моковые данные на данные с сервера
+  const [notifications, setNotifications] = useState([]);
   const [selectedNotification, setSelectedNotification] = useState(null);
   const [filter, setFilter] = useState("all");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Загрузка уведомлений с сервера при монтировании компонента
+  useEffect(() => {
+    const fetchNotifications = () => {
+      setLoading(true);
+      setError(null);
+
+      notifApi.getNotifications((err, data) => {
+        setLoading(false);
+        if (err) {
+          console.error("Ошибка при загрузке уведомлений:", err);
+          setError("Не удалось загрузить уведомления");
+        } else {
+          console.log("Уведомления получены:", data);
+          
+          // Словарь перевода категорий на русский язык
+          const categoryTranslations = {
+            "USER": "Пользователи",
+            "TASK": "Задачи",
+            "RULE": "Правила",
+            "PENALTY": "Штрафы",
+            "FINANCE": "Финансы"
+          };
+          
+          // Преобразуем данные с бэкенда в формат, понятный компонентам
+          const transformedNotifications = Array.isArray(data) ? data.map(notification => {
+            // Получаем оригинальную категорию
+            const originalCategory = notification.categoryName || notification.category || "OTHER";
+            
+            // Переводим категорию на русский или используем оригинал, если перевода нет
+            const translatedCategory = categoryTranslations[originalCategory] || originalCategory || "Уведомление";
+            
+            return {
+              id: notification.id,
+              category: translatedCategory,
+              description: notification.message || notification.description || "",
+              datetime: notification.timestamp,
+              read: notification.read || notification.isRead || false
+            };
+          }) : [];
+          
+          setNotifications(transformedNotifications);
+        }
+      });
+    };
+
+    fetchNotifications();
+  }, []);
 
   const handleSelectNotification = (notification) => {
-    // Обновляем уведомление, помечая его как прочитанное
-    const updatedNotifications = notifications.map((n) =>
-      n.id === notification.id ? { ...n, read: true } : n
-    );
-    setNotifications(updatedNotifications);
-
-    // Передаём обновлённое уведомление в выбранное
-    setSelectedNotification({ ...notification, read: true });
+    // Отметить уведомление как прочитанное через API
+    notifApi.readNotification(notification.id, (err, data) => {
+      if (err) {
+        console.error("Ошибка при отметке уведомления как прочитанное:", err);
+      } else {
+        console.log("Уведомление отмечено как прочитанное:", data);
+        
+        // Обновляем список уведомлений с учетом прочитанного
+        setNotifications(prevNotifications =>
+          prevNotifications.map(n =>
+            n.id === notification.id ? { ...n, read: true } : n
+          )
+        );
+        
+        // Устанавливаем выбранное уведомление как прочитанное
+        setSelectedNotification({ ...notification, read: true });
+      }
+    });
   };
 
   // Фильтруем уведомления в зависимости от значения filter
@@ -173,34 +97,47 @@ function NotificationPage() {
           filter={filter}
           onChangeFilter={(newFilter) => setFilter(newFilter)}
         />
-        {/* Мобильная версия */}
-        <div className="block md:hidden bg-white rounded-xl shadow-sm overflow-hidden">
-          {selectedNotification ? (
-            <NotificationDetails
-              notification={selectedNotification}
-              onBack={() => setSelectedNotification(null)}
-            />
-          ) : (
-            <NotificationList
-              notifications={filteredNotifications}
-              onSelect={handleSelectNotification}
-            />
-          )}
-        </div>
-        {/* Десктопная версия */}
-        <div className="hidden md:flex h-[calc(100vh-80px)] bg-white rounded-xl shadow-sm overflow-hidden">
-          {/* Левая колонка со списком уведомлений с независимой прокруткой */}
-          <div className="w-1/2 border-r border-gray-200 overflow-y-auto">
-            <NotificationList
-              notifications={filteredNotifications}
-              onSelect={handleSelectNotification}
-            />
+        {/* Отображение состояния загрузки */}
+        {loading ? (
+          <div className="bg-white rounded-xl shadow-sm p-8 flex justify-center items-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
           </div>
-          {/* Правая колонка – подробности уведомления */}
-          <div className="w-1/2 overflow-y-auto">
-            <NotificationDetails notification={selectedNotification} />
+        ) : error ? (
+          <div className="bg-white rounded-xl shadow-sm p-8 text-center text-red-500">
+            {error}
           </div>
-        </div>
+        ) : (
+          <>
+            {/* Мобильная версия */}
+            <div className="block md:hidden bg-white rounded-xl shadow-sm overflow-hidden">
+              {selectedNotification ? (
+                <NotificationDetails
+                  notification={selectedNotification}
+                  onBack={() => setSelectedNotification(null)}
+                />
+              ) : (
+                <NotificationList
+                  notifications={filteredNotifications}
+                  onSelect={handleSelectNotification}
+                />
+              )}
+            </div>
+            {/* Десктопная версия */}
+            <div className="hidden md:flex h-[calc(100vh-80px)] bg-white rounded-xl shadow-sm overflow-hidden">
+              {/* Левая колонка со списком уведомлений с независимой прокруткой */}
+              <div className="w-1/2 border-r border-gray-200 overflow-y-auto">
+                <NotificationList
+                  notifications={filteredNotifications}
+                  onSelect={handleSelectNotification}
+                />
+              </div>
+              {/* Правая колонка – подробности уведомления */}
+              <div className="w-1/2 overflow-y-auto">
+                <NotificationDetails notification={selectedNotification} />
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
