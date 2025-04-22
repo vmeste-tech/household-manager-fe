@@ -1,91 +1,150 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DashboardHeader from "../../components/Dashboard/DashboardHeader";
 import Heading from "../../components/Universal/Heading";
 import CustomButton from "../../components/Universal/CustomButton";
 import CreateExpenseItemModal from "../../components/Modal/CreateExpenseItemModal";
 import CreateExpenseModal from "../../components/Modal/CreateExpenseModal";
+import { financeApi } from "../../api";
+import ExpenseItemCreateDto from "../../generated-finance-client-js/src/model/ExpenseItemCreateDto";
+import CreateExpenseRequest from "../../generated-finance-client-js/src/model/CreateExpenseRequest";
 
 function PurchasesPage() {
-  // Исходные данные для таблицы затрат
-  const expencesData = [
-    {
-      id: 1,
-      item: "Продукты для недели",
-      description: "Овощи, фрукты, молочные продукты, хлеб и яйца.",
-    },
-    {
-      id: 2,
-      item: "Бытовая химия",
-      description:
-        "Моющее средство, чистящие средства, мыло и дезинфицирующие средства.",
-    },
-    {
-      id: 3,
-      item: "Канцелярия",
-      description: "Бумага, ручки, маркеры, степлеры и скрепки.",
-    },
-    {
-      id: 4,
-      item: "Зоотовары",
-      description: "Корм, игрушки и аксессуары для домашних животных.",
-    },
-    {
-      id: 5,
-      item: "Одежда",
-      description: "Футболки, джинсы, куртки и аксессуары.",
-    },
-    {
-      id: 6,
-      item: "Электроника",
-      description: "Смартфоны, планшеты, наушники и зарядные устройства.",
-    },
-  ];
-
-  const purchasesData = [
-    {
-      item: "Оплата ЖКХ",
-      date: "2025-03-10",
-      amount: 1500,
-      description: "Оплата квартплаты за февраль.",
-    },
-    {
-      item: "Покупка продуктов",
-      date: "2025-03-11",
-      amount: 2300,
-      description: "Совместная покупка продуктов на неделю.",
-    },
-    {
-      item: "Оплата интернета",
-      date: "2025-03-12",
-      amount: 800,
-      description: "Ежемесячная оплата интернета.",
-    },
-  ];
-
-  // Храним список статей затрат в состоянии, чтобы обновлять при создании новой статьи
-  const [expenses, setExpenses] = useState(expencesData);
-  // Состояние для управления модальными окнами
+  // Состояния для данных
+  const [expenses, setExpenses] = useState([]); // Категории затрат
+  const [purchasesData, setPurchasesData] = useState([]); // История расходов
+  const [selectedExpense, setSelectedExpense] = useState(null);
+  
+  // Состояния для управления интерфейсом
   const [isExpenseItemModalOpen, setExpenseItemModalOpen] = useState(false);
   const [isExpenseModalOpen, setExpenseModalOpen] = useState(false);
-  // Состояние для выбранной категории затрат
-  const [selectedExpense, setSelectedExpense] = useState(null);
+  const [loading, setLoading] = useState({
+    expenseItems: true,
+    expenses: true
+  });
+  const [error, setError] = useState({
+    expenseItems: null,
+    expenses: null
+  });
 
-  const handleCreateExpenseItem = (newExpenseItem) => {
-    // Обычно ID генерируется на сервере. Для демонстрации создаём его на клиенте.
-    const newId = expenses.length + 1;
-    const expenseItem = { id: newId, ...newExpenseItem };
-    setExpenses([...expenses, expenseItem]);
-    setExpenseItemModalOpen(false);
+  // Загрузка данных при монтировании компонента
+  useEffect(() => {
+    loadExpenseItems();
+    loadExpenses();
+  }, []);
+
+  // Получение категорий затрат
+  const loadExpenseItems = () => {
+    const apartmentId = localStorage.getItem("apartmentId");
+    if (!apartmentId) {
+      setError(prev => ({...prev, expenseItems: "ID квартиры не найден"}));
+      setLoading(prev => ({...prev, expenseItems: false}));
+      return;
+    }
+
+    financeApi.getApartmentExpenseItem(apartmentId, (err, data) => {
+      setLoading(prev => ({...prev, expenseItems: false}));
+      if (err) {
+        console.error("Ошибка при загрузке категорий затрат:", err);
+        setError(prev => ({...prev, expenseItems: "Ошибка загрузки категорий затрат"}));
+      } else {
+        setExpenses(data);
+        setError(prev => ({...prev, expenseItems: null}));
+      }
+    });
   };
 
-  const handleCreateExpense = (newExpense) => {
-    // Здесь можно вызвать API для создания затраты или обновить локальное состояние
-    console.log("Новая затратa:", newExpense);
-    setExpenseModalOpen(false);
+  // Получение истории расходов
+  const loadExpenses = () => {
+    // Формируем параметры для запроса расходов за последние 30 дней
+    const endDate = new Date();
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - 30);
+    
+    const opts = {
+      startDate: startDate.toISOString().split('T')[0],
+      endDate: endDate.toISOString().split('T')[0]
+    };
+
+    financeApi.getExpenses(opts, (err, data) => {
+      setLoading(prev => ({...prev, expenses: false}));
+      if (err) {
+        console.error("Ошибка при загрузке расходов:", err);
+        setError(prev => ({...prev, expenses: "Ошибка загрузки расходов"}));
+      } else {
+        setPurchasesData(data || []);
+        setError(prev => ({...prev, expenses: null}));
+      }
+    });
+  };
+
+  const handleCreateExpenseItem = (newExpenseItemData) => {
+    const apartmentId = localStorage.getItem("apartmentId");
+    if (!apartmentId) {
+      console.error("ID квартиры не найден");
+      return;
+    }
+
+    const expenseItemDto = new ExpenseItemCreateDto();
+    expenseItemDto.apartmentId = apartmentId;
+    expenseItemDto.name = newExpenseItemData.name;
+    expenseItemDto.description = newExpenseItemData.description;
+
+    financeApi.createExpenseItem(expenseItemDto, (err, data) => {
+      if (err) {
+        console.error("Ошибка при создании категории затрат:", err);
+        // Можно добавить уведомление об ошибке
+      } else {
+        console.log("Категория затрат создана:", data);
+        setExpenses(prev => [...prev, data]);
+      }
+      setExpenseItemModalOpen(false);
+    });
+  };
+
+  const handleCreateExpense = (newExpenseData) => {
+    const apartmentId = localStorage.getItem("apartmentId");
+    if (!apartmentId) {
+      console.error("ID квартиры не найден");
+      return;
+    }
+
+    const expenseRequest = new CreateExpenseRequest();
+    expenseRequest.amount = newExpenseData.amount;
+    expenseRequest.description = newExpenseData.description;
+    expenseRequest.itemId = newExpenseData.itemId;
+    expenseRequest.apartmentId = apartmentId;
+    
+    // Если есть фото, добавляем его в запрос
+    if (newExpenseData.photoBase64) {
+      expenseRequest.photoBase64 = newExpenseData.photoBase64;
+    }
+
+    financeApi.createExpenses(expenseRequest, (err, data) => {
+      if (err) {
+        console.error("Ошибка при создании расхода:", err);
+        // Можно добавить уведомление об ошибке
+      } else {
+        console.log("Расход создан:", data);
+        // Обновляем список расходов
+        loadExpenses();
+      }
+      setExpenseModalOpen(false);
+    });
   };
 
   const handleExpenseClick = (expense) => {
     setSelectedExpense(expense.id === selectedExpense?.id ? null : expense);
+  };
+
+  // Форматирование даты для отображения в российском формате (ДД.ММ.ГГГГ)
+  const formatDate = (dateString) => {
+    try {
+      const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+      return new Date(dateString).toLocaleDateString('ru-RU', options);
+    } catch (e) {
+      console.error("Ошибка при форматировании даты:", e);
+      return dateString;
+    }
   };
 
   return (
@@ -95,7 +154,7 @@ function PurchasesPage() {
         <Heading>Покупки и затраты</Heading>
         
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
-          {/* История покупок - now as primary element */}
+          {/* История покупок */}
           <div className="w-full lg:w-3/5 lg:flex-grow">
             <div className="bg-white rounded-xl shadow-sm p-3 sm:p-4 mb-4">
               <div className="flex justify-between items-center mb-4">
@@ -108,25 +167,33 @@ function PurchasesPage() {
                 />
               </div>
               
-              <div className="space-y-3">
-                {purchasesData.map((purchase, index) => (
-                  <div 
-                    key={index} 
-                    className="border-b border-gray-100 pb-3 last:border-b-0 last:pb-0"
-                  >
-                    <div className="flex justify-between items-center mb-1">
-                      <span className="font-medium text-gray-800">{purchase.item}</span>
-                      <span className="text-indigo-700 font-semibold">{purchase.amount} ₽</span>
+              {loading.expenses ? (
+                <div className="py-4 text-center text-gray-500">Загрузка данных...</div>
+              ) : error.expenses ? (
+                <div className="py-4 text-center text-red-500">{error.expenses}</div>
+              ) : purchasesData.length === 0 ? (
+                <div className="py-4 text-center text-gray-500">Нет данных о расходах</div>
+              ) : (
+                <div className="space-y-3">
+                  {purchasesData.map((purchase) => (
+                    <div 
+                      key={purchase.id}
+                      className="border-b border-gray-100 pb-3 last:border-b-0 last:pb-0"
+                    >
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="font-medium text-gray-800">{purchase.expenseItemName}</span>
+                        <span className="text-indigo-700 font-semibold">{purchase.amount} ₽</span>
+                      </div>
+                      <div className="flex justify-between items-center text-sm">
+                        <span className="text-gray-500">{purchase.description}</span>
+                        <span className="text-gray-400 bg-gray-50 px-2 py-0.5 rounded text-xs">
+                          {formatDate(purchase.createdDate)}
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex justify-between items-center text-sm">
-                      <span className="text-gray-500">{purchase.description}</span>
-                      <span className="text-gray-400 bg-gray-50 px-2 py-0.5 rounded text-xs">
-                        {purchase.date}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
             
             {/* Summary card */}
@@ -135,13 +202,15 @@ function PurchasesPage() {
               <div className="flex justify-between items-center text-lg font-medium">
                 <span className="text-gray-600">Сумма затрат:</span>
                 <span className="text-indigo-700">
-                  {purchasesData.reduce((sum, item) => sum + item.amount, 0)} ₽
+                  {loading.expenses ? "Загрузка..." : 
+                   error.expenses ? "Ошибка" : 
+                   `${purchasesData.reduce((sum, item) => sum + item.amount, 0)} ₽`}
                 </span>
               </div>
             </div>
           </div>
           
-          {/* Категории затрат - компактное отображение */}
+          {/* Категории затрат */}
           <div className="w-full lg:w-2/5 bg-white rounded-xl shadow-sm p-3 sm:p-4">
             <div className="flex justify-between items-center mb-4">
               <div className="text-lg font-semibold text-gray-800">Категории затрат</div>
@@ -153,41 +222,43 @@ function PurchasesPage() {
               />
             </div>
             
-            {/* Компактный список категорий */}
-            <div className="space-y-1 mb-4">
-              {expenses.map((expense) => (
-                <div 
-                  key={expense.id}
-                  onClick={() => handleExpenseClick(expense)}
-                  className={`flex justify-between items-center p-2 rounded-lg cursor-pointer transition-colors ${
-                    selectedExpense?.id === expense.id 
-                      ? 'bg-indigo-50 border-l-4 border-indigo-500' 
-                      : 'hover:bg-gray-50'
-                  }`}
-                >
-                  <span className="font-medium text-gray-800 truncate">
-                    {expense.item}
-                  </span>
-                </div>
-              ))}
-            </div>
+            {loading.expenseItems ? (
+              <div className="py-4 text-center text-gray-500">Загрузка категорий...</div>
+            ) : error.expenseItems ? (
+              <div className="py-4 text-center text-red-500">{error.expenseItems}</div>
+            ) : expenses.length === 0 ? (
+              <div className="py-4 text-center text-gray-500">Нет категорий затрат</div>
+            ) : (
+              <div className="space-y-1 mb-4">
+                {expenses.map((expense) => (
+                  <div 
+                    key={expense.id}
+                    onClick={() => handleExpenseClick(expense)}
+                    className={`flex justify-between items-center p-2 rounded-lg cursor-pointer transition-colors ${
+                      selectedExpense?.id === expense.id 
+                        ? 'bg-indigo-50 border-l-4 border-indigo-500' 
+                        : 'hover:bg-gray-50'
+                    }`}
+                  >
+                    <span className="font-medium text-gray-800 truncate">
+                      {expense.name}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
             
             {/* Панель с подробностями о выбранной категории */}
             {selectedExpense && (
               <div className="mt-4 p-3 bg-gray-50 rounded-lg border border-gray-100">
                 <div className="text-md font-semibold text-gray-800 mb-2">
-                  {selectedExpense.item}
+                  {selectedExpense.name}
                 </div>
                 <p className="text-sm text-gray-600">
                   {selectedExpense.description}
                 </p>
                 <div className="mt-3 flex justify-end">
-                  <button
-                    onClick={() => setExpenseModalOpen(true)}
-                    className="px-4 py-1.5 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 transition"
-                  >
-                    Внести затрату
-                  </button>
+                  {/* Здесь можно добавить кнопки действий, например редактирование */}
                 </div>
               </div>
             )}
