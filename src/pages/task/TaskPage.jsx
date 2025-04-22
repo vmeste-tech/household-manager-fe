@@ -9,7 +9,7 @@ import CreateTaskModal from "../../components/Modal/CreateTaskModal";
 function TaskPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userFilter, setUserFilter] = useState("all");
-  const [timeFilter, setTimeFilter] = useState("month");
+  const [timeFilter, setTimeFilter] = useState("today");
 
   // Sample card data for statistics
   const sampleCardsData = [

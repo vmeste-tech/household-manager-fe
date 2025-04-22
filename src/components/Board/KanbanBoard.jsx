@@ -18,8 +18,7 @@ const mapUserData = (user) => {
   return {
     id: user.id,
     name: `${user.firstName} ${user.lastName}`,
-    avatar:
-      user.profilePictureUrl || "https://randomuser.me/api/portraits/men/1.jpg",
+    avatar: user.profilePictureUrl || null, // Remove default avatar URL
   };
 };
 
