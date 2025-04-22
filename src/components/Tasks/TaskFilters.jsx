@@ -8,9 +8,9 @@ const TaskFilters = ({
   setTimeFilter 
 }) => {
   const timePeriods = [
-    { id: "today", name: "Сегодня", icon: "🗓️" },
-    { id: "week", name: "Неделя", icon: "📅" },
-    { id: "month", name: "Месяц", icon: "📆" }
+    { id: "today", name: "Сегодня" },
+    { id: "week", name: "Неделя" },
+    { id: "month", name: "Месяц" }
   ];
 
   return (
@@ -21,14 +21,13 @@ const TaskFilters = ({
             key={period.id}
             onClick={() => setTimeFilter(period.id)}
             className={`
-              px-4 py-2 text-sm transition-colors cursor-pointer flex items-center
+              px-4 py-2 text-sm transition-colors cursor-pointer flex items-center justify-center w-24
               ${index !== 0 ? "border-l border-indigo-100" : ""}
               ${timeFilter === period.id
                 ? "bg-indigo-100 text-indigo-800 font-medium"
                 : "text-gray-600 hover:bg-gray-50"}
             `}
           >
-            <span className="mr-1">{period.icon}</span>
             {period.name}
           </div>
         ))}
