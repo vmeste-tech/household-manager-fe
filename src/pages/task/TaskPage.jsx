@@ -8,7 +8,10 @@ import CreateTaskModal from "../../components/Modal/CreateTaskModal";
 
 function TaskPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [userFilter, setUserFilter] = useState("all");
+  const [timeFilter, setTimeFilter] = useState("month");
 
+  // Sample card data for statistics
   const sampleCardsData = [
     {
       title: "Всего задач",
@@ -39,8 +42,13 @@ function TaskPage() {
   return (
     <div className="bg-indigo-50 min-h-screen overflow-x-hidden">
       <DashboardHeader />
-      <div className="pt-20 max-w-7xl mx-auto flex flex-col gap-8 px-4 sm:px-6 lg:px-8">
-        <KanbanBoard />
+      <div className="pt-20 max-w-7xl mx-auto flex flex-col gap-6 px-4 sm:px-6 lg:px-8">
+        <KanbanBoard 
+          userFilter={userFilter}
+          timeFilter={timeFilter}
+          setUserFilter={setUserFilter}
+          setTimeFilter={setTimeFilter}
+        />
         <div className="flex justify-center">
           <CustomButton
             text="+ Добавить задачу"

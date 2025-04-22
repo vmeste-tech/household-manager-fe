@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import { DragDropContext } from "@hello-pangea/dnd";
-import Filter from "./Filter";
 import KanbanColumn from "./KanbanColumn";
 import { taskApi, userApi } from "../../api";
+import TaskFilters from "../Tasks/TaskFilters";
 
 const columns = ["CREATED", "IN_PROGRESS", "COMPLETED"];
 
@@ -15,10 +16,10 @@ const formatDate = (date) => {
 
 const mapUserData = (user) => {
   return {
-    id: user.id, // UUID пользователя
-    name: `${user.firstName} ${user.lastName}`, // Имя и фамилия
+    id: user.id,
+    name: `${user.firstName} ${user.lastName}`,
     avatar:
-      user.profilePictureUrl || "https://randomuser.me/api/portraits/men/1.jpg", // Используем заглушку, если аватар отсутствует
+      user.profilePictureUrl || "https://randomuser.me/api/portraits/men/1.jpg",
   };
 };
 
@@ -56,10 +57,9 @@ const getApartmentId = () => {
   return apartmentId;
 };
 
-const KanbanBoard = () => {
+const KanbanBoard = ({ userFilter, timeFilter, setUserFilter, setTimeFilter }) => {
   const [tasks, setTasks] = useState([]);
   const [users, setUsers] = useState([]);
-  const [filter, setFilter] = useState("all");
 
   useEffect(() => {
     const loadTasksAndUsers = async () => {
@@ -71,12 +71,26 @@ const KanbanBoard = () => {
         }
 
         const today = formatDate(new Date());
-        const weekLater = formatDate(
-          new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-        );
+        let endDate;
+
+        switch (timeFilter) {
+          case "today":
+            endDate = today;
+            break;
+          case "week":
+            endDate = formatDate(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000));
+            break;
+          case "month":
+            endDate = formatDate(
+              new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+            );
+            break;
+          default:
+            endDate = formatDate(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000));
+        }
 
         const [taskData, userData] = await Promise.all([
-          fetchTasks(apartmentId, today, weekLater),
+          fetchTasks(apartmentId, today, endDate),
           fetchUsers(apartmentId),
         ]);
 
@@ -90,16 +104,12 @@ const KanbanBoard = () => {
     };
 
     loadTasksAndUsers();
-  }, []);
+  }, [timeFilter]);
 
-  const filteredTasks =
-    filter === "all"
-      ? tasks
-      : tasks.filter((task) => task.assignedTo === filter);
-
-  const handleFilterChange = (e) => {
-    setFilter(e.target.value);
-  };
+  const filteredTasks = tasks.filter((task) => {
+    if (userFilter !== "all" && task.assignedTo !== userFilter) return false;
+    return true;
+  });
 
   const handleDragEnd = (result) => {
     if (!result.destination) return;
@@ -110,19 +120,35 @@ const KanbanBoard = () => {
     setTasks(
       tasks.map((task) => (task.id === movedTask.id ? updatedTask : task))
     );
+
+    // Here you would typically make an API call to update the task status
+    // taskApi.updateTaskStatus(movedTask.id, destination.droppableId, (error, data) => {
+    //   if (error) {
+    //     console.error("Error updating task status:", error);
+    //   }
+    // });
   };
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-2">
-        <p className="text-xl font-bold uppercase tracking-wider text-indigo-800 m-0 p-0">
-          Доска задач
-        </p>
-        <Filter filter={filter} onChange={handleFilterChange} users={users} />
+      <div className="flex flex-col gap-4">
+        <div className="flex justify-between items-center">
+          <p className="text-xl font-bold uppercase tracking-wider text-indigo-800 m-0 p-0">
+            Доска задач
+          </p>
+        </div>
+
+        <TaskFilters
+          userFilter={userFilter}
+          setUserFilter={setUserFilter}
+          users={users}
+          timeFilter={timeFilter}
+          setTimeFilter={setTimeFilter}
+        />
       </div>
 
       <DragDropContext onDragEnd={handleDragEnd}>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
           {columns.map((column) => {
             const columnTasks = filteredTasks.filter(
               (task) => task.status === column
@@ -140,6 +166,12 @@ const KanbanBoard = () => {
       </DragDropContext>
     </div>
   );
+};
+KanbanBoard.propTypes = {
+  userFilter: PropTypes.string.isRequired,
+  timeFilter: PropTypes.string.isRequired,
+  setUserFilter: PropTypes.func.isRequired,
+  setTimeFilter: PropTypes.func.isRequired,
 };
 
 export default KanbanBoard;
