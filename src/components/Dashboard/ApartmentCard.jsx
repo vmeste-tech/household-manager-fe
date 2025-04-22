@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
-const ApartmentCard = ({ apartmentName, residentsCount, daysLived }) => {
+const ApartmentCard = ({ apartmentName = "Квартира не выбрана", residentsCount = 0, daysLived = 0 }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -44,9 +44,9 @@ const ApartmentCard = ({ apartmentName, residentsCount, daysLived }) => {
 };
 
 ApartmentCard.propTypes = {
-  apartmentName: PropTypes.string.isRequired,
-  residentsCount: PropTypes.number.isRequired,
-  daysLived: PropTypes.number.isRequired,
+  apartmentName: PropTypes.string,
+  residentsCount: PropTypes.number,
+  daysLived: PropTypes.number
 };
 
 export default ApartmentCard;

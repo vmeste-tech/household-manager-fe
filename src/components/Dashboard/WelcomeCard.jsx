@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 
-const WelcomeCard = () => {
+const WelcomeCard = ({ userName = "Пользователь" }) => {
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
@@ -30,13 +31,17 @@ const WelcomeCard = () => {
       <h2 className="text-4xl md:text-5xl text-blue-900">
         С возвращением,
         <br />
-        <strong>Егор</strong>
+        <strong>{userName}</strong>
       </h2>
       <span className="inline-block mt-8 px-8 py-2 rounded-full text-xl font-bold text-white bg-indigo-800">
         {dateTimeString}
       </span>
     </div>
   );
+};
+
+WelcomeCard.propTypes = {
+  userName: PropTypes.string
 };
 
 export default WelcomeCard;

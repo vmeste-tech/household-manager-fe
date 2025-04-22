@@ -1,16 +1,19 @@
 import { useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 import WeeklyTasksChart from "./WeeklyTasksChart";
 
-const TasksCard = () => {
+const TasksCard = ({ tasksData }) => {
   const navigate = useNavigate();
-  const tasksData = [
-    { label: "M", count: 5 },
-    { label: "T", count: 10 },
-    { label: "W", count: 3 },
-    { label: "T", count: 8 },
-    { label: "F", count: 12 },
-    { label: "S", count: 7 },
-    { label: "S", count: 4 },
+  
+  // Данные по умолчанию для графика, если реальных данных нет
+  const defaultTasksData = [
+    { label: "П", count: 5 },
+    { label: "В", count: 10 },
+    { label: "С", count: 3 },
+    { label: "Ч", count: 8 },
+    { label: "П", count: 12 },
+    { label: "С", count: 7 },
+    { label: "В", count: 4 },
   ];
 
   const handleClick = () => {
@@ -26,7 +29,7 @@ const TasksCard = () => {
         <div className="flex flex-col h-full">
           <h3 className="text-xl font-bold text-indigo-800">Задачи</h3>
           <div className="mt-auto">
-            <WeeklyTasksChart tasksData={tasksData} />
+            <WeeklyTasksChart tasksData={tasksData || defaultTasksData} />
           </div>
         </div>
       </div>
@@ -37,6 +40,15 @@ const TasksCard = () => {
       />
     </div>
   );
+};
+
+TasksCard.propTypes = {
+  tasksData: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string.isRequired,
+      count: PropTypes.number.isRequired
+    })
+  )
 };
 
 export default TasksCard;

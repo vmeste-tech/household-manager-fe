@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 
-const InboxCard = () => {
+const InboxCard = ({ unreadCount = 0 }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -11,7 +12,7 @@ const InboxCard = () => {
     <div className="flex-1 bg-blue-100 border border-blue-200 rounded-xl p-6 animate-fade-in">
       <h2 className="text-4xl md:text-5xl text-blue-900">
         Уведомления <br />
-        <strong>23</strong>
+        <strong>{unreadCount}</strong>
       </h2>
       <span
         onClick={handleClick}
@@ -21,6 +22,10 @@ const InboxCard = () => {
       </span>
     </div>
   );
+};
+
+InboxCard.propTypes = {
+  unreadCount: PropTypes.number
 };
 
 export default InboxCard;

@@ -2,10 +2,15 @@ import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import PurchasesChart from "./PurchasesChart";
 
-const PurchasesCard = ({ purchasesData }) => {
+const PurchasesCard = ({ purchasesData = [] }) => {
   const navigate = useNavigate();
+  
+  // Значения по умолчанию, если данных нет
+  const defaultData = [100, 200, 150, 300, 250, 400, 350, 500, 450, 550, 600, 650];
+  const dataToUse = purchasesData.length > 0 ? purchasesData : defaultData;
+  
   // Вычисляем общую сумму покупок
-  const total = purchasesData.reduce((acc, curr) => acc + curr, 0);
+  const total = dataToUse.reduce((acc, curr) => acc + curr, 0);
 
   return (
     <div className="relative">
@@ -30,7 +35,7 @@ const PurchasesCard = ({ purchasesData }) => {
 
         {/* График прижат к нижней части карточки */}
         <div className="absolute bottom-5 left-5 right-5">
-          <PurchasesChart purchasesData={purchasesData} />
+          <PurchasesChart purchasesData={dataToUse} />
         </div>
       </div>
       {/* Невидимая кнопка, перекрывающая карточку */}
@@ -43,7 +48,7 @@ const PurchasesCard = ({ purchasesData }) => {
 };
 
 PurchasesCard.propTypes = {
-  purchasesData: PropTypes.arrayOf(PropTypes.number),
+  purchasesData: PropTypes.arrayOf(PropTypes.number)
 };
 
 export default PurchasesCard;

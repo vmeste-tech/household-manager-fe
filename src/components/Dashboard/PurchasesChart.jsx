@@ -1,10 +1,11 @@
 import PropTypes from "prop-types";
 
 const PurchasesChart = ({ purchasesData }) => {
-  // Если данные не переданы, используем значения по умолчанию:
-  const defaultData = [4, 16, 24, 32, 20, 10, 10, 4, 16, 24, 32, 20, 10, 20];
+  // Если данные не переданы, используем значения по умолчанию
+  const defaultData = [4, 16, 24, 32, 20, 10, 10, 4, 16, 24, 32, 20];
+  
   // Передаётся массив чисел, где каждое число — количество покупок за период
-  const data = purchasesData || defaultData;
+  const data = purchasesData && purchasesData.length > 0 ? purchasesData : defaultData;
 
   // Вычисляем кумулятивные суммы: каждая колонка — сумма предыдущих + новая покупка
   const cumulativeData = [];
@@ -51,7 +52,7 @@ const PurchasesChart = ({ purchasesData }) => {
 };
 
 PurchasesChart.propTypes = {
-  purchasesData: PropTypes.arrayOf(PropTypes.number),
+  purchasesData: PropTypes.arrayOf(PropTypes.number)
 };
 
 export default PurchasesChart;

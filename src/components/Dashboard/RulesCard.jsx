@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 
-const RulesCard = ({ activeRules, votingRules }) => {
+const RulesCard = ({ activeRules = 0, votingRules = 0 }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -55,8 +55,8 @@ const RulesCard = ({ activeRules, votingRules }) => {
 };
 
 RulesCard.propTypes = {
-  activeRules: PropTypes.number.isRequired,
-  votingRules: PropTypes.number.isRequired,
+  activeRules: PropTypes.number,
+  votingRules: PropTypes.number
 };
 
 export default RulesCard;

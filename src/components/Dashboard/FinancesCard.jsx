@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 
-const FinancesCard = ({ balance }) => {
+const FinancesCard = ({ balance = 0 }) => {
   const navigate = useNavigate();
 
   // Массив с названиями месяцев на русском
@@ -53,7 +53,7 @@ const FinancesCard = ({ balance }) => {
 };
 
 FinancesCard.propTypes = {
-  balance: PropTypes.number.isRequired,
+  balance: PropTypes.number
 };
 
 export default FinancesCard;

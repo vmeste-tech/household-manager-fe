@@ -3,13 +3,13 @@ import PropTypes from "prop-types";
 const WeeklyTasksChart = ({ tasksData }) => {
   // Если данные не переданы, используем значения по умолчанию:
   const defaultData = [
-    { label: "M", count: 4 },
-    { label: "T", count: 16 },
-    { label: "W", count: 24 },
-    { label: "T", count: 32 },
-    { label: "F", count: 20 },
-    { label: "S", count: 10 },
-    { label: "S", count: 10 },
+    { label: "П", count: 4 },
+    { label: "В", count: 16 },
+    { label: "С", count: 24 },
+    { label: "Ч", count: 32 },
+    { label: "П", count: 20 },
+    { label: "С", count: 10 },
+    { label: "В", count: 10 },
   ];
 
   const data = tasksData || defaultData;
@@ -53,7 +53,7 @@ WeeklyTasksChart.propTypes = {
       label: PropTypes.string.isRequired,
       count: PropTypes.number.isRequired,
     })
-  ),
+  )
 };
 
 export default WeeklyTasksChart;

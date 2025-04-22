@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 
-const MonthlyFinesCard = ({ finesCount, totalFines }) => {
+const PenaltyCard = ({ finesCount = 0, totalFines = 0 }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -21,6 +21,7 @@ const MonthlyFinesCard = ({ finesCount, totalFines }) => {
             </span>
             <span className="text-sm text-gray-600">штрафов получено</span>
           </div>
+
           <div className="flex flex-col items-center border-l border-gray-300 pl-6">
             <span className="text-4xl font-bold text-indigo-800">
               {totalFines} руб.
@@ -43,9 +44,9 @@ const MonthlyFinesCard = ({ finesCount, totalFines }) => {
   );
 };
 
-MonthlyFinesCard.propTypes = {
-  finesCount: PropTypes.number.isRequired,
-  totalFines: PropTypes.number.isRequired,
+PenaltyCard.propTypes = {
+  finesCount: PropTypes.number,
+  totalFines: PropTypes.number
 };
 
-export default MonthlyFinesCard;
+export default PenaltyCard;
