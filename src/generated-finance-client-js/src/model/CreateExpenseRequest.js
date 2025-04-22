@@ -53,8 +53,8 @@ class CreateExpenseRequest {
             if (data.hasOwnProperty('description')) {
                 obj['description'] = ApiClient.convertToType(data['description'], 'String');
             }
-            if (data.hasOwnProperty('photoUrl')) {
-                obj['photoUrl'] = ApiClient.convertToType(data['photoUrl'], 'String');
+            if (data.hasOwnProperty('photoBase64')) {
+                obj['photoBase64'] = ApiClient.convertToType(data['photoBase64'], 'String');
             }
             if (data.hasOwnProperty('itemId')) {
                 obj['itemId'] = ApiClient.convertToType(data['itemId'], 'String');
@@ -74,8 +74,8 @@ class CreateExpenseRequest {
             throw new Error("Expected the field `description` to be a primitive type in the JSON string but got " + data['description']);
         }
         // ensure the json data is a string
-        if (data['photoUrl'] && !(typeof data['photoUrl'] === 'string' || data['photoUrl'] instanceof String)) {
-            throw new Error("Expected the field `photoUrl` to be a primitive type in the JSON string but got " + data['photoUrl']);
+        if (data['photoBase64'] && !(typeof data['photoBase64'] === 'string' || data['photoBase64'] instanceof String)) {
+            throw new Error("Expected the field `photoBase64` to be a primitive type in the JSON string but got " + data['photoBase64']);
         }
         // ensure the json data is a string
         if (data['itemId'] && !(typeof data['itemId'] === 'string' || data['itemId'] instanceof String)) {
@@ -101,9 +101,9 @@ CreateExpenseRequest.prototype['amount'] = undefined;
 CreateExpenseRequest.prototype['description'] = undefined;
 
 /**
- * @member {String} photoUrl
+ * @member {String} photoBase64
  */
-CreateExpenseRequest.prototype['photoUrl'] = undefined;
+CreateExpenseRequest.prototype['photoBase64'] = undefined;
 
 /**
  * @member {String} itemId

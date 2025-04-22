@@ -25,7 +25,3 @@ src/model/ExpenseItemDto.js
 src/model/ExpenseItemUpdateDto.js
 src/model/ExpensesDto.js
 src/model/Participant.js
-test/model/ErrorResponse.spec.js
-test/model/ExpenseItemCreateDto.spec.js
-test/model/ExpenseItemDto.spec.js
-test/model/ExpenseItemUpdateDto.spec.js
