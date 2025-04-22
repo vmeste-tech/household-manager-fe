@@ -1,15 +1,72 @@
-import { useState } from "react";
-import KanbanBoard from "../../components/Board/KanbanBoard";
+import { useState, useEffect } from "react";
 import DashboardHeader from "../../components/Dashboard/DashboardHeader";
 import StatCardsGrid from "../../components/Tasks/TaskStats";
 import CustomButton from "../../components/Universal/CustomButton";
 import Heading from "../../components/Universal/Heading";
 import CreateTaskModal from "../../components/Modal/CreateTaskModal";
+import TaskList from "../../components/Tasks/TaskList";
+import { taskApi } from "../../api"; // Import the task API
 
 function TaskPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userFilter, setUserFilter] = useState("all");
   const [timeFilter, setTimeFilter] = useState("today");
+  const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch tasks data
+  useEffect(() => {
+    const fetchTasks = async () => {
+      setLoading(true);
+      try {
+        const apartmentId = localStorage.getItem("apartmentId");
+        if (!apartmentId) {
+          console.error("Apartment ID not found in localStorage");
+          setLoading(false);
+          return;
+        }
+
+        const today = formatDate(new Date());
+        let endDate;
+
+        switch (timeFilter) {
+          case "today":
+            endDate = today;
+            break;
+          case "week":
+            endDate = formatDate(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000));
+            break;
+          case "month":
+            endDate = formatDate(new Date(Date.now() + 30 * 24 * 60 * 60 * 1000));
+            break;
+          default:
+            endDate = formatDate(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000));
+        }
+
+        taskApi.getTasks(apartmentId, today, endDate, (error, data) => {
+          if (error) {
+            console.error("Error fetching tasks:", error);
+          } else {
+            setTasks(data || []);
+          }
+          setLoading(false);
+        });
+      } catch (error) {
+        console.error("Error in fetch tasks:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchTasks();
+  }, [timeFilter]);
+
+  // Format date helper
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
 
   // Sample card data for statistics
   const sampleCardsData = [
@@ -35,19 +92,54 @@ function TaskPage() {
 
   const handleCreateTask = (taskData) => {
     console.log("Создание задачи:", taskData);
-    // Здесь можно добавить вызов API для создания задачи
+    // Call the API to create a task
+    taskApi.create({
+      ...taskData,
+      status: "CREATED"
+    }, (error, data) => {
+      if (error) {
+        console.error("Error creating task:", error);
+      } else {
+        // Refresh the task list
+        setTasks(prevTasks => [...prevTasks, data]);
+      }
+    });
     setIsModalOpen(false);
   };
+
+  const handleStatusChange = (taskId, newStatus) => {
+    taskApi.changeStatus(taskId, newStatus, (error) => {
+      if (error) {
+        console.error("Error updating task status:", error);
+      } else {
+        // Update the task in the local state
+        setTasks(prevTasks =>
+          prevTasks.map(task => 
+            task.id === taskId ? { ...task, status: newStatus } : task
+          )
+        );
+      }
+    });
+  };
+
+  // Filter tasks based on userFilter
+  const filteredTasks = tasks.filter(task => {
+    if (userFilter !== "all" && task.assignedTo !== userFilter) return false;
+    return true;
+  });
 
   return (
     <div className="bg-indigo-50 min-h-screen overflow-x-hidden">
       <DashboardHeader />
-      <div className="pt-20 max-w-7xl mx-auto flex flex-col gap-6 px-4 sm:px-6 lg:px-8">
-        <KanbanBoard 
+      <div className="pt-20 max-w-7xl mx-auto flex flex-col gap-6 px-4 sm:px-6 lg:px-8 pb-8">
+        <TaskList 
+          tasks={filteredTasks}
           userFilter={userFilter}
           timeFilter={timeFilter}
           setUserFilter={setUserFilter}
           setTimeFilter={setTimeFilter}
+          loading={loading}
+          onStatusChange={handleStatusChange}
         />
         <div className="flex justify-center">
           <CustomButton
