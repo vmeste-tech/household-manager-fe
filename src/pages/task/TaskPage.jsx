@@ -5,18 +5,19 @@ import CustomButton from "../../components/Universal/CustomButton";
 import Heading from "../../components/Universal/Heading";
 import CreateTaskModal from "../../components/Modal/CreateTaskModal";
 import TaskList from "../../components/Tasks/TaskList";
-import { taskApi } from "../../api"; // Import the task API
+import { taskApi, userApi } from "../../api";
 
 function TaskPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userFilter, setUserFilter] = useState("all");
   const [timeFilter, setTimeFilter] = useState("today");
   const [tasks, setTasks] = useState([]);
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch tasks data
+  // Fetch tasks and users data
   useEffect(() => {
-    const fetchTasks = async () => {
+    const fetchData = async () => {
       setLoading(true);
       try {
         const apartmentId = localStorage.getItem("apartmentId");
@@ -26,6 +27,19 @@ function TaskPage() {
           return;
         }
 
+        // Fetch users first
+        await new Promise((resolve) => {
+          userApi.getApartmentUsers(apartmentId, (error, data) => {
+            if (error) {
+              console.error("Error fetching users:", error);
+            } else {
+              setUsers(data || []);
+            }
+            resolve();
+          });
+        });
+
+        // Then fetch tasks
         const today = formatDate(new Date());
         let endDate;
 
@@ -52,12 +66,12 @@ function TaskPage() {
           setLoading(false);
         });
       } catch (error) {
-        console.error("Error in fetch tasks:", error);
+        console.error("Error in fetch data:", error);
         setLoading(false);
       }
     };
 
-    fetchTasks();
+    fetchData();
   }, [timeFilter]);
 
   // Format date helper
@@ -122,8 +136,26 @@ function TaskPage() {
     });
   };
 
+  // Create a mapping of user IDs to user data
+  const userMap = users.reduce((acc, user) => {
+    acc[user.id] = {
+      name: `${user.firstName} ${user.lastName}`,
+      avatar: user.profilePictureUrl || null
+    };
+    return acc;
+  }, {});
+
+  // Enrich tasks with user data
+  const enrichedTasks = tasks.map(task => {
+    const assignedUser = task.assignedTo ? userMap[task.assignedTo] : null;
+    return {
+      ...task,
+      assignedUserInfo: assignedUser || { name: "Не назначено", avatar: null }
+    };
+  });
+
   // Filter tasks based on userFilter
-  const filteredTasks = tasks.filter(task => {
+  const filteredTasks = enrichedTasks.filter(task => {
     if (userFilter !== "all" && task.assignedTo !== userFilter) return false;
     return true;
   });
@@ -140,6 +172,7 @@ function TaskPage() {
           setTimeFilter={setTimeFilter}
           loading={loading}
           onStatusChange={handleStatusChange}
+          users={users}
         />
         <div className="flex justify-center">
           <CustomButton
@@ -155,6 +188,7 @@ function TaskPage() {
         <CreateTaskModal
           onClose={() => setIsModalOpen(false)}
           onCreate={handleCreateTask}
+          users={users}
         />
       )}
     </div>
