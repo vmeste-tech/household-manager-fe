@@ -5,14 +5,14 @@ All URIs are relative to *http://localhost:8082*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**addToApartment**](DefaultApi.md#addToApartment) | **POST** /api/v1/apartments/{apartmentId}/users/{userId} | Добавление пользователя в квартиру
-[**changePassword**](DefaultApi.md#changePassword) | **PATCH** /api/v1/users/{userId}/password | Обновление пароля
+[**changePassword**](DefaultApi.md#changePassword) | **PATCH** /api/v1/users/password | Обновление пароля
 [**createApartment**](DefaultApi.md#createApartment) | **POST** /api/v1/apartments | Создание квартиры
 [**createInviteCode**](DefaultApi.md#createInviteCode) | **POST** /api/v1/invite/create | Создание приглашения
 [**deleteApartment**](DefaultApi.md#deleteApartment) | **DELETE** /api/v1/apartments/{apartmentId} | Удаление квартиры
 [**deleteFromApartment**](DefaultApi.md#deleteFromApartment) | **DELETE** /api/v1/apartments/{apartmentId}/users/{userId} | Удаление пользователя из квартиры
 [**deleteUser**](DefaultApi.md#deleteUser) | **DELETE** /api/v1/users/{userId} | 
 [**findApartmentByUser**](DefaultApi.md#findApartmentByUser) | **GET** /api/v1/apartments/by-user | Получение квартиры по JWT токену пользователя
-[**getApartment**](DefaultApi.md#getApartment) | **GET** /api/v1/apartments/{apartmentId} | Получение квартиры идентификатору
+[**getApartment**](DefaultApi.md#getApartment) | **GET** /api/v1/apartments/{apartmentId} | Получение квартиры по идентификатору
 [**getApartmentUsers**](DefaultApi.md#getApartmentUsers) | **GET** /api/v1/apartments/{apartmentId}/users | Получение пользователей, проживающих в квартире
 [**getUser**](DefaultApi.md#getUser) | **GET** /api/v1/users/me | Получение информации о пользователе по JWT токену
 [**login**](DefaultApi.md#login) | **POST** /api/v1/auth/login | Получение JWT токена
@@ -76,7 +76,7 @@ Name | Type | Description  | Notes
 
 ## changePassword
 
-> changePassword(userId, changePasswordRequest)
+> changePassword(changePasswordRequest)
 
 Обновление пароля
 
@@ -88,9 +88,8 @@ Name | Type | Description  | Notes
 import OpenApiDefinition from 'open_api_definition';
 
 let apiInstance = new OpenApiDefinition.DefaultApi();
-let userId = "userId_example"; // String | 
 let changePasswordRequest = new OpenApiDefinition.ChangePasswordRequest(); // ChangePasswordRequest | 
-apiInstance.changePassword(userId, changePasswordRequest, (error, data, response) => {
+apiInstance.changePassword(changePasswordRequest, (error, data, response) => {
   if (error) {
     console.error(error);
   } else {
@@ -104,7 +103,6 @@ apiInstance.changePassword(userId, changePasswordRequest, (error, data, response
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **userId** | **String**|  | 
  **changePasswordRequest** | [**ChangePasswordRequest**](ChangePasswordRequest.md)|  | 
 
 ### Return type
@@ -407,9 +405,9 @@ This endpoint does not need any parameter.
 
 > GetApartmentResponse getApartment(apartmentId)
 
-Получение квартиры идентификатору
+Получение квартиры по идентификатору
 
-Позволяет получить квартиру по JWT токену пользователя
+Позволяет получить квартиру идентификатору
 
 ### Example
 

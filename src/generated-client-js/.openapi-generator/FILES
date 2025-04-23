@@ -15,9 +15,11 @@ docs/GetUserResponse.md
 docs/InviteCodeDto.md
 docs/RefreshTokenRequest.md
 docs/Response.md
+docs/S3ControllerApi.md
 docs/TokenResponse.md
 docs/UpdateApartmentRequest.md
 docs/UpdateApartmentResponse.md
+docs/UploadFileRequest.md
 docs/UseInviteCodeRequest.md
 docs/UserInfoDto.md
 docs/UserRegistrationRequest.md
@@ -27,6 +29,7 @@ mocha.opts
 package.json
 src/ApiClient.js
 src/api/DefaultApi.js
+src/api/S3ControllerApi.js
 src/index.js
 src/model/AddToApartmentResponse.js
 src/model/ApartmentInfo.js
@@ -43,7 +46,10 @@ src/model/Response.js
 src/model/TokenResponse.js
 src/model/UpdateApartmentRequest.js
 src/model/UpdateApartmentResponse.js
+src/model/UploadFileRequest.js
 src/model/UseInviteCodeRequest.js
 src/model/UserInfoDto.js
 src/model/UserRegistrationRequest.js
 src/model/UserResponse.js
+test/api/S3ControllerApi.spec.js
+test/model/UploadFileRequest.spec.js

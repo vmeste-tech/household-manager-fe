@@ -127,14 +127,14 @@ All URIs are relative to *http://localhost:8082*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *OpenApiDefinition.DefaultApi* | [**addToApartment**](docs/DefaultApi.md#addToApartment) | **POST** /api/v1/apartments/{apartmentId}/users/{userId} | Добавление пользователя в квартиру
-*OpenApiDefinition.DefaultApi* | [**changePassword**](docs/DefaultApi.md#changePassword) | **PATCH** /api/v1/users/{userId}/password | Обновление пароля
+*OpenApiDefinition.DefaultApi* | [**changePassword**](docs/DefaultApi.md#changePassword) | **PATCH** /api/v1/users/password | Обновление пароля
 *OpenApiDefinition.DefaultApi* | [**createApartment**](docs/DefaultApi.md#createApartment) | **POST** /api/v1/apartments | Создание квартиры
 *OpenApiDefinition.DefaultApi* | [**createInviteCode**](docs/DefaultApi.md#createInviteCode) | **POST** /api/v1/invite/create | Создание приглашения
 *OpenApiDefinition.DefaultApi* | [**deleteApartment**](docs/DefaultApi.md#deleteApartment) | **DELETE** /api/v1/apartments/{apartmentId} | Удаление квартиры
 *OpenApiDefinition.DefaultApi* | [**deleteFromApartment**](docs/DefaultApi.md#deleteFromApartment) | **DELETE** /api/v1/apartments/{apartmentId}/users/{userId} | Удаление пользователя из квартиры
 *OpenApiDefinition.DefaultApi* | [**deleteUser**](docs/DefaultApi.md#deleteUser) | **DELETE** /api/v1/users/{userId} | 
 *OpenApiDefinition.DefaultApi* | [**findApartmentByUser**](docs/DefaultApi.md#findApartmentByUser) | **GET** /api/v1/apartments/by-user | Получение квартиры по JWT токену пользователя
-*OpenApiDefinition.DefaultApi* | [**getApartment**](docs/DefaultApi.md#getApartment) | **GET** /api/v1/apartments/{apartmentId} | Получение квартиры идентификатору
+*OpenApiDefinition.DefaultApi* | [**getApartment**](docs/DefaultApi.md#getApartment) | **GET** /api/v1/apartments/{apartmentId} | Получение квартиры по идентификатору
 *OpenApiDefinition.DefaultApi* | [**getApartmentUsers**](docs/DefaultApi.md#getApartmentUsers) | **GET** /api/v1/apartments/{apartmentId}/users | Получение пользователей, проживающих в квартире
 *OpenApiDefinition.DefaultApi* | [**getUser**](docs/DefaultApi.md#getUser) | **GET** /api/v1/users/me | Получение информации о пользователе по JWT токену
 *OpenApiDefinition.DefaultApi* | [**login**](docs/DefaultApi.md#login) | **POST** /api/v1/auth/login | Получение JWT токена
@@ -142,6 +142,8 @@ Class | Method | HTTP request | Description
 *OpenApiDefinition.DefaultApi* | [**register**](docs/DefaultApi.md#register) | **POST** /api/v1/users/register | Регистрация пользователя
 *OpenApiDefinition.DefaultApi* | [**updateApartment**](docs/DefaultApi.md#updateApartment) | **PUT** /api/v1/apartments/{apartmentId} | Обновление квартиры
 *OpenApiDefinition.DefaultApi* | [**useInviteCode**](docs/DefaultApi.md#useInviteCode) | **POST** /api/v1/invite/use | Использование приглашения
+*OpenApiDefinition.S3ControllerApi* | [**getFile**](docs/S3ControllerApi.md#getFile) | **GET** /api/v1/s3/file/get/{key} | 
+*OpenApiDefinition.S3ControllerApi* | [**uploadFile**](docs/S3ControllerApi.md#uploadFile) | **POST** /api/v1/s3/file/upload | 
 
 
 ## Documentation for Models
@@ -161,6 +163,7 @@ Class | Method | HTTP request | Description
  - [OpenApiDefinition.TokenResponse](docs/TokenResponse.md)
  - [OpenApiDefinition.UpdateApartmentRequest](docs/UpdateApartmentRequest.md)
  - [OpenApiDefinition.UpdateApartmentResponse](docs/UpdateApartmentResponse.md)
+ - [OpenApiDefinition.UploadFileRequest](docs/UploadFileRequest.md)
  - [OpenApiDefinition.UseInviteCodeRequest](docs/UseInviteCodeRequest.md)
  - [OpenApiDefinition.UserInfoDto](docs/UserInfoDto.md)
  - [OpenApiDefinition.UserRegistrationRequest](docs/UserRegistrationRequest.md)

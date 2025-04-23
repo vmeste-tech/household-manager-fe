@@ -28,11 +28,13 @@ import Response from './model/Response';
 import TokenResponse from './model/TokenResponse';
 import UpdateApartmentRequest from './model/UpdateApartmentRequest';
 import UpdateApartmentResponse from './model/UpdateApartmentResponse';
+import UploadFileRequest from './model/UploadFileRequest';
 import UseInviteCodeRequest from './model/UseInviteCodeRequest';
 import UserInfoDto from './model/UserInfoDto';
 import UserRegistrationRequest from './model/UserRegistrationRequest';
 import UserResponse from './model/UserResponse';
 import DefaultApi from './api/DefaultApi';
+import S3ControllerApi from './api/S3ControllerApi';
 
 
 /**
@@ -164,6 +166,12 @@ export {
     UpdateApartmentResponse,
 
     /**
+     * The UploadFileRequest model constructor.
+     * @property {module:model/UploadFileRequest}
+     */
+    UploadFileRequest,
+
+    /**
      * The UseInviteCodeRequest model constructor.
      * @property {module:model/UseInviteCodeRequest}
      */
@@ -191,5 +199,11 @@ export {
     * The DefaultApi service constructor.
     * @property {module:api/DefaultApi}
     */
-    DefaultApi
+    DefaultApi,
+
+    /**
+    * The S3ControllerApi service constructor.
+    * @property {module:api/S3ControllerApi}
+    */
+    S3ControllerApi
 };

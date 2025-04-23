@@ -111,23 +111,17 @@ export default class DefaultApi {
     /**
      * Обновление пароля
      * Позволяет обновить пароль пользователя
-     * @param {String} userId 
      * @param {module:model/ChangePasswordRequest} changePasswordRequest 
      * @param {module:api/DefaultApi~changePasswordCallback} callback The callback function, accepting three arguments: error, data, response
      */
-    changePassword(userId, changePasswordRequest, callback) {
+    changePassword(changePasswordRequest, callback) {
       let postBody = changePasswordRequest;
-      // verify the required parameter 'userId' is set
-      if (userId === undefined || userId === null) {
-        throw new Error("Missing the required parameter 'userId' when calling changePassword");
-      }
       // verify the required parameter 'changePasswordRequest' is set
       if (changePasswordRequest === undefined || changePasswordRequest === null) {
         throw new Error("Missing the required parameter 'changePasswordRequest' when calling changePassword");
       }
 
       let pathParams = {
-        'userId': userId
       };
       let queryParams = {
       };
@@ -141,7 +135,7 @@ export default class DefaultApi {
       let accepts = ['*/*'];
       let returnType = null;
       return this.apiClient.callApi(
-        '/api/v1/users/{userId}/password', 'PATCH',
+        '/api/v1/users/password', 'PATCH',
         pathParams, queryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, null, callback
       );
@@ -407,8 +401,8 @@ export default class DefaultApi {
      */
 
     /**
-     * Получение квартиры идентификатору
-     * Позволяет получить квартиру по JWT токену пользователя
+     * Получение квартиры по идентификатору
+     * Позволяет получить квартиру идентификатору
      * @param {String} apartmentId 
      * @param {module:api/DefaultApi~getApartmentCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link module:model/GetApartmentResponse}
