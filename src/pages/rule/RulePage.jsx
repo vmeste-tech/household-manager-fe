@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import DashboardHeader from "../../components/Dashboard/DashboardHeader";
 import RuleCards from "../../components/Rules/RuleCards";
 import Tabs from "../../components/Rules/Tabs";
@@ -14,18 +14,13 @@ function RulePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const [refreshTrigger, setRefreshTrigger] = useState(0); // Add refresh trigger
+  // Add state for rule statistics
   const [ruleStats, setRuleStats] = useState({
     activeRules: 0,
     votingRules: 0
   });
 
-  // Create a function to refresh data
-  const refreshData = useCallback(() => {
-    setRefreshTrigger(prev => prev + 1); // Increment to trigger useEffect
-  }, []);
-
-  // Fetch rule statistics on component mount or when refreshTrigger changes
+  // Fetch rule statistics on component mount
   useEffect(() => {
     const fetchRuleStats = () => {
       try {
@@ -61,8 +56,9 @@ function RulePage() {
     };
     
     fetchRuleStats();
-  }, [refreshTrigger]); // Add refreshTrigger as dependency
+  }, []);
 
+  // Update statsData to use real statistics
   const statsData = [
     {
       title: "Активные правила",
@@ -95,6 +91,7 @@ function RulePage() {
     setErrorMsg("");
     
     try {
+      // Create a request object based on the API model
       const createRuleRequest = new CreateRuleRequest(
         ruleData.name,
         ruleData.description,
@@ -102,12 +99,15 @@ function RulePage() {
         ruleData.timeZone
       );
       
+      // Set optional penaltyAmount if it exists
       if (ruleData.penaltyAmount) {
         createRuleRequest.penaltyAmount = parseFloat(ruleData.penaltyAmount);
       }
       
+      // Add apartmentId from the input data
       createRuleRequest.apartmentId = ruleData.apartmentId;
       
+      // Call the API
       ruleApi.createRule(createRuleRequest, (error, data) => {
         setIsLoading(false);
         
@@ -116,8 +116,12 @@ function RulePage() {
           setErrorMsg("Не удалось создать правило");
         } else {
           console.log("Rule created successfully:", data);
+          // Close the modal
           setIsModalOpen(false);
-          refreshData(); // Refresh data after successful creation
+          
+          // You might want to refresh the rules list here or show a success message
+          // This would depend on how your RuleCards component gets its data
+          // If RuleCards fetches data on mount, you could implement a refresh mechanism
         }
       });
     } catch (error) {
@@ -146,11 +150,7 @@ function RulePage() {
 
         <Heading>Правила квартиры</Heading>
         <Tabs activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
-        <RuleCards 
-          activeFilter={activeFilter} 
-          refreshData={refreshData} // Pass refresh function to child component
-          isLoading={isLoading}
-        />
+        <RuleCards activeFilter={activeFilter} />
 
         <div className="flex justify-center mb-8">
           <CustomButton
@@ -164,7 +164,7 @@ function RulePage() {
         <CreateRuleModal
           onClose={() => setIsModalOpen(false)}
           onCreate={handleCreateRule}
-          isLoading={isLoading}
+          isLoading={isLoading} // Pass the loading state to the modal
         />
       )}
     </div>
