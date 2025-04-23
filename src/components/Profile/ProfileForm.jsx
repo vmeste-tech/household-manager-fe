@@ -96,7 +96,7 @@ const ProfileForm = ({ user, onPasswordChange, onSubmit }) => {
       </div>
 
       <div className="flex justify-end mt-6">
-        <CustomButton text="Сохранить" variant="filled" type="submit" />
+        <CustomButton text="Сохранить" variant="filled" onClick={onSubmit} />
       </div>
     </form>
   );
