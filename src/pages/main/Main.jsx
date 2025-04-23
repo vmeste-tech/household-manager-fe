@@ -53,7 +53,25 @@ const Main = () => {
       setLoading(prev => ({ ...prev, apartment: false }));
       if (error) {
         console.error("Ошибка получения квартиры:", error);
-        setErrors(prev => ({ ...prev, apartment: "Не удалось загрузить данные квартиры" }));
+        
+        // Проверяем, является ли ошибка 404 (квартира не найдена)
+        if (error.status === 404) {
+          console.log("У пользователя нет квартиры");
+          // Устанавливаем apartment в null и отмечаем все загрузки как выполненные
+          setApartment(null);
+          setLoading(prev => ({
+            ...prev,
+            tasks: false,
+            rules: false,
+            penalties: false,
+            finances: false,
+            purchases: false,
+            notifications: false
+          }));
+        } else {
+          // В случае других ошибок сохраняем информацию в состоянии ошибок
+          setErrors(prev => ({ ...prev, apartment: "Не удалось загрузить данные квартиры" }));
+        }
       } else {
         setApartment(data);
         if (data?.apartmentId) {
@@ -74,7 +92,8 @@ const Main = () => {
             rules: false,
             penalties: false,
             finances: false,
-            purchases: false
+            purchases: false,
+            notifications: false
           }));
         }
       }

@@ -5,8 +5,8 @@ import PurchasesChart from "./PurchasesChart";
 const PurchasesCard = ({ purchasesData = [] }) => {
   const navigate = useNavigate();
   
-  // Значения по умолчанию, если данных нет
-  const defaultData = [100, 200, 150, 300, 250, 400, 350, 500, 450, 550, 600, 650];
+  // Значения по умолчанию, если данных нет - все нули
+  const defaultData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   const dataToUse = purchasesData.length > 0 ? purchasesData : defaultData;
   
   // Вычисляем общую сумму покупок
@@ -21,15 +21,15 @@ const PurchasesCard = ({ purchasesData = [] }) => {
         {/* Заголовок — не меняем */}
         <h3 className="text-xl font-bold text-indigo-800">Затраты</h3>
 
-        {/* Блок с суммой, выровненный по левому краю */}
-        <div className="absolute top-1/2 left-6 transform -translate-y-1/2 z-10 inline-block bg-white bg-opacity-50 p-2 rounded">
+        {/* Улучшенный блок с суммой */}
+        <div className="absolute top-1/2 left-6 transform -translate-y-1/2 z-10 bg-white/70 backdrop-blur-sm p-3 rounded-lg shadow-sm">
           <div>
             <span className="text-3xl font-bold text-indigo-800">
               {total} руб.
             </span>
           </div>
-          <div className="text-center">
-            <span className="text-xs text-gray-600">потрачено за месяц</span>
+          <div>
+            <span className="text-sm text-gray-600">потрачено за месяц</span>
           </div>
         </div>
 
