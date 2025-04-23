@@ -79,8 +79,10 @@ const RuleDetails = ({ rule, styleConfig, onClose, onVote }) => {
       // Update local state
       setUserVote(voteType);
       
-      // Notify parent component
-      onVote(rule.id, voteType);
+      // Notify parent component to trigger refresh
+      if (onVote) {
+        onVote(rule.id, voteType);
+      }
     } catch (error) {
       console.error("Error voting:", error);
       setVoteError("Не удалось проголосовать. Попробуйте позже.");

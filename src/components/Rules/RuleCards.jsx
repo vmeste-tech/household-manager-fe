@@ -4,7 +4,7 @@ import RuleCard from "./RuleCard";
 import RuleDetails from "./RuleDetails";
 import { ruleApi } from "../../api";
 
-const RuleCards = ({ activeFilter }) => {
+const RuleCards = ({ activeFilter, refreshData, isLoading: parentLoading }) => {
   const [selectedRule, setSelectedRule] = useState(null);
   const [rules, setRules] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -83,26 +83,32 @@ const RuleCards = ({ activeFilter }) => {
     };
 
     fetchRules();
-  }, []);
+  }, [activeFilter]); // Add activeFilter as dependency to refresh when filter changes
 
   const filteredRules =
     activeFilter === "Все"
       ? rules
       : rules.filter((rule) => rule.status === activeFilter);
 
-  const handleVote = (ruleId, voteType) => {
-    // Здесь будет логика обработки голосования
-    console.log(`Проголосовал ${voteType} за правило ${ruleId}`);
-
-    // В реальном приложении здесь был бы API-запрос
-    // и обновление состояния после успешного ответа
+  const handleVote = async (ruleId, voteType) => {
+    // After successful vote, refresh the data
+    try {
+      console.log(`Проголосовал ${voteType} за правило ${ruleId}`);
+      
+      // After successful vote, refresh data
+      if (refreshData) {
+        refreshData();
+      }
+    } catch (error) {
+      console.error("Voting error:", error);
+    }
   };
 
   const closeDetails = () => {
     setSelectedRule(null);
   };
 
-  if (loading) {
+  if (loading || parentLoading) {
     return (
       <div className="flex justify-center items-center h-64">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
@@ -148,7 +154,10 @@ const RuleCards = ({ activeFilter }) => {
           rule={selectedRule}
           styleConfig={statusStyles[selectedRule.status]}
           onClose={closeDetails}
-          onVote={handleVote}
+          onVote={(ruleId, voteType) => {
+            handleVote(ruleId, voteType);
+            refreshData(); // Refresh data after voting
+          }}
         />
       )}
     </>
@@ -157,6 +166,8 @@ const RuleCards = ({ activeFilter }) => {
 
 RuleCards.propTypes = {
   activeFilter: PropTypes.string.isRequired,
+  refreshData: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool
 };
 
 export default RuleCards;
