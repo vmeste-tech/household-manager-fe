@@ -3,12 +3,15 @@ import PropTypes from "prop-types";
 import Modal from "../Universal/Modal";
 import CustomButton from "../Universal/CustomButton";
 import Heading from "../Universal/Heading";
+import ChangePasswordRequest from "../../generated-client-js/src/model/ChangePasswordRequest";
+import { userApi } from "../../api";
 
 const PasswordChangeModal = ({ isOpen, onClose, onSave }) => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChangePassword = () => {
     // Reset previous errors
@@ -25,13 +28,41 @@ const PasswordChangeModal = ({ isOpen, onClose, onSave }) => {
       return;
     }
 
-    // Call parent handler with password data
-    onSave({ oldPassword, newPassword });
+    setIsLoading(true);
 
-    // Reset form
-    setOldPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
+    // Create the request object according to the API requirements
+    const changePasswordRequest = new ChangePasswordRequest();
+    changePasswordRequest.newPassword = newPassword;
+
+    // Call the API to change the password
+    userApi.changePassword(changePasswordRequest, (error) => {
+      setIsLoading(false);
+
+      if (error) {
+        console.error("Ошибка при смене пароля:", error);
+
+        // Handle different error cases
+        if (error.status === 400) {
+          setPasswordError("Некорректный запрос. Возможно, новый пароль не соответствует требованиям безопасности.");
+        } else if (error.status === 401) {
+          setPasswordError("Неверный текущий пароль.");
+        } else {
+          setPasswordError(`Ошибка при смене пароля: ${error.message || 'Неизвестная ошибка'}`);
+        }
+        return;
+      }
+
+      // Success case
+      console.log("Пароль успешно изменен");
+
+      // Call parent handler with password data
+      onSave({ oldPassword, newPassword });
+
+      // Reset form
+      setOldPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+    });
   };
 
   if (!isOpen) return null;
@@ -89,11 +120,12 @@ const PasswordChangeModal = ({ isOpen, onClose, onSave }) => {
         </div>
 
         <div className="flex justify-end gap-2 mt-6">
-          <CustomButton text="Отмена" variant="outlined" onClick={onClose} />
+          <CustomButton text="Отмена" variant="outlined" onClick={onClose} disabled={isLoading} />
           <CustomButton
-            text="Сохранить"
+            text={isLoading ? "Сохранение..." : "Сохранить"}
             variant="filled"
             onClick={handleChangePassword}
+            disabled={isLoading}
           />
         </div>
       </div>
