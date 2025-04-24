@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import DashboardHeader from "../../components/Dashboard/DashboardHeader";
 import StatCardsGrid from "../../components/Tasks/TaskStats";
 import CustomButton from "../../components/Universal/CustomButton";
@@ -14,8 +14,17 @@ function TaskPage() {
   const [tasks, setTasks] = useState([]);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [taskStats, setTaskStats] = useState({
+    total: 0,
+    completed: 0,
+    overdue: 0
+  });
+  const prevStatsRef = useRef({
+    total: 0,
+    completed: 0,
+    overdue: 0
+  });
 
-  // Fetch tasks and users data
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -27,7 +36,6 @@ function TaskPage() {
           return;
         }
 
-        // Fetch users first
         await new Promise((resolve) => {
           userApi.getApartmentUsers(apartmentId, (error, data) => {
             if (error) {
@@ -39,7 +47,6 @@ function TaskPage() {
           });
         });
 
-        // Then fetch tasks
         const today = formatDate(new Date());
         let endDate;
 
@@ -74,7 +81,6 @@ function TaskPage() {
     fetchData();
   }, [timeFilter]);
 
-  // Format date helper
   const formatDate = (date) => {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -82,31 +88,60 @@ function TaskPage() {
     return `${year}-${month}-${day}`;
   };
 
-  // Sample card data for statistics
-  const sampleCardsData = [
-    {
-      title: "Всего задач",
-      value: "53",
-      changeText: "3 добавлено",
-      isIncrease: true,
-    },
-    {
-      title: "Выполнено",
-      value: "12",
-      changeText: "2 выполнено",
-      isIncrease: true,
-    },
-    {
-      title: "Просрочено",
-      value: "9",
-      changeText: "3 просрочено",
-      isIncrease: false,
-    },
-  ];
+  useEffect(() => {
+    if (tasks.length === 0) return;
+
+    const prevStats = {
+      total: taskStats.total,
+      completed: taskStats.completed,
+      overdue: taskStats.overdue
+    };
+    prevStatsRef.current = prevStats;
+
+    const today = new Date();
+    const total = tasks.length;
+    const completed = tasks.filter(task => task.status === "COMPLETED").length;
+    const overdue = tasks.filter(task => {
+      const deadline = new Date(task.deadline);
+      return deadline < today && task.status !== "COMPLETED";
+    }).length;
+
+    setTaskStats({
+      total,
+      completed,
+      overdue
+    });
+  }, [tasks]);
+
+  const getCardsData = () => {
+    const totalDiff = taskStats.total - prevStatsRef.current.total;
+    const completedDiff = taskStats.completed - prevStatsRef.current.completed;
+    const overdueDiff = taskStats.overdue - prevStatsRef.current.overdue;
+
+    return [
+      {
+        title: "Всего задач",
+        value: taskStats.total.toString(),
+        changeText: `${Math.abs(totalDiff)} ${totalDiff >= 0 ? "добавлено" : "удалено"}`,
+        isIncrease: totalDiff >= 0,
+      },
+      {
+        title: "Выполнено",
+        value: taskStats.completed.toString(),
+        changeText: `${Math.abs(completedDiff)} выполнено`,
+        isIncrease: completedDiff >= 0,
+      },
+      {
+        title: "Просрочено",
+        value: taskStats.overdue.toString(),
+        changeText: `${Math.abs(overdueDiff)} просрочено`,
+        isIncrease: overdueDiff <= 0,
+      },
+    ];
+  };
 
   const handleCreateTask = (taskData) => {
     console.log("Создание задачи:", taskData);
-    // Call the API to create a task
     taskApi.create({
       ...taskData,
       status: "CREATED"
@@ -114,7 +149,6 @@ function TaskPage() {
       if (error) {
         console.error("Error creating task:", error);
       } else {
-        // Refresh the task list
         setTasks(prevTasks => [...prevTasks, data]);
       }
     });
@@ -122,7 +156,6 @@ function TaskPage() {
   };
 
   const handleStatusChange = (taskId, newStatus) => {
-    // Find the current task in the tasks array
     const currentTask = tasks.find(task => task.id === taskId);
     
     if (!currentTask) {
@@ -130,7 +163,6 @@ function TaskPage() {
       return;
     }
     
-    // Create a complete task DTO with all existing properties and the updated status
     const taskDto = {
       ...currentTask,
       status: newStatus
@@ -140,7 +172,6 @@ function TaskPage() {
       if (error) {
         console.error("Error updating task status:", error);
       } else {
-        // Update the task in the local state using the returned data
         setTasks(prevTasks =>
           prevTasks.map(task => 
             task.id === data.taskId ? { ...task, status: data.status } : task
@@ -150,7 +181,6 @@ function TaskPage() {
     });
   };
 
-  // Create a mapping of user IDs to user data
   const userMap = users.reduce((acc, user) => {
     acc[user.id] = {
       name: `${user.firstName} ${user.lastName}`,
@@ -159,7 +189,6 @@ function TaskPage() {
     return acc;
   }, {});
 
-  // Enrich tasks with user data
   const enrichedTasks = tasks.map(task => {
     const assignedUser = task.assignedTo ? userMap[task.assignedTo] : null;
     return {
@@ -168,7 +197,6 @@ function TaskPage() {
     };
   });
 
-  // Filter tasks based on userFilter
   const filteredTasks = enrichedTasks.filter(task => {
     if (userFilter !== "all" && task.assignedTo !== userFilter) return false;
     return true;
@@ -196,7 +224,7 @@ function TaskPage() {
           />
         </div>
         <Heading>Статистика выполнения</Heading>
-        <StatCardsGrid cardsData={sampleCardsData} />
+        <StatCardsGrid cardsData={getCardsData()} />
       </div>
       {isModalOpen && (
         <CreateTaskModal
