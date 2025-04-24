@@ -107,8 +107,7 @@ var bearerAuth = defaultClient.authentications['bearerAuth'];
 bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 var api = new OpenApiDefinition.DefaultApi()
-var taskId = "taskId_example"; // {String} 
-var status = "status_example"; // {String} 
+var taskDto = new OpenApiDefinition.TaskDto(); // {TaskDto} 
 var callback = function(error, data, response) {
   if (error) {
     console.error(error);
@@ -116,7 +115,7 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.changeStatus(taskId, status, callback);
+api.changeStatus(taskDto, callback);
 
 ```
 
@@ -126,7 +125,7 @@ All URIs are relative to *http://localhost:8083*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*OpenApiDefinition.DefaultApi* | [**changeStatus**](docs/DefaultApi.md#changeStatus) | **PATCH** /api/v1/tasks/{taskId}/status | Изменение статуса задачи
+*OpenApiDefinition.DefaultApi* | [**changeStatus**](docs/DefaultApi.md#changeStatus) | **PATCH** /api/v1/tasks/status | Изменение статуса задачи
 *OpenApiDefinition.DefaultApi* | [**create**](docs/DefaultApi.md#create) | **POST** /api/v1/tasks | Создание задачи
 *OpenApiDefinition.DefaultApi* | [**deleteTask**](docs/DefaultApi.md#deleteTask) | **DELETE** /api/v1/tasks/{taskId} | Удаление задачи
 *OpenApiDefinition.DefaultApi* | [**getOverdueTasks**](docs/DefaultApi.md#getOverdueTasks) | **GET** /api/v1/tasks/{apartmentId}/overdue | Получение списка просроченных задач

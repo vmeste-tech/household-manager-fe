@@ -122,14 +122,28 @@ function TaskPage() {
   };
 
   const handleStatusChange = (taskId, newStatus) => {
-    taskApi.changeStatus(taskId, newStatus, (error) => {
+    // Find the current task in the tasks array
+    const currentTask = tasks.find(task => task.id === taskId);
+    
+    if (!currentTask) {
+      console.error("Task not found:", taskId);
+      return;
+    }
+    
+    // Create a complete task DTO with all existing properties and the updated status
+    const taskDto = {
+      ...currentTask,
+      status: newStatus
+    };
+    
+    taskApi.changeStatus(taskDto, (error, data) => {
       if (error) {
         console.error("Error updating task status:", error);
       } else {
-        // Update the task in the local state
+        // Update the task in the local state using the returned data
         setTasks(prevTasks =>
           prevTasks.map(task => 
-            task.id === taskId ? { ...task, status: newStatus } : task
+            task.id === data.taskId ? { ...task, status: data.status } : task
           )
         );
       }

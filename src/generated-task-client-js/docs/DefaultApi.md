@@ -4,7 +4,7 @@ All URIs are relative to *http://localhost:8083*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**changeStatus**](DefaultApi.md#changeStatus) | **PATCH** /api/v1/tasks/{taskId}/status | Изменение статуса задачи
+[**changeStatus**](DefaultApi.md#changeStatus) | **PATCH** /api/v1/tasks/status | Изменение статуса задачи
 [**create**](DefaultApi.md#create) | **POST** /api/v1/tasks | Создание задачи
 [**deleteTask**](DefaultApi.md#deleteTask) | **DELETE** /api/v1/tasks/{taskId} | Удаление задачи
 [**getOverdueTasks**](DefaultApi.md#getOverdueTasks) | **GET** /api/v1/tasks/{apartmentId}/overdue | Получение списка просроченных задач
@@ -14,7 +14,7 @@ Method | HTTP request | Description
 
 ## changeStatus
 
-> ChangeStatusResponse changeStatus(taskId, status)
+> ChangeStatusResponse changeStatus(taskDto)
 
 Изменение статуса задачи
 
@@ -30,9 +30,8 @@ let bearerAuth = defaultClient.authentications['bearerAuth'];
 bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new OpenApiDefinition.DefaultApi();
-let taskId = "taskId_example"; // String | 
-let status = "status_example"; // String | 
-apiInstance.changeStatus(taskId, status, (error, data, response) => {
+let taskDto = new OpenApiDefinition.TaskDto(); // TaskDto | 
+apiInstance.changeStatus(taskDto, (error, data, response) => {
   if (error) {
     console.error(error);
   } else {
@@ -46,8 +45,7 @@ apiInstance.changeStatus(taskId, status, (error, data, response) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **taskId** | **String**|  | 
- **status** | **String**|  | 
+ **taskDto** | [**TaskDto**](TaskDto.md)|  | 
 
 ### Return type
 
@@ -59,7 +57,7 @@ Name | Type | Description  | Notes
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
+- **Content-Type**: application/json
 - **Accept**: */*
 
 
@@ -163,7 +161,7 @@ null (empty response body)
 
 ## getOverdueTasks
 
-> [TaskDto] getOverdueTasks(apartmentId, startDate, endDate)
+> [TaskDto] getOverdueTasks(apartmentId)
 
 Получение списка просроченных задач
 
@@ -180,9 +178,7 @@ bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new OpenApiDefinition.DefaultApi();
 let apartmentId = "apartmentId_example"; // String | 
-let startDate = new Date("2013-10-20"); // Date | 
-let endDate = new Date("2013-10-20"); // Date | 
-apiInstance.getOverdueTasks(apartmentId, startDate, endDate, (error, data, response) => {
+apiInstance.getOverdueTasks(apartmentId, (error, data, response) => {
   if (error) {
     console.error(error);
   } else {
@@ -197,8 +193,6 @@ apiInstance.getOverdueTasks(apartmentId, startDate, endDate, (error, data, respo
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **apartmentId** | **String**|  | 
- **startDate** | **Date**|  | 
- **endDate** | **Date**|  | 
 
 ### Return type
 

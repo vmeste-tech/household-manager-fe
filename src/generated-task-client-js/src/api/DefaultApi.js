@@ -47,27 +47,20 @@ export default class DefaultApi {
     /**
      * Изменение статуса задачи
      * Позволяет создать задачу
-     * @param {String} taskId 
-     * @param {module:model/String} status 
+     * @param {module:model/TaskDto} taskDto 
      * @param {module:api/DefaultApi~changeStatusCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link module:model/ChangeStatusResponse}
      */
-    changeStatus(taskId, status, callback) {
-      let postBody = null;
-      // verify the required parameter 'taskId' is set
-      if (taskId === undefined || taskId === null) {
-        throw new Error("Missing the required parameter 'taskId' when calling changeStatus");
-      }
-      // verify the required parameter 'status' is set
-      if (status === undefined || status === null) {
-        throw new Error("Missing the required parameter 'status' when calling changeStatus");
+    changeStatus(taskDto, callback) {
+      let postBody = taskDto;
+      // verify the required parameter 'taskDto' is set
+      if (taskDto === undefined || taskDto === null) {
+        throw new Error("Missing the required parameter 'taskDto' when calling changeStatus");
       }
 
       let pathParams = {
-        'taskId': taskId
       };
       let queryParams = {
-        'status': status
       };
       let headerParams = {
       };
@@ -75,11 +68,11 @@ export default class DefaultApi {
       };
 
       let authNames = ['bearerAuth'];
-      let contentTypes = [];
+      let contentTypes = ['application/json'];
       let accepts = ['*/*'];
       let returnType = ChangeStatusResponse;
       return this.apiClient.callApi(
-        '/api/v1/tasks/{taskId}/status', 'PATCH',
+        '/api/v1/tasks/status', 'PATCH',
         pathParams, queryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, null, callback
       );
@@ -181,32 +174,20 @@ export default class DefaultApi {
      * Получение списка просроченных задач
      * Позволяет получить список просроченных задач
      * @param {String} apartmentId 
-     * @param {Date} startDate 
-     * @param {Date} endDate 
      * @param {module:api/DefaultApi~getOverdueTasksCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link Array.<module:model/TaskDto>}
      */
-    getOverdueTasks(apartmentId, startDate, endDate, callback) {
+    getOverdueTasks(apartmentId, callback) {
       let postBody = null;
       // verify the required parameter 'apartmentId' is set
       if (apartmentId === undefined || apartmentId === null) {
         throw new Error("Missing the required parameter 'apartmentId' when calling getOverdueTasks");
-      }
-      // verify the required parameter 'startDate' is set
-      if (startDate === undefined || startDate === null) {
-        throw new Error("Missing the required parameter 'startDate' when calling getOverdueTasks");
-      }
-      // verify the required parameter 'endDate' is set
-      if (endDate === undefined || endDate === null) {
-        throw new Error("Missing the required parameter 'endDate' when calling getOverdueTasks");
       }
 
       let pathParams = {
         'apartmentId': apartmentId
       };
       let queryParams = {
-        'startDate': startDate,
-        'endDate': endDate
       };
       let headerParams = {
       };
