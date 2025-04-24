@@ -60,12 +60,6 @@ function ApartmentPage() {
     fetchApartmentData();
   }, []);
 
-  const handleUserUpdate = (updatedUser) => {
-    setUsers(
-      users.map((user) => (user.id === updatedUser.id ? updatedUser : user))
-    );
-  };
-
   if (loading) {
     return (
       <div className="bg-indigo-50 min-h-screen overflow-x-hidden">
@@ -93,7 +87,7 @@ function ApartmentPage() {
       <DashboardHeader />
       <div className="pt-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col gap-8">
         <ApartmentInfo apartmentData={apartmentData} />
-        <UserTable users={users} onUserUpdate={handleUserUpdate} />
+        <UserTable users={users} />
         <div className="flex justify-center">
           <AddUserButton />
         </div>

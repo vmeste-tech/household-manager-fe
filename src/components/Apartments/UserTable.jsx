@@ -1,6 +1,4 @@
-import { useState } from "react";
 import PropTypes from "prop-types";
-import EditUserModal from "../Modal/EditUserModal";
 
 // Mapping between backend enum and frontend display values
 const STATUS_MAPPING = {
@@ -16,18 +14,7 @@ const STATUS_MAPPING = {
   "Выселился": null // Note: This status doesn't have a backend equivalent
 };
 
-const UsersTable = ({ users, onUserUpdate }) => {
-  const [editingUser, setEditingUser] = useState(null);
-
-  const handleEditClick = (user) => {
-    setEditingUser(user);
-  };
-
-  const handleSaveUser = (updatedUser) => {
-    onUserUpdate(updatedUser);
-    setEditingUser(null);
-  };
-
+const UsersTable = ({ users }) => {
   // Функция для форматирования даты в русском формате
   const formatDate = (dateString) => {
     const options = {
@@ -102,9 +89,6 @@ const UsersTable = ({ users, onUserUpdate }) => {
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50">
               Статус
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50">
-              Действия
-            </th>
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
@@ -129,33 +113,10 @@ const UsersTable = ({ users, onUserUpdate }) => {
               <td className="px-6 py-4 whitespace-nowrap">
                 {getStatusBadge(user.status)}
               </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <div
-                  role="button"
-                  tabIndex={0}
-                  className="inline-block px-4 py-2 text-sm font-medium text-indigo-600 border rounded-md hover:bg-indigo-50 cursor-pointer transition duration-150 ease-in-out"
-                  onClick={() => handleEditClick(user)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      handleEditClick(user);
-                    }
-                  }}
-                >
-                  Изменить статус
-                </div>
-              </td>
             </tr>
           ))}
         </tbody>
       </table>
-
-      {editingUser && (
-        <EditUserModal
-          user={editingUser}
-          onClose={() => setEditingUser(null)}
-          onSave={handleSaveUser}
-        />
-      )}
     </div>
   );
 };
@@ -171,7 +132,6 @@ UsersTable.propTypes = {
       status: PropTypes.string.isRequired,
     })
   ).isRequired,
-  onUserUpdate: PropTypes.func,
 };
 
 export default UsersTable;
