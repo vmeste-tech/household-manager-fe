@@ -139,7 +139,11 @@ function RulePage() {
 
         <Heading>Правила квартиры</Heading>
         <Tabs activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
-        <RuleCards activeFilter={activeFilter} refresh={refreshRules} />
+        <RuleCards 
+          activeFilter={activeFilter} 
+          refresh={refreshRules} 
+          onVoteSubmitted={() => setRefreshRules(prev => !prev)} 
+        />
 
         <div className="flex justify-center mb-8">
           <CustomButton

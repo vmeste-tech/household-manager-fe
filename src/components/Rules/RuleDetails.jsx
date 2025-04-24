@@ -79,8 +79,15 @@ const RuleDetails = ({ rule, styleConfig, onClose, onVote }) => {
       // Update local state
       setUserVote(voteType);
       
-      // Notify parent component
-      onVote(rule.id, voteType);
+      // Добавляем небольшую задержку, чтобы пользователь увидел результат голосования
+      setTimeout(() => {
+        // Уведомляем родительский компонент для обновления списка правил
+        onVote(rule.id, voteType);
+        
+        // Закрываем модальное окно
+        onClose();
+      }, 1000); // Задержка в миллисекундах (1 секунда)
+      
     } catch (error) {
       console.error("Error voting:", error);
       setVoteError("Не удалось проголосовать. Попробуйте позже.");

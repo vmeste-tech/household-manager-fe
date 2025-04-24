@@ -4,7 +4,7 @@ import RuleCard from "./RuleCard";
 import RuleDetails from "./RuleDetails";
 import { ruleApi } from "../../api";
 
-const RuleCards = ({ activeFilter, refresh }) => {
+const RuleCards = ({ activeFilter, refresh, onVoteSubmitted }) => {
   const [selectedRule, setSelectedRule] = useState(null);
   const [rules, setRules] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -91,11 +91,9 @@ const RuleCards = ({ activeFilter, refresh }) => {
       : rules.filter((rule) => rule.status === activeFilter);
 
   const handleVote = (ruleId, voteType) => {
-    // Здесь будет логика обработки голосования
     console.log(`Проголосовал ${voteType} за правило ${ruleId}`);
-
-    // В реальном приложении здесь был бы API-запрос
-    // и обновление состояния после успешного ответа
+    // Вызываем функцию обновления после успешного голосования
+    onVoteSubmitted();
   };
 
   const closeDetails = () => {
@@ -157,7 +155,8 @@ const RuleCards = ({ activeFilter, refresh }) => {
 
 RuleCards.propTypes = {
   activeFilter: PropTypes.string.isRequired,
-  refresh: PropTypes.bool
+  refresh: PropTypes.bool,
+  onVoteSubmitted: PropTypes.func
 };
 
 export default RuleCards;
