@@ -67,10 +67,20 @@ function TaskPage() {
         taskApi.getTasks(apartmentId, today, endDate, (error, data) => {
           if (error) {
             console.error("Error fetching tasks:", error);
+            setLoading(false);
           } else {
-            setTasks(data || []);
+            taskApi.getOverdueTasks(apartmentId, (overdueError, overdueData) => {
+              if (overdueError) {
+                console.error("Error fetching overdue tasks:", overdueError);
+                setTasks(data || []);
+              } else {
+                const overdueIds = new Set(overdueData.map(task => task.id));
+                const nonDuplicateTasks = data.filter(task => !overdueIds.has(task.id));
+                setTasks([...nonDuplicateTasks, ...overdueData]);
+              }
+              setLoading(false);
+            });
           }
-          setLoading(false);
         });
       } catch (error) {
         console.error("Error in fetch data:", error);
@@ -198,8 +208,9 @@ function TaskPage() {
   });
 
   const filteredTasks = enrichedTasks.filter(task => {
-    if (userFilter !== "all" && task.assignedTo !== userFilter) return false;
-    return true;
+    if (userFilter === "all") return true;
+    if (!task.assignedTo) return false;
+    return task.assignedTo === userFilter;
   });
 
   return (

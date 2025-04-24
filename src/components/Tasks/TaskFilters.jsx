@@ -13,6 +13,13 @@ const TaskFilters = ({
     { id: "month", name: "Месяц" }
   ];
 
+  // Функция для обработки изменения фильтра пользователей
+  const handleUserFilterChange = (e) => {
+    const newValue = e.target.value;
+    console.log("Изменение фильтра пользователей на:", newValue);
+    setUserFilter(newValue);
+  };
+
   return (
     <div className="flex flex-wrap items-center justify-between gap-4 bg-white rounded-lg p-3 shadow-sm">
       <div className="flex items-center bg-white rounded-md overflow-hidden shadow-sm border border-indigo-200">
@@ -37,12 +44,12 @@ const TaskFilters = ({
         <select
           className="appearance-none bg-white border-2 border-indigo-300 rounded-md py-2 pl-10 pr-8 text-sm font-medium focus:outline-none focus:ring-2 focus:border-indigo-500 focus:ring-indigo-500 transition-all group-hover:border-indigo-500"
           value={userFilter}
-          onChange={(e) => setUserFilter(e.target.value)}
+          onChange={handleUserFilterChange}
         >
           <option value="all">Все пользователи</option>
           {users.map(user => (
             <option key={user.id} value={user.id}>
-              {user.name}
+              {user.firstName} {user.lastName}
             </option>
           ))}
         </select>
@@ -69,7 +76,8 @@ TaskFilters.propTypes = {
   users: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
+      firstName: PropTypes.string.isRequired,
+      lastName: PropTypes.string.isRequired,
     })
   ).isRequired,
   timeFilter: PropTypes.string.isRequired,
