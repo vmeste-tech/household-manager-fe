@@ -1,10 +1,32 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
+import { userApi } from "../../api";
 
 const DashboardHeader = ({ avatarUrl }) => {
   const notificationRef = useRef(null);
   const navigate = useNavigate();
+  const [userData, setUserData] = useState(null);
+
+
+  // Fetch user data on component mount
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        userApi.getUser((error, data) => {
+          if (error) {
+            console.error("Error fetching user data:", error);
+          } else {
+            setUserData(data);
+          }
+        });
+      } catch (error) {
+        console.error("Error in user data fetch:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const handleTitleClick = () => {
     navigate("/main");
@@ -59,6 +81,9 @@ const DashboardHeader = ({ avatarUrl }) => {
     </svg>
   );
 
+  // Determine which avatar URL to use (from prop, user data, or default)
+  const userAvatarUrl = avatarUrl || (userData && userData.profilePictureUrl);
+
   return (
     <header className="fixed w-full bg-white text-indigo-800 z-50 shadow-lg animate-slide-down">
       <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between h-16">
@@ -77,11 +102,11 @@ const DashboardHeader = ({ avatarUrl }) => {
             уведомления
           </span>
           
-          {avatarUrl ? (
+          {userAvatarUrl ? (
             <img
               onClick={handleProfileClick}
               className="w-10 h-10 rounded-full cursor-pointer transition-transform duration-300 hover:scale-110 object-cover"
-              src={avatarUrl}
+              src={userAvatarUrl}
               alt="Profile"
             />
           ) : (
