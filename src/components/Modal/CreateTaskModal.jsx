@@ -1,35 +1,70 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Modal from "../Universal/Modal";
 import Heading from "../Universal/Heading";
 import CustomButton from "../Universal/CustomButton";
 import CustomSelect from "../Universal/CustomSelect";
 
-const CreateTaskModal = ({ onClose, onCreate }) => {
+const CreateTaskModal = ({ onClose, onCreate, users = [], rules = [], error }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [scheduledAt, setScheduledAt] = useState("");
   const [ruleId, setRuleId] = useState("");
   const [assignedTo, setAssignedTo] = useState("");
+  const [localError, setLocalError] = useState("");
 
-  // Пример данных для правил квартиры и пользователей
-  const sampleRules = [
-    { id: "rule1", name: "Правило 1" },
-    { id: "rule2", name: "Правило 2" },
-  ];
+  // Обработка внешней ошибки
+  useEffect(() => {
+    if (error) {
+      setLocalError(error);
+    }
+  }, [error]);
 
-  const sampleUsers = [
-    { id: "user1", name: "Пользователь 1" },
-    { id: "user2", name: "Пользователь 2" },
-  ];
+  // Преобразуем массивы пользователей и правил в нужный формат для выпадающих списков
+  const userOptions = users.map(user => ({
+    id: user.id,
+    name: `${user.firstName} ${user.lastName}`
+  }));
+
+  const ruleOptions = rules.map(rule => ({
+    id: rule.id,
+    name: rule.name
+  }));
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLocalError("");
 
     // Получаем ID квартиры из localStorage
     const apartmentId = localStorage.getItem("apartmentId");
     if (!apartmentId) {
-      console.error("ID квартиры не найден в localStorage");
+      setLocalError("ID квартиры не найден");
+      return;
+    }
+
+    // Проверяем обязательные поля
+    if (!title.trim()) {
+      setLocalError("Введите название задачи");
+      return;
+    }
+
+    if (!description.trim()) {
+      setLocalError("Введите описание задачи");
+      return;
+    }
+
+    if (!scheduledAt) {
+      setLocalError("Укажите дату и время выполнения");
+      return;
+    }
+
+    if (!ruleId) {
+      setLocalError("Выберите правило для задачи");
+      return;
+    }
+
+    if (!assignedTo) {
+      setLocalError("Назначьте исполнителя задачи");
       return;
     }
 
@@ -37,17 +72,11 @@ const CreateTaskModal = ({ onClose, onCreate }) => {
     const taskData = {
       title,
       description,
-      scheduledAt,
+      scheduledAt: new Date(scheduledAt).toISOString(),
       apartmentId,
+      ruleId,
+      assignedTo
     };
-
-    // Опциональные поля
-    if (ruleId.trim()) {
-      taskData.ruleId = ruleId;
-    }
-    if (assignedTo.trim()) {
-      taskData.assignedTo = assignedTo;
-    }
 
     onCreate(taskData);
   };
@@ -55,6 +84,13 @@ const CreateTaskModal = ({ onClose, onCreate }) => {
   return (
     <Modal onClose={onClose}>
       <Heading>Создать задачу</Heading>
+      
+      {localError && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+          <span className="block sm:inline">{localError}</span>
+        </div>
+      )}
+      
       <form onSubmit={handleSubmit} className="mt-4 space-y-4">
         <div>
           <label
@@ -96,7 +132,7 @@ const CreateTaskModal = ({ onClose, onCreate }) => {
             htmlFor="scheduledAt"
             className="block text-sm font-medium text-gray-700"
           >
-            Дата и время (по расписанию)
+            Дата и время выполнения
           </label>
           <input
             id="scheduledAt"
@@ -111,21 +147,23 @@ const CreateTaskModal = ({ onClose, onCreate }) => {
         {/* Выпадающий список для правила */}
         <CustomSelect
           id="rule"
-          label="Правило (опционально)"
+          label="Правило"
           value={ruleId}
           onChange={(e) => setRuleId(e.target.value)}
-          options={sampleRules}
-          placeholder="Не выбрано"
+          options={ruleOptions}
+          placeholder="Выберите правило"
+          required={true}
         />
 
         {/* Выпадающий список для пользователя */}
         <CustomSelect
           id="assignedTo"
-          label="Назначено на (опционально)"
+          label="Назначено на"
           value={assignedTo}
           onChange={(e) => setAssignedTo(e.target.value)}
-          options={sampleUsers}
-          placeholder="Не выбрано"
+          options={userOptions}
+          placeholder="Выберите пользователя"
+          required={true}
         />
 
         <div className="flex justify-end space-x-2">
@@ -140,6 +178,9 @@ const CreateTaskModal = ({ onClose, onCreate }) => {
 CreateTaskModal.propTypes = {
   onClose: PropTypes.func.isRequired,
   onCreate: PropTypes.func.isRequired,
+  users: PropTypes.array,
+  rules: PropTypes.array,
+  error: PropTypes.string
 };
 
 export default CreateTaskModal;
