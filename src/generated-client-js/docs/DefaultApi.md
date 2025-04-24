@@ -19,6 +19,7 @@ Method | HTTP request | Description
 [**refreshToken**](DefaultApi.md#refreshToken) | **POST** /api/v1/auth/refresh | Обновление JWT токена
 [**register**](DefaultApi.md#register) | **POST** /api/v1/users/register | Регистрация пользователя
 [**updateApartment**](DefaultApi.md#updateApartment) | **PUT** /api/v1/apartments/{apartmentId} | Обновление квартиры
+[**updateProfile**](DefaultApi.md#updateProfile) | **PATCH** /api/v1/users/profile | Обновление профиля пользователя
 [**useInviteCode**](DefaultApi.md#useInviteCode) | **POST** /api/v1/invite/use | Использование приглашения
 
 
@@ -719,6 +720,51 @@ Name | Type | Description  | Notes
 ### Authorization
 
 [bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: */*
+
+
+## updateProfile
+
+> GetUserResponse updateProfile(updateUserProfileRequest)
+
+Обновление профиля пользователя
+
+Позволяет обновить имя, фамилию, почту и фото профиля пользователя (фото в формате base64)
+
+### Example
+
+```javascript
+import OpenApiDefinition from 'open_api_definition';
+
+let apiInstance = new OpenApiDefinition.DefaultApi();
+let updateUserProfileRequest = new OpenApiDefinition.UpdateUserProfileRequest(); // UpdateUserProfileRequest | 
+apiInstance.updateProfile(updateUserProfileRequest, (error, data, response) => {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+});
+```
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **updateUserProfileRequest** | [**UpdateUserProfileRequest**](UpdateUserProfileRequest.md)|  | 
+
+### Return type
+
+[**GetUserResponse**](GetUserResponse.md)
+
+### Authorization
+
+No authorization required
 
 ### HTTP request headers
 

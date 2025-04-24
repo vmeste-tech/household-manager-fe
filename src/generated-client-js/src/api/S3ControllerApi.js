@@ -77,6 +77,46 @@ export default class S3ControllerApi {
     }
 
     /**
+     * Callback function to receive the result of the uploadBase64File operation.
+     * @callback module:api/S3ControllerApi~uploadBase64FileCallback
+     * @param {String} error Error message, if any.
+     * @param {String} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * @param {String} body 
+     * @param {module:api/S3ControllerApi~uploadBase64FileCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link String}
+     */
+    uploadBase64File(body, callback) {
+      let postBody = body;
+      // verify the required parameter 'body' is set
+      if (body === undefined || body === null) {
+        throw new Error("Missing the required parameter 'body' when calling uploadBase64File");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = [];
+      let contentTypes = ['application/json'];
+      let accepts = ['*/*'];
+      let returnType = 'String';
+      return this.apiClient.callApi(
+        '/api/v1/s3/file/upload/base64', 'POST',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
      * Callback function to receive the result of the uploadFile operation.
      * @callback module:api/S3ControllerApi~uploadFileCallback
      * @param {String} error Error message, if any.

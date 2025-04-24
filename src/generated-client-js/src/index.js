@@ -28,6 +28,7 @@ import Response from './model/Response';
 import TokenResponse from './model/TokenResponse';
 import UpdateApartmentRequest from './model/UpdateApartmentRequest';
 import UpdateApartmentResponse from './model/UpdateApartmentResponse';
+import UpdateUserProfileRequest from './model/UpdateUserProfileRequest';
 import UploadFileRequest from './model/UploadFileRequest';
 import UseInviteCodeRequest from './model/UseInviteCodeRequest';
 import UserInfoDto from './model/UserInfoDto';
@@ -164,6 +165,12 @@ export {
      * @property {module:model/UpdateApartmentResponse}
      */
     UpdateApartmentResponse,
+
+    /**
+     * The UpdateUserProfileRequest model constructor.
+     * @property {module:model/UpdateUserProfileRequest}
+     */
+    UpdateUserProfileRequest,
 
     /**
      * The UploadFileRequest model constructor.

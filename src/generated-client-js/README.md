@@ -141,8 +141,10 @@ Class | Method | HTTP request | Description
 *OpenApiDefinition.DefaultApi* | [**refreshToken**](docs/DefaultApi.md#refreshToken) | **POST** /api/v1/auth/refresh | Обновление JWT токена
 *OpenApiDefinition.DefaultApi* | [**register**](docs/DefaultApi.md#register) | **POST** /api/v1/users/register | Регистрация пользователя
 *OpenApiDefinition.DefaultApi* | [**updateApartment**](docs/DefaultApi.md#updateApartment) | **PUT** /api/v1/apartments/{apartmentId} | Обновление квартиры
+*OpenApiDefinition.DefaultApi* | [**updateProfile**](docs/DefaultApi.md#updateProfile) | **PATCH** /api/v1/users/profile | Обновление профиля пользователя
 *OpenApiDefinition.DefaultApi* | [**useInviteCode**](docs/DefaultApi.md#useInviteCode) | **POST** /api/v1/invite/use | Использование приглашения
 *OpenApiDefinition.S3ControllerApi* | [**getFile**](docs/S3ControllerApi.md#getFile) | **GET** /api/v1/s3/file/get/{key} | 
+*OpenApiDefinition.S3ControllerApi* | [**uploadBase64File**](docs/S3ControllerApi.md#uploadBase64File) | **POST** /api/v1/s3/file/upload/base64 | 
 *OpenApiDefinition.S3ControllerApi* | [**uploadFile**](docs/S3ControllerApi.md#uploadFile) | **POST** /api/v1/s3/file/upload | 
 
 
@@ -163,6 +165,7 @@ Class | Method | HTTP request | Description
  - [OpenApiDefinition.TokenResponse](docs/TokenResponse.md)
  - [OpenApiDefinition.UpdateApartmentRequest](docs/UpdateApartmentRequest.md)
  - [OpenApiDefinition.UpdateApartmentResponse](docs/UpdateApartmentResponse.md)
+ - [OpenApiDefinition.UpdateUserProfileRequest](docs/UpdateUserProfileRequest.md)
  - [OpenApiDefinition.UploadFileRequest](docs/UploadFileRequest.md)
  - [OpenApiDefinition.UseInviteCodeRequest](docs/UseInviteCodeRequest.md)
  - [OpenApiDefinition.UserInfoDto](docs/UserInfoDto.md)

@@ -19,6 +19,7 @@ docs/S3ControllerApi.md
 docs/TokenResponse.md
 docs/UpdateApartmentRequest.md
 docs/UpdateApartmentResponse.md
+docs/UpdateUserProfileRequest.md
 docs/UploadFileRequest.md
 docs/UseInviteCodeRequest.md
 docs/UserInfoDto.md
@@ -46,10 +47,10 @@ src/model/Response.js
 src/model/TokenResponse.js
 src/model/UpdateApartmentRequest.js
 src/model/UpdateApartmentResponse.js
+src/model/UpdateUserProfileRequest.js
 src/model/UploadFileRequest.js
 src/model/UseInviteCodeRequest.js
 src/model/UserInfoDto.js
 src/model/UserRegistrationRequest.js
 src/model/UserResponse.js
-test/api/S3ControllerApi.spec.js
-test/model/UploadFileRequest.spec.js
+test/model/UpdateUserProfileRequest.spec.js

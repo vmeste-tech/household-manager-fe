@@ -28,6 +28,7 @@ import Response from '../model/Response';
 import TokenResponse from '../model/TokenResponse';
 import UpdateApartmentRequest from '../model/UpdateApartmentRequest';
 import UpdateApartmentResponse from '../model/UpdateApartmentResponse';
+import UpdateUserProfileRequest from '../model/UpdateUserProfileRequest';
 import UseInviteCodeRequest from '../model/UseInviteCodeRequest';
 import UserRegistrationRequest from '../model/UserRegistrationRequest';
 import UserResponse from '../model/UserResponse';
@@ -684,6 +685,48 @@ export default class DefaultApi {
       let returnType = UpdateApartmentResponse;
       return this.apiClient.callApi(
         '/api/v1/apartments/{apartmentId}', 'PUT',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the updateProfile operation.
+     * @callback module:api/DefaultApi~updateProfileCallback
+     * @param {String} error Error message, if any.
+     * @param {module:model/GetUserResponse} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * Обновление профиля пользователя
+     * Позволяет обновить имя, фамилию, почту и фото профиля пользователя (фото в формате base64)
+     * @param {module:model/UpdateUserProfileRequest} updateUserProfileRequest 
+     * @param {module:api/DefaultApi~updateProfileCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/GetUserResponse}
+     */
+    updateProfile(updateUserProfileRequest, callback) {
+      let postBody = updateUserProfileRequest;
+      // verify the required parameter 'updateUserProfileRequest' is set
+      if (updateUserProfileRequest === undefined || updateUserProfileRequest === null) {
+        throw new Error("Missing the required parameter 'updateUserProfileRequest' when calling updateProfile");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = [];
+      let contentTypes = ['application/json'];
+      let accepts = ['*/*'];
+      let returnType = GetUserResponse;
+      return this.apiClient.callApi(
+        '/api/v1/users/profile', 'PATCH',
         pathParams, queryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, null, callback
       );
