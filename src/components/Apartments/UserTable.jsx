@@ -27,7 +27,7 @@ const UsersTable = ({ users, onUserUpdate }) => {
     onUserUpdate(updatedUser);
     setEditingUser(null);
   };
-  
+
   // Функция для форматирования даты в русском формате
   const formatDate = (dateString) => {
     const options = {
@@ -97,9 +97,6 @@ const UsersTable = ({ users, onUserUpdate }) => {
               Фамилия
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50">
-              Тип
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50">
               Время присоединения
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50">
@@ -127,9 +124,6 @@ const UsersTable = ({ users, onUserUpdate }) => {
                 {user.lastName}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                {user.type}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                 {formatDate(user.joinTime)}
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
@@ -147,7 +141,7 @@ const UsersTable = ({ users, onUserUpdate }) => {
                     }
                   }}
                 >
-                  Редактировать
+                  Изменить статус
                 </div>
               </td>
             </tr>
@@ -173,7 +167,6 @@ UsersTable.propTypes = {
       firstName: PropTypes.string.isRequired,
       lastName: PropTypes.string.isRequired,
       photo: PropTypes.string.isRequired,
-      type: PropTypes.string.isRequired,
       joinTime: PropTypes.string.isRequired,
       status: PropTypes.string.isRequired,
     })
