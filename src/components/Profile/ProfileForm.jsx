@@ -1,14 +1,28 @@
+import { useRef } from "react";
 import CustomButton from "../Universal/CustomButton";
 import PropTypes from 'prop-types';
 
 const ProfileForm = ({ user, onPasswordChange, onSubmit }) => {
+  const firstNameRef = useRef(null);
+  const lastNameRef = useRef(null);
+  const emailRef = useRef(null);
+  const statusRef = useRef(null);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    const updatedUserData = {
+      firstName: firstNameRef.current.value,
+      lastName: lastNameRef.current.value,
+      email: emailRef.current.value,
+      status: statusRef.current.value
+    };
+    
+    onSubmit(updatedUserData);
+  };
+
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        onSubmit();
-      }}
-    >
+    <form onSubmit={handleSubmit}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Имя */}
         <div>
@@ -23,6 +37,7 @@ const ProfileForm = ({ user, onPasswordChange, onSubmit }) => {
             type="text"
             defaultValue={user.firstName}
             placeholder="Введите имя"
+            ref={firstNameRef}
             className="w-full px-3 py-2 border rounded !border-gray-300 focus:outline-none focus:!border-indigo-600"
           />
         </div>
@@ -40,6 +55,7 @@ const ProfileForm = ({ user, onPasswordChange, onSubmit }) => {
             type="text"
             defaultValue={user.lastName}
             placeholder="Введите фамилию"
+            ref={lastNameRef}
             className="w-full px-3 py-2 border rounded !border-gray-300 focus:outline-none focus:!border-indigo-600"
           />
         </div>
@@ -61,6 +77,7 @@ const ProfileForm = ({ user, onPasswordChange, onSubmit }) => {
               type="email"
               defaultValue={user.email}
               placeholder="name@example.com"
+              ref={emailRef}
               className="w-full pl-9 pr-3 py-2 border rounded !border-gray-300 focus:outline-none focus:!border-indigo-600"
             />
           </div>
@@ -77,11 +94,12 @@ const ProfileForm = ({ user, onPasswordChange, onSubmit }) => {
           <select
             id="status"
             defaultValue={user.status}
+            ref={statusRef}
             className="w-full px-3 py-2 border rounded !border-gray-300 focus:outline-none focus:!border-indigo-600"
           >
-            <option>Активен</option>
-            <option>В отпуске</option>
-            <option>Заболел</option>
+            <option value="ACTIVE">Активен</option>
+            <option value="AWAY">В отпуске</option>
+            <option value="SICK">Заболел</option>
           </select>
         </div>
 
@@ -96,11 +114,12 @@ const ProfileForm = ({ user, onPasswordChange, onSubmit }) => {
       </div>
 
       <div className="flex justify-end mt-6">
-        <CustomButton text="Сохранить" variant="filled" onClick={onSubmit} />
+        <CustomButton text="Сохранить" onClick={handleSubmit} variant="filled" />
       </div>
     </form>
   );
 };
+
 ProfileForm.propTypes = {
   user: PropTypes.shape({
     firstName: PropTypes.string,
@@ -109,7 +128,7 @@ ProfileForm.propTypes = {
     status: PropTypes.string
   }).isRequired,
   onPasswordChange: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired
+  onSubmit: PropTypes.func.isRequired,
 };
 
 export default ProfileForm;
