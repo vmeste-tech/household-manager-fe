@@ -10,26 +10,26 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost";
 export const apiConfig = {
   // Сервис пользователей
   main: {
-    baseUrl: `${API_BASE_URL}:8082`,
+    baseUrl: `${API_BASE_URL}`,
   },
   // Сервис задач
   task: {
-    baseUrl: `${API_BASE_URL}:8083`,
+    baseUrl: `${API_BASE_URL}`,
   },
   // Сервис правил
   rule: {
-    baseUrl: `${API_BASE_URL}:8084`,
+    baseUrl: `${API_BASE_URL}`,
   },
   // Сервис штрафов
   penalty: {
-    baseUrl: `${API_BASE_URL}:8085`,
+    baseUrl: `${API_BASE_URL}`,
   },
   // Финансовый сервис
   finance: {
-    baseUrl: `${API_BASE_URL}:8086`,
+    baseUrl: `${API_BASE_URL}`,
   },
   // Сервис уведомлений
   notification: {
-    baseUrl: `${API_BASE_URL}:8087`,
+    baseUrl: `${API_BASE_URL}`,
   }
 };
