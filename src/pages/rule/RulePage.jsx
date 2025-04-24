@@ -14,51 +14,48 @@ function RulePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  // Add state for rule statistics
+  const [refreshRules, setRefreshRules] = useState(false);
   const [ruleStats, setRuleStats] = useState({
     activeRules: 0,
     votingRules: 0
   });
 
-  // Fetch rule statistics on component mount
-  useEffect(() => {
-    const fetchRuleStats = () => {
-      try {
-        const apartmentId = localStorage.getItem("apartmentId");
+  const fetchRuleData = () => {
+    try {
+      const apartmentId = localStorage.getItem("apartmentId");
+      
+      if (!apartmentId) {
+        console.error("Идентификатор квартиры не найден");
+        return;
+      }
+      
+      setIsLoading(true);
+      ruleApi.getApartmentRules(apartmentId, (error, data) => {
+        setIsLoading(false);
         
-        if (!apartmentId) {
-          console.error("Идентификатор квартиры не найден");
+        if (error) {
+          console.error("Error fetching rules:", error);
           return;
         }
         
-        setIsLoading(true);
-        ruleApi.getApartmentRules(apartmentId, (error, data) => {
-          setIsLoading(false);
-          
-          if (error) {
-            console.error("Error fetching rules:", error);
-            return;
-          }
-          
-          // Count rules by status
-          const activeRules = data.filter(rule => rule.status === "ACCEPTED").length;
-          const votingRules = data.filter(rule => rule.status === "VOTING").length;
-          
-          setRuleStats({
-            activeRules,
-            votingRules
-          });
+        const activeRules = data.filter(rule => rule.status === "ACCEPTED").length;
+        const votingRules = data.filter(rule => rule.status === "VOTING").length;
+        
+        setRuleStats({
+          activeRules,
+          votingRules
         });
-      } catch (err) {
-        console.error("Failed to fetch rule stats:", err);
-        setIsLoading(false);
-      }
-    };
-    
-    fetchRuleStats();
-  }, []);
+      });
+    } catch (err) {
+      console.error("Failed to fetch rule stats:", err);
+      setIsLoading(false);
+    }
+  };
 
-  // Update statsData to use real statistics
+  useEffect(() => {
+    fetchRuleData();
+  }, [refreshRules]);
+
   const statsData = [
     {
       title: "Активные правила",
@@ -91,7 +88,6 @@ function RulePage() {
     setErrorMsg("");
     
     try {
-      // Create a request object based on the API model
       const createRuleRequest = new CreateRuleRequest(
         ruleData.name,
         ruleData.description,
@@ -99,15 +95,12 @@ function RulePage() {
         ruleData.timeZone
       );
       
-      // Set optional penaltyAmount if it exists
       if (ruleData.penaltyAmount) {
         createRuleRequest.penaltyAmount = parseFloat(ruleData.penaltyAmount);
       }
       
-      // Add apartmentId from the input data
       createRuleRequest.apartmentId = ruleData.apartmentId;
       
-      // Call the API
       ruleApi.createRule(createRuleRequest, (error, data) => {
         setIsLoading(false);
         
@@ -116,12 +109,8 @@ function RulePage() {
           setErrorMsg("Не удалось создать правило");
         } else {
           console.log("Rule created successfully:", data);
-          // Close the modal
           setIsModalOpen(false);
-          
-          // You might want to refresh the rules list here or show a success message
-          // This would depend on how your RuleCards component gets its data
-          // If RuleCards fetches data on mount, you could implement a refresh mechanism
+          setRefreshRules(prev => !prev);
         }
       });
     } catch (error) {
@@ -150,7 +139,7 @@ function RulePage() {
 
         <Heading>Правила квартиры</Heading>
         <Tabs activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
-        <RuleCards activeFilter={activeFilter} />
+        <RuleCards activeFilter={activeFilter} refresh={refreshRules} />
 
         <div className="flex justify-center mb-8">
           <CustomButton
@@ -164,7 +153,7 @@ function RulePage() {
         <CreateRuleModal
           onClose={() => setIsModalOpen(false)}
           onCreate={handleCreateRule}
-          isLoading={isLoading} // Pass the loading state to the modal
+          isLoading={isLoading}
         />
       )}
     </div>

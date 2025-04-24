@@ -4,7 +4,7 @@ import RuleCard from "./RuleCard";
 import RuleDetails from "./RuleDetails";
 import { ruleApi } from "../../api";
 
-const RuleCards = ({ activeFilter }) => {
+const RuleCards = ({ activeFilter, refresh }) => {
   const [selectedRule, setSelectedRule] = useState(null);
   const [rules, setRules] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -83,7 +83,7 @@ const RuleCards = ({ activeFilter }) => {
     };
 
     fetchRules();
-  }, []);
+  }, [refresh, activeFilter]);
 
   const filteredRules =
     activeFilter === "Все"
@@ -157,6 +157,7 @@ const RuleCards = ({ activeFilter }) => {
 
 RuleCards.propTypes = {
   activeFilter: PropTypes.string.isRequired,
+  refresh: PropTypes.bool
 };
 
 export default RuleCards;
