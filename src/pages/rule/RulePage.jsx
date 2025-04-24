@@ -17,7 +17,8 @@ function RulePage() {
   const [refreshRules, setRefreshRules] = useState(false);
   const [ruleStats, setRuleStats] = useState({
     activeRules: 0,
-    votingRules: 0
+    votingRules: 0,
+    rejectedRules: 0
   });
 
   const fetchRuleData = () => {
@@ -40,10 +41,12 @@ function RulePage() {
         
         const activeRules = data.filter(rule => rule.status === "ACCEPTED").length;
         const votingRules = data.filter(rule => rule.status === "VOTING").length;
+        const rejectedRules = data.filter(rule => rule.status === "REJECTED").length;
         
         setRuleStats({
           activeRules,
-          votingRules
+          votingRules,
+          rejectedRules
         });
       });
     } catch (err) {
@@ -70,15 +73,9 @@ function RulePage() {
       isIncrease: true,
     },
     {
-      title: "Соблюдаемость",
-      value: "87%",
-      changeText: "выше среднего",
-      isIncrease: true,
-    },
-    {
-      title: "Штрафы",
-      value: "3420₽",
-      changeText: "общая сумма",
+      title: "Отклоненные",
+      value: String(ruleStats.rejectedRules),
+      changeText: "не прошли голосование",
       isIncrease: false,
     },
   ];
