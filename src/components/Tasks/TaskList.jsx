@@ -10,7 +10,8 @@ const TaskList = ({
   setUserFilter, 
   setTimeFilter,
   loading,
-  onStatusChange
+  onStatusChange,
+  users
 }) => {
   const [expandedSections, setExpandedSections] = useState({
     CREATED: true,
@@ -67,7 +68,7 @@ const TaskList = ({
       <TaskFilters
         userFilter={userFilter}
         setUserFilter={setUserFilter}
-        users={[]}  // This would need to be passed from the parent or fetched here
+        users={users}
         timeFilter={timeFilter}
         setTimeFilter={setTimeFilter}
       />
@@ -135,7 +136,8 @@ TaskList.propTypes = {
   setUserFilter: PropTypes.func.isRequired,
   setTimeFilter: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
-  onStatusChange: PropTypes.func.isRequired
+  onStatusChange: PropTypes.func.isRequired,
+  users: PropTypes.array
 };
 
 export default TaskList;

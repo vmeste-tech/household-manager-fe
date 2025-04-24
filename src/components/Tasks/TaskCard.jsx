@@ -19,6 +19,15 @@ const TaskCard = ({ task, onStatusChange }) => {
     CANCELED: "bg-gray-100 text-gray-800"
   };
 
+  // Дефолтная SVG для аватара
+  const defaultAvatarSvg = (
+    <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center">
+      <svg className="w-5 h-5 text-indigo-600" viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+      </svg>
+    </div>
+  );
+
   const formatDate = (dateString) => {
     try {
       const date = new Date(dateString);
@@ -106,17 +115,20 @@ const TaskCard = ({ task, onStatusChange }) => {
             )}
             
             <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-              <div>
-                <span className="text-gray-500">Назначено:</span> 
-                <span className="ml-2 font-medium">{task.assignedTo || 'Не назначено'}</span>
-              </div>
-              
-              {task.ruleId && (
-                <div>
-                  <span className="text-gray-500">Правило:</span>
-                  <span className="ml-2 font-medium">{task.ruleId}</span>
+              <div className="flex items-center">
+                <div className="flex items-center">
+                  {task.assignedUserInfo?.avatar ? (
+                    <img 
+                      src={task.assignedUserInfo.avatar} 
+                      alt={task.assignedUserInfo.name}
+                      className="w-8 h-8 rounded-full object-cover mr-2" 
+                    />
+                  ) : (
+                    <div className="mr-2">{defaultAvatarSvg}</div>
+                  )}
+                  <span className="font-medium">{task.assignedUserInfo?.name || 'Не назначено'}</span>
                 </div>
-              )}
+              </div>
             </div>
           </div>
         </div>
@@ -134,6 +146,10 @@ TaskCard.propTypes = {
     scheduledAt: PropTypes.string.isRequired,
     assignedTo: PropTypes.string,
     ruleId: PropTypes.string,
+    assignedUserInfo: PropTypes.shape({
+      name: PropTypes.string,
+      avatar: PropTypes.string
+    })
   }).isRequired,
   onStatusChange: PropTypes.func.isRequired,
 };
