@@ -41,6 +41,14 @@ export function tokenInterceptor(req) {
   req.end = function (callback) {
     originalEnd(function (err, res) {
       if (err && err.status === 401) {
+        // Проверяем, находится ли пользователь на странице входа
+        const currentPath = window.location.pathname;
+        if (currentPath === "/signin") {
+          // На странице логина не пытаемся обновить токен, просто возвращаем ошибку
+          callback(err, res);
+          return;
+        }
+
         req._retry = true;
         const refreshToken = localStorage.getItem("refresh_token");
 

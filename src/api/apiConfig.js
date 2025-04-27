@@ -4,13 +4,13 @@
  */
 
 // Получаем базовый URL из переменной окружения или используем значение по умолчанию
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost";
+const API_BASE_URL = "http://localhost";
 
 // Конфигурация для каждого отдельного сервиса
 export const apiConfig = {
   // Сервис пользователей
   main: {
-    baseUrl: `${API_BASE_URL}`,
+    baseUrl: `${API_BASE_URL}:8082`,
   },
   // Сервис задач
   task: {
