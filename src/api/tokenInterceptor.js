@@ -43,7 +43,7 @@ export function tokenInterceptor(req) {
       if (err && err.status === 401) {
         // Проверяем, находится ли пользователь на странице входа
         const currentPath = window.location.pathname;
-        if (currentPath === "/signin") {
+        if (currentPath === "/signin" || currentPath === "/signup") {
           // На странице логина не пытаемся обновить токен, просто возвращаем ошибку
           callback(err, res);
           return;
