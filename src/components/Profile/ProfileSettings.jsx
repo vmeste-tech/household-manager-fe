@@ -92,9 +92,18 @@ export default function AccountSettings() {
     userApi.changePassword(changePasswordRequest, (error) => {
       if (error) {
         console.error("Ошибка при изменении пароля:", error);
+        let errorMessage = "Не удалось изменить пароль. Попробуйте снова позже.";
+        
+        // Обработка различных статус-кодов ошибок
+        if (error.status === 400) {
+          errorMessage = "Неверные данные для смены пароля.";
+        } else if (error.status === 401) {
+          errorMessage = "Неверный текущий пароль.";
+        }
+        
         setUpdateStatus({
           success: false,
-          error: "Не удалось изменить пароль. Проверьте правильность текущего пароля."
+          error: errorMessage
         });
       } else {
         setUpdateStatus({
@@ -129,9 +138,18 @@ export default function AccountSettings() {
       setLoading(false);
       if (error) {
         console.error("Ошибка при обновлении профиля:", error);
+        let errorMessage = "Не удалось обновить профиль. Пожалуйста, попробуйте снова.";
+        
+        // Обработка различных статус-кодов ошибок
+        if (error.status === 400) {
+          errorMessage = "Некорректные данные профиля.";
+        } else if (error.status === 409) {
+          errorMessage = "Пользователь с таким email уже существует.";
+        }
+        
         setUpdateStatus({
           success: false,
-          error: "Не удалось обновить профиль. Пожалуйста, попробуйте снова."
+          error: errorMessage
         });
       } else {
         console.log("Профиль успешно обновлен:", data);

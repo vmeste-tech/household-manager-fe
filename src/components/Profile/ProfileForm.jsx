@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import CustomButton from "../Universal/CustomButton";
 import PropTypes from 'prop-types';
 
@@ -7,9 +7,60 @@ const ProfileForm = ({ user, onPasswordChange, onSubmit }) => {
   const lastNameRef = useRef(null);
   const emailRef = useRef(null);
   const statusRef = useRef(null);
+  
+  // Состояние для хранения ошибок валидации
+  const [errors, setErrors] = useState({
+    firstName: "",
+    lastName: "",
+    email: ""
+  });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  // Функция валидации имени/фамилии
+  const validateName = (name, fieldName) => {
+    if (!name.trim()) {
+      return `${fieldName} обязательно для заполнения`;
+    }
+    if (name.length < 2) {
+      return `${fieldName} должно содержать не менее 2 символов`;
+    }
+    return "";
+  };
+
+  // Функция валидации email
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email) {
+      return "Email обязателен";
+    }
+    if (!emailRegex.test(email)) {
+      return "Неверный формат email";
+    }
+    return "";
+  };
+
+  // Функция валидации всех полей
+  const validateForm = () => {
+    const firstName = firstNameRef.current.value;
+    const lastName = lastNameRef.current.value;
+    const email = emailRef.current.value;
+    
+    const newErrors = {
+      firstName: validateName(firstName, "Имя"),
+      lastName: validateName(lastName, "Фамилия"),
+      email: validateEmail(email)
+    };
+    
+    setErrors(newErrors);
+    
+    // Форма валидна, если нет ошибок
+    return !Object.values(newErrors).some(error => error);
+  };
+
+  const handleSubmit = () => {
+    // Валидируем форму перед отправкой
+    if (!validateForm()) {
+      return;
+    }
     
     const updatedUserData = {
       firstName: firstNameRef.current.value,
@@ -22,7 +73,7 @@ const ProfileForm = ({ user, onPasswordChange, onSubmit }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Имя */}
         <div>
@@ -38,8 +89,13 @@ const ProfileForm = ({ user, onPasswordChange, onSubmit }) => {
             defaultValue={user.firstName}
             placeholder="Введите имя"
             ref={firstNameRef}
-            className="w-full px-3 py-2 border rounded !border-gray-300 focus:outline-none focus:!border-indigo-600"
+            className={`w-full px-3 py-2 border rounded ${
+              errors.firstName ? "border-red-300 focus:ring-red-500 focus:border-red-500" : "border-gray-300 focus:ring-indigo-500 focus:border-indigo-600"
+            } focus:outline-none`}
           />
+          {errors.firstName && (
+            <p className="mt-1 text-sm text-red-600">{errors.firstName}</p>
+          )}
         </div>
 
         {/* Фамилия */}
@@ -56,8 +112,13 @@ const ProfileForm = ({ user, onPasswordChange, onSubmit }) => {
             defaultValue={user.lastName}
             placeholder="Введите фамилию"
             ref={lastNameRef}
-            className="w-full px-3 py-2 border rounded !border-gray-300 focus:outline-none focus:!border-indigo-600"
+            className={`w-full px-3 py-2 border rounded ${
+              errors.lastName ? "border-red-300 focus:ring-red-500 focus:border-red-500" : "border-gray-300 focus:ring-indigo-500 focus:border-indigo-600"
+            } focus:outline-none`}
           />
+          {errors.lastName && (
+            <p className="mt-1 text-sm text-red-600">{errors.lastName}</p>
+          )}
         </div>
 
         {/* Электронная почта */}
@@ -78,9 +139,14 @@ const ProfileForm = ({ user, onPasswordChange, onSubmit }) => {
               defaultValue={user.email}
               placeholder="name@example.com"
               ref={emailRef}
-              className="w-full pl-9 pr-3 py-2 border rounded !border-gray-300 focus:outline-none focus:!border-indigo-600"
+              className={`w-full pl-9 pr-3 py-2 border rounded ${
+                errors.email ? "border-red-300 focus:ring-red-500 focus:border-red-500" : "border-gray-300 focus:ring-indigo-500 focus:border-indigo-600"
+              } focus:outline-none`}
             />
           </div>
+          {errors.email && (
+            <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+          )}
         </div>
 
         {/* Статус */}
@@ -95,7 +161,7 @@ const ProfileForm = ({ user, onPasswordChange, onSubmit }) => {
             id="status"
             defaultValue={user.status}
             ref={statusRef}
-            className="w-full px-3 py-2 border rounded !border-gray-300 focus:outline-none focus:!border-indigo-600"
+            className="w-full px-3 py-2 border rounded border-gray-300 focus:outline-none focus:border-indigo-600"
           >
             <option value="ACTIVE">Активен</option>
             <option value="AWAY">В отпуске</option>
@@ -116,7 +182,7 @@ const ProfileForm = ({ user, onPasswordChange, onSubmit }) => {
       <div className="flex justify-end mt-6">
         <CustomButton text="Сохранить" onClick={handleSubmit} variant="filled" />
       </div>
-    </form>
+    </div>
   );
 };
 
