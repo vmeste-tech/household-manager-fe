@@ -5,6 +5,7 @@ import { userApi } from "../../api";
 import AvatarUploadModal from "./AvatarUploadModal";
 import PasswordChangeModal from "../Modal/PasswordChangeModal";
 import UpdateUserProfileRequest from "../../generated-client-js/src/model/UpdateUserProfileRequest";
+import FormFeedback from "../Universal/FormFeedback";
 
 export default function AccountSettings() {
   const [showFileDropZone, setShowFileDropZone] = useState(false);
@@ -110,7 +111,6 @@ export default function AccountSettings() {
           success: true,
           error: null
         });
-        setTimeout(() => setUpdateStatus({ success: false, error: null }), 3000);
       }
     });
   };
@@ -167,9 +167,6 @@ export default function AccountSettings() {
           success: true,
           error: null
         });
-        
-        // Скрываем уведомление об успехе через 3 секунды
-        setTimeout(() => setUpdateStatus({ success: false, error: null }), 3000);
       }
     });
   };
@@ -212,15 +209,19 @@ export default function AccountSettings() {
         <div className="text-2xl font-bold mb-6">Настройки</div>
         
         {updateStatus.success && (
-          <div className="mb-4 p-3 bg-green-100 text-green-800 rounded">
-            Данные успешно сохранены!
-          </div>
+          <FormFeedback
+            type="success"
+            message="Данные успешно сохранены!"
+            onClose={() => setUpdateStatus({ success: false, error: null })}
+          />
         )}
         
         {updateStatus.error && (
-          <div className="mb-4 p-3 bg-red-100 text-red-800 rounded">
-            {updateStatus.error}
-          </div>
+          <FormFeedback
+            type="error"
+            message={updateStatus.error}
+            onClose={() => setUpdateStatus({ success: false, error: null })}
+          />
         )}
 
         <AvatarDisplay
