@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Alert from "../../components/Toasts/Alert";
 import { userApi } from "../../api";
+import FormFeedback from "../../components/Universal/FormFeedback";
 
 const SignUpPage = () => {
   const navigate = useNavigate();
@@ -14,14 +15,115 @@ const SignUpPage = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   // Стейт для отображения toast-сообщения
   const [toast, setToast] = useState(null); // { type: string, message: string }
+  // Состояние для хранения ошибки регистрации
+  const [error, setError] = useState(null);
+  // Состояние для ошибок валидации полей
+  const [validationErrors, setValidationErrors] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  // Функция для очистки ошибки
+  const clearError = () => {
+    setError(null);
+  };
+
+  // Функция валидации имени
+  const validateName = (name, fieldName) => {
+    if (!name.trim()) {
+      return `${fieldName} обязательно для заполнения`;
+    }
+    if (name.length < 2) {
+      return `${fieldName} должно содержать не менее 2 символов`;
+    }
+    return "";
+  };
+
+  // Функция валидации электронной почты
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email) {
+      return "Email обязателен";
+    }
+    if (!emailRegex.test(email)) {
+      return "Неверный формат email";
+    }
+    return "";
+  };
+
+  // Функция валидации пароля
+  const validatePassword = (password) => {
+    if (!password) {
+      return "Пароль обязателен";
+    }
+    if (password.length < 8) {
+      return "Пароль должен содержать не менее 8 символов";
+    }
+    return "";
+  };
+
+  // Функция валидации подтверждения пароля
+  const validateConfirmPassword = (confirmPassword, password) => {
+    if (!confirmPassword) {
+      return "Подтверждение пароля обязательно";
+    }
+    if (confirmPassword !== password) {
+      return "Пароли не совпадают";
+    }
+    return "";
+  };
+
+  // Валидация всей формы
+  const validateForm = () => {
+    const errors = {
+      firstName: validateName(firstName, "Имя"),
+      lastName: validateName(lastName, "Фамилия"),
+      email: validateEmail(email),
+      password: validatePassword(password),
+      confirmPassword: validateConfirmPassword(confirmPassword, password),
+    };
+
+    setValidationErrors(errors);
+
+    // Возвращает true, если ошибок нет
+    return !Object.values(errors).some((error) => error);
+  };
+
+  // Обработчики изменения полей с очисткой ошибок
+  const handleFirstNameChange = (e) => {
+    setFirstName(e.target.value);
+    setValidationErrors((prev) => ({ ...prev, firstName: "" }));
+  };
+
+  const handleLastNameChange = (e) => {
+    setLastName(e.target.value);
+    setValidationErrors((prev) => ({ ...prev, lastName: "" }));
+  };
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+    setValidationErrors((prev) => ({ ...prev, email: "" }));
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+    setValidationErrors((prev) => ({ ...prev, password: "" }));
+  };
+
+  const handleConfirmPasswordChange = (e) => {
+    setConfirmPassword(e.target.value);
+    setValidationErrors((prev) => ({ ...prev, confirmPassword: "" }));
+  };
 
   // Обработчик отправки формы
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Проверяем, что пароли совпадают
-    if (password !== confirmPassword) {
-      setToast({ type: "danger", message: "Пароли не совпадают!" });
+    // Валидируем форму перед отправкой
+    if (!validateForm()) {
       return;
     }
 
@@ -37,10 +139,22 @@ const SignUpPage = () => {
     userApi.register(userRegistrationRequest, (error, data) => {
       if (error) {
         console.error("Ошибка при регистрации:", error);
-        setToast({
-          type: "danger",
-          message: "Не удалось зарегистрироваться. Попробуйте ещё раз.",
-        });
+        // Устанавливаем ошибку для отображения в FormFeedback
+        setError("Не удалось зарегистрироваться. Пожалуйста, попробуйте позже.");
+        
+        // Если есть конкретная ошибка от сервера, показываем её
+        if (error.status) {
+          switch (error.status) {
+            case 400:
+              setError("Некорректные данные для регистрации.");
+              break;
+            case 409:
+              setError("Пользователь с таким email уже существует.");
+              break;
+            default:
+              setError(`Ошибка сервера (${error.status}). Пожалуйста, попробуйте позже.`);
+          }
+        }
       } else {
         console.log("Пользователь успешно зарегистрирован:", data);
         // При успешной регистрации перенаправляем, например, на /main
@@ -78,6 +192,14 @@ const SignUpPage = () => {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+          {/* Используем компонент FormFeedback для отображения ошибок */}
+          <FormFeedback 
+            type="error" 
+            message={error} 
+            title="Ошибка регистрации" 
+            onClose={clearError} 
+          />
+          
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label
@@ -93,11 +215,17 @@ const SignUpPage = () => {
                   type="text"
                   required
                   placeholder="Введите ваше имя"
-                  className="appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 
-                             focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  className={`appearance-none rounded-md block w-full px-3 py-2 border ${
+                    validationErrors.firstName 
+                      ? "border-red-300 focus:ring-red-500 focus:border-red-500" 
+                      : "border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+                  } placeholder-gray-500 text-gray-900 focus:outline-none sm:text-sm`}
                   value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
+                  onChange={handleFirstNameChange}
                 />
+                {validationErrors.firstName && (
+                  <p className="mt-1 text-sm text-red-600">{validationErrors.firstName}</p>
+                )}
               </div>
             </div>
 
@@ -115,11 +243,17 @@ const SignUpPage = () => {
                   type="text"
                   required
                   placeholder="Введите вашу фамилию"
-                  className="appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 
-                             focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  className={`appearance-none rounded-md block w-full px-3 py-2 border ${
+                    validationErrors.lastName 
+                      ? "border-red-300 focus:ring-red-500 focus:border-red-500" 
+                      : "border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+                  } placeholder-gray-500 text-gray-900 focus:outline-none sm:text-sm`}
                   value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
+                  onChange={handleLastNameChange}
                 />
+                {validationErrors.lastName && (
+                  <p className="mt-1 text-sm text-red-600">{validationErrors.lastName}</p>
+                )}
               </div>
             </div>
 
@@ -137,11 +271,17 @@ const SignUpPage = () => {
                   type="email"
                   required
                   placeholder="Введите ваш адрес электронной почты"
-                  className="appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 
-                             focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  className={`appearance-none rounded-md block w-full px-3 py-2 border ${
+                    validationErrors.email 
+                      ? "border-red-300 focus:ring-red-500 focus:border-red-500" 
+                      : "border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+                  } placeholder-gray-500 text-gray-900 focus:outline-none sm:text-sm`} 
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={handleEmailChange}
                 />
+                {validationErrors.email && (
+                  <p className="mt-1 text-sm text-red-600">{validationErrors.email}</p>
+                )}
               </div>
             </div>
 
@@ -159,11 +299,17 @@ const SignUpPage = () => {
                   type="password"
                   required
                   placeholder="Введите ваш пароль"
-                  className="appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 
-                             focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  className={`appearance-none rounded-md block w-full px-3 py-2 border ${
+                    validationErrors.password 
+                      ? "border-red-300 focus:ring-red-500 focus:border-red-500" 
+                      : "border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+                  } placeholder-gray-500 text-gray-900 focus:outline-none sm:text-sm`}
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={handlePasswordChange}
                 />
+                {validationErrors.password && (
+                  <p className="mt-1 text-sm text-red-600">{validationErrors.password}</p>
+                )}
               </div>
             </div>
 
@@ -181,11 +327,17 @@ const SignUpPage = () => {
                   type="password"
                   required
                   placeholder="Подтвердите ваш пароль"
-                  className="appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 
-                             focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  className={`appearance-none rounded-md block w-full px-3 py-2 border ${
+                    validationErrors.confirmPassword 
+                      ? "border-red-300 focus:ring-red-500 focus:border-red-500" 
+                      : "border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+                  } placeholder-gray-500 text-gray-900 focus:outline-none sm:text-sm`}
                   value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  onChange={handleConfirmPasswordChange}
                 />
+                {validationErrors.confirmPassword && (
+                  <p className="mt-1 text-sm text-red-600">{validationErrors.confirmPassword}</p>
+                )}
               </div>
             </div>
 

@@ -13,6 +13,10 @@ const SignInPage = ({ setLoggedIn, setEmail }) => {
     email: '',
     password: ''
   });
+  const [validationErrors, setValidationErrors] = useState({
+    email: '',
+    password: ''
+  });
 
   // Set a flag in localStorage to indicate we're on the login page
   // This will be used by any auth interceptors to avoid token refresh attempts
@@ -25,12 +29,54 @@ const SignInPage = ({ setLoggedIn, setEmail }) => {
     };
   }, []);
 
+  // Функция валидации электронной почты
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email) {
+      return "Email обязателен";
+    }
+    if (!emailRegex.test(email)) {
+      return "Неверный формат email";
+    }
+    return "";
+  };
+
+  // Функция валидации пароля
+  const validatePassword = (password) => {
+    if (!password) {
+      return "Пароль обязателен";
+    }
+    if (password.length < 8) {
+      return "Пароль должен содержать не менее 8 символов";
+    }
+    return "";
+  };
+
+  // Валидация всей формы
+  const validateForm = () => {
+    const errors = {
+      email: validateEmail(formValues.email),
+      password: validatePassword(formValues.password)
+    };
+    
+    setValidationErrors(errors);
+    
+    // Возвращает true, если ошибок нет
+    return !errors.email && !errors.password;
+  };
+
   // Обработчик изменений полей ввода
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormValues(prev => ({
       ...prev,
       [name]: value
+    }));
+    
+    // Сбрасываем ошибку валидации при изменении поля
+    setValidationErrors(prev => ({
+      ...prev,
+      [name]: ''
     }));
   };
 
@@ -41,6 +87,13 @@ const SignInPage = ({ setLoggedIn, setEmail }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Проверяем валидность формы
+    if (!validateForm()) {
+      // Если форма невалидна, прерываем выполнение
+      return;
+    }
+    
     setIsLoading(true);
     setError(null);
 
@@ -146,6 +199,7 @@ const SignInPage = ({ setLoggedIn, setEmail }) => {
               autoComplete="email"
               required
               validations={{ email: true }}
+              error={validationErrors.email}
             />
 
             <FormInput
@@ -159,6 +213,7 @@ const SignInPage = ({ setLoggedIn, setEmail }) => {
               autoComplete="current-password"
               required
               validations={{ minLength: 8 }}
+              error={validationErrors.password}
             />
 
             <div className="flex items-center justify-between">
