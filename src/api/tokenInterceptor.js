@@ -41,7 +41,10 @@ export function tokenInterceptor(req) {
   req.end = function (callback) {
     originalEnd(function (err, res) {
       if (err && err.status === 401) {
-        if (err.noRefresh || window.location.pathname === "/signin" || localStorage.getItem("is_login_page") === "true") {
+        // Проверяем, находится ли пользователь на странице входа
+        const currentPath = window.location.pathname;
+        if (currentPath === "/signin") {
+          // На странице логина не пытаемся обновить токен, просто возвращаем ошибку
           callback(err, res);
           return;
         }
@@ -62,9 +65,7 @@ export function tokenInterceptor(req) {
               retryOriginalRequest(newToken);
             })
             .catch(() => {
-              setTimeout(() => {
-                window.location.href = "/signin";
-              }, 100);
+              window.location.href = "/signin";
               callback(err, null);
             });
         }
@@ -94,9 +95,7 @@ export function tokenInterceptor(req) {
           })
           .catch(() => {
             processQueue(err, null);
-            setTimeout(() => {
-              window.location.href = "/signin";
-            }, 100);
+            window.location.href = "/signin";
             callback(err, null);
           })
           .finally(() => {
