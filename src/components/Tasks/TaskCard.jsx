@@ -44,10 +44,20 @@ const TaskCard = ({ task, onStatusChange }) => {
     }
   };
 
+  const isTaskOverdue = () => {
+    const taskDate = new Date(task.scheduledAt);
+    const currentDate = new Date();
+    return taskDate < currentDate && 
+           task.status !== 'COMPLETED' && 
+           task.status !== 'CANCELED';
+  };
+
   const handleStatusChange = (newStatus) => {
     onStatusChange(task.id, newStatus);
     setShowStatusMenu(false);
   };
+
+  const overdue = isTaskOverdue();
 
   return (
     <div className="p-4 hover:bg-gray-50 transition-colors duration-200">
@@ -76,32 +86,47 @@ const TaskCard = ({ task, onStatusChange }) => {
             {statusOptions[task.status]}
           </span>
           
-          <div className="relative">
-            <button 
-              className="p-1 rounded-full hover:bg-gray-200"
-              onClick={() => setShowStatusMenu(!showStatusMenu)}
-            >
-              <svg className="w-5 h-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+          {!overdue && (
+            <div className="relative">
+              <button 
+                className="p-1 rounded-full hover:bg-gray-200"
+                onClick={() => {
+                  setShowStatusMenu(!showStatusMenu);
+                  if (!isExpanded) {
+                    setIsExpanded(true);
+                  }
+                }}
+              >
+                <svg className="w-5 h-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                </svg>
+              </button>
+              
+              {showStatusMenu && (
+                <div className="absolute right-0 z-10 mt-1 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5">
+                  <div className="py-1">
+                    {Object.keys(statusOptions).map(status => (
+                      <button
+                        key={status}
+                        className={`block px-4 py-2 text-sm text-left w-full ${status === task.status ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700 hover:bg-gray-100'}`}
+                        onClick={() => handleStatusChange(status)}
+                      >
+                        {statusOptions[status]}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+          
+          {overdue && (
+            <div className="p-1" title="Статус просроченной задачи нельзя изменить">
+              <svg className="w-5 h-5 text-gray-300" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
               </svg>
-            </button>
-            
-            {showStatusMenu && (
-              <div className="absolute right-0 z-10 mt-1 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5">
-                <div className="py-1">
-                  {Object.keys(statusOptions).map(status => (
-                    <button
-                      key={status}
-                      className={`block px-4 py-2 text-sm text-left w-full ${status === task.status ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700 hover:bg-gray-100'}`}
-                      onClick={() => handleStatusChange(status)}
-                    >
-                      {statusOptions[status]}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
       
