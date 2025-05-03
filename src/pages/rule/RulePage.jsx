@@ -97,6 +97,7 @@ function RulePage() {
       }
       
       createRuleRequest.apartmentId = ruleData.apartmentId;
+      createRuleRequest.autoCreateTasks = ruleData.autoCreateTasks || false; // Добавляем параметр автоматического создания задач
       
       ruleApi.createRule(createRuleRequest, (error, data) => {
         setIsLoading(false);

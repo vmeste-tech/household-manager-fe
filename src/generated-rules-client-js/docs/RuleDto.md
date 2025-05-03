@@ -7,10 +7,11 @@ Name | Type | Description | Notes
 **id** | **String** |  | [optional] 
 **name** | **String** |  | [optional] 
 **description** | **String** |  | [optional] 
+**status** | **String** |  | [optional] 
 **penaltyAmount** | **Number** |  | [optional] 
 **cronExpression** | **String** |  | [optional] 
 **timeZone** | **String** |  | [optional] 
-**status** | **String** |  | [optional] 
+**autoCreateTasks** | **Boolean** |  | [optional] 
 
 
 

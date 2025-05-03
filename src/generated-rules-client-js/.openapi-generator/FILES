@@ -21,6 +21,3 @@ src/model/RuleDto.js
 src/model/RuleInfo.js
 src/model/UpdateRuleRequest.js
 src/model/VoteDto.js
-test/model/CreateVoteRequest.spec.js
-test/model/RuleInfo.spec.js
-test/model/VoteDto.spec.js

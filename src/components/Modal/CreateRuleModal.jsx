@@ -12,6 +12,7 @@ const CreateRuleModal = ({ onClose, onCreate }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [penaltyAmount, setPenaltyAmount] = useState("");
+  const [autoCreateTasks, setAutoCreateTasks] = useState(false); // Новое состояние
 
   // Этап 2: настройки расписания
   const [frequency, setFrequency] = useState("daily"); // daily, weekly, monthly
@@ -72,12 +73,14 @@ const CreateRuleModal = ({ onClose, onCreate }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!timeOfDay) {
+    // Если автоматическое создание задач включено, проверяем время выполнения
+    if (autoCreateTasks && !timeOfDay) {
       console.error("Введите время выполнения");
       return;
     }
 
-    const cronExpression = generateCronExpression();
+    // Генерируем CRON-выражение только если автоматическое создание задач включено
+    const cronExpression = autoCreateTasks ? generateCronExpression() : "";
 
     // Получаем ID квартиры из localStorage
     const apartmentId = localStorage.getItem("apartmentId");
@@ -93,6 +96,7 @@ const CreateRuleModal = ({ onClose, onCreate }) => {
       penaltyAmount: parseFloat(penaltyAmount) || 0,
       cronExpression,
       timeZone,
+      autoCreateTasks,
     };
 
     onCreate(ruleData);
@@ -102,13 +106,7 @@ const CreateRuleModal = ({ onClose, onCreate }) => {
     <Modal onClose={onClose}>
       <Heading>Создать правило</Heading>
       {step === 1 && (
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            setStep(2);
-          }}
-          className="mt-4 space-y-4"
-        >
+        <div className="mt-4 space-y-4">
           <div>
             <label
               htmlFor="ruleName"
@@ -159,14 +157,41 @@ const CreateRuleModal = ({ onClose, onCreate }) => {
             />
           </div>
 
+          {/* Новый чекбокс для автоматического создания задач */}
+          <div className="flex items-center">
+            <input
+              id="autoCreateTasks"
+              type="checkbox"
+              checked={autoCreateTasks}
+              onChange={(e) => setAutoCreateTasks(e.target.checked)}
+              className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+            />
+            <label
+              htmlFor="autoCreateTasks"
+              className="ml-2 block text-sm text-gray-700"
+            >
+              Автоматически создавать задачи по этому правилу
+            </label>
+          </div>
+
           <div className="flex justify-end space-x-2">
             <CustomButton text="Отмена" onClick={onClose} variant="outlined" />
-            <CustomButton text="Далее" onClick={() => setStep(2)} />
+            <CustomButton 
+              text={autoCreateTasks ? "Далее" : "Создать"} 
+              onClick={(e) => {
+                e.preventDefault();
+                if (autoCreateTasks) {
+                  setStep(2);
+                } else {
+                  handleSubmit(e);
+                }
+              }}
+            />
           </div>
-        </form>
+        </div>
       )}
       {step === 2 && (
-        <form onSubmit={handleSubmit} className="mt-4 space-y-4">
+        <div className="mt-4 space-y-4">
           <div>
             <label
               htmlFor="frequency"
@@ -273,9 +298,12 @@ const CreateRuleModal = ({ onClose, onCreate }) => {
               onClick={() => setStep(1)}
               variant="outlined"
             />
-            <CustomButton text="Создать" onClick={handleSubmit} />
+            <CustomButton 
+              text="Создать" 
+              onClick={handleSubmit} 
+            />
           </div>
-        </form>
+        </div>
       )}
     </Modal>
   );

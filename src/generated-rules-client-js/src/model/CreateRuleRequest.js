@@ -24,12 +24,10 @@ class CreateRuleRequest {
      * @alias module:model/CreateRuleRequest
      * @param name {String} 
      * @param description {String} 
-     * @param cronExpression {String} 
-     * @param timeZone {String} 
      */
-    constructor(name, description, cronExpression, timeZone) { 
+    constructor(name, description) { 
         
-        CreateRuleRequest.initialize(this, name, description, cronExpression, timeZone);
+        CreateRuleRequest.initialize(this, name, description);
     }
 
     /**
@@ -37,11 +35,9 @@ class CreateRuleRequest {
      * This method is used by the constructors of any subclasses, in order to implement multiple inheritance (mix-ins).
      * Only for internal use.
      */
-    static initialize(obj, name, description, cronExpression, timeZone) { 
+    static initialize(obj, name, description) { 
         obj['name'] = name;
         obj['description'] = description;
-        obj['cronExpression'] = cronExpression;
-        obj['timeZone'] = timeZone;
     }
 
     /**
@@ -69,6 +65,9 @@ class CreateRuleRequest {
             }
             if (data.hasOwnProperty('timeZone')) {
                 obj['timeZone'] = ApiClient.convertToType(data['timeZone'], 'String');
+            }
+            if (data.hasOwnProperty('autoCreateTasks')) {
+                obj['autoCreateTasks'] = ApiClient.convertToType(data['autoCreateTasks'], 'Boolean');
             }
         }
         return obj;
@@ -109,7 +108,7 @@ class CreateRuleRequest {
 
 }
 
-CreateRuleRequest.RequiredProperties = ["name", "description", "cronExpression", "timeZone"];
+CreateRuleRequest.RequiredProperties = ["name", "description"];
 
 /**
  * @member {String} name
@@ -135,6 +134,11 @@ CreateRuleRequest.prototype['cronExpression'] = undefined;
  * @member {String} timeZone
  */
 CreateRuleRequest.prototype['timeZone'] = undefined;
+
+/**
+ * @member {Boolean} autoCreateTasks
+ */
+CreateRuleRequest.prototype['autoCreateTasks'] = undefined;
 
 
 

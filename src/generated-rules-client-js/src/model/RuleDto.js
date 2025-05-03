@@ -56,6 +56,9 @@ class RuleDto {
             if (data.hasOwnProperty('description')) {
                 obj['description'] = ApiClient.convertToType(data['description'], 'String');
             }
+            if (data.hasOwnProperty('status')) {
+                obj['status'] = ApiClient.convertToType(data['status'], 'String');
+            }
             if (data.hasOwnProperty('penaltyAmount')) {
                 obj['penaltyAmount'] = ApiClient.convertToType(data['penaltyAmount'], 'Number');
             }
@@ -65,8 +68,8 @@ class RuleDto {
             if (data.hasOwnProperty('timeZone')) {
                 obj['timeZone'] = ApiClient.convertToType(data['timeZone'], 'String');
             }
-            if (data.hasOwnProperty('status')) {
-                obj['status'] = ApiClient.convertToType(data['status'], 'String');
+            if (data.hasOwnProperty('autoCreateTasks')) {
+                obj['autoCreateTasks'] = ApiClient.convertToType(data['autoCreateTasks'], 'Boolean');
             }
         }
         return obj;
@@ -91,16 +94,16 @@ class RuleDto {
             throw new Error("Expected the field `description` to be a primitive type in the JSON string but got " + data['description']);
         }
         // ensure the json data is a string
+        if (data['status'] && !(typeof data['status'] === 'string' || data['status'] instanceof String)) {
+            throw new Error("Expected the field `status` to be a primitive type in the JSON string but got " + data['status']);
+        }
+        // ensure the json data is a string
         if (data['cronExpression'] && !(typeof data['cronExpression'] === 'string' || data['cronExpression'] instanceof String)) {
             throw new Error("Expected the field `cronExpression` to be a primitive type in the JSON string but got " + data['cronExpression']);
         }
         // ensure the json data is a string
         if (data['timeZone'] && !(typeof data['timeZone'] === 'string' || data['timeZone'] instanceof String)) {
             throw new Error("Expected the field `timeZone` to be a primitive type in the JSON string but got " + data['timeZone']);
-        }
-        // ensure the json data is a string
-        if (data['status'] && !(typeof data['status'] === 'string' || data['status'] instanceof String)) {
-            throw new Error("Expected the field `status` to be a primitive type in the JSON string but got " + data['status']);
         }
 
         return true;
@@ -127,6 +130,11 @@ RuleDto.prototype['name'] = undefined;
 RuleDto.prototype['description'] = undefined;
 
 /**
+ * @member {module:model/RuleDto.StatusEnum} status
+ */
+RuleDto.prototype['status'] = undefined;
+
+/**
  * @member {Number} penaltyAmount
  */
 RuleDto.prototype['penaltyAmount'] = undefined;
@@ -142,9 +150,9 @@ RuleDto.prototype['cronExpression'] = undefined;
 RuleDto.prototype['timeZone'] = undefined;
 
 /**
- * @member {module:model/RuleDto.StatusEnum} status
+ * @member {Boolean} autoCreateTasks
  */
-RuleDto.prototype['status'] = undefined;
+RuleDto.prototype['autoCreateTasks'] = undefined;
 
 
 
