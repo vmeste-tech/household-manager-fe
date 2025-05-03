@@ -93,9 +93,17 @@ function TaskPage() {
                 console.error("Error fetching overdue tasks:", overdueError);
                 setTasks(data || []);
               } else {
-                const overdueIds = new Set(overdueData.map(task => task.id));
-                const nonDuplicateTasks = data.filter(task => !overdueIds.has(task.id));
-                setTasks([...nonDuplicateTasks, ...overdueData]);
+                // Mark overdue tasks with OVERDUE status
+                const overdueTasksWithStatus = (overdueData || []).map(task => ({
+                  ...task,
+                  status: "OVERDUE"
+                }));
+                
+                // Filter out tasks that are already in the overdue list
+                const overdueIds = new Set(overdueTasksWithStatus.map(task => task.id));
+                const nonDuplicateTasks = (data || []).filter(task => !overdueIds.has(task.id));
+                
+                setTasks([...overdueTasksWithStatus, ...nonDuplicateTasks]);
               }
               setLoading(false);
             });

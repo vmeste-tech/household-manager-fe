@@ -5,7 +5,8 @@ import KanbanColumn from "./KanbanColumn";
 import { taskApi, userApi } from "../../api";
 import TaskFilters from "../Tasks/TaskFilters";
 
-const columns = ["CREATED", "IN_PROGRESS", "COMPLETED"];
+// Update columns array to include OVERDUE at the end
+const columns = ["CREATED", "IN_PROGRESS", "COMPLETED", "OVERDUE"];
 
 const formatDate = (date) => {
   const year = date.getFullYear();
@@ -29,7 +30,28 @@ const fetchTasks = (apartmentId, startDate, endDate) => {
         console.error("Ошибка при получении задач:", error);
         reject(error);
       } else {
-        resolve(data);
+        // Fetch overdue tasks
+        taskApi.getOverdueTasks(apartmentId, (overdueError, overdueData) => {
+          if (overdueError) {
+            resolve(data || []);
+          } else {
+            // Mark overdue tasks with OVERDUE status
+            const overdueTasksWithStatus = (overdueData || []).map((task) => ({
+              ...task,
+              status: "OVERDUE",
+            }));
+
+            // Filter out tasks that are already in the overdue list
+            const overdueIds = new Set(
+              overdueTasksWithStatus.map((task) => task.id)
+            );
+            const nonDuplicateTasks = (data || []).filter(
+              (task) => !overdueIds.has(task.id)
+            );
+
+            resolve([...overdueTasksWithStatus, ...nonDuplicateTasks]);
+          }
+        });
       }
     });
   });

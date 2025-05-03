@@ -16,7 +16,8 @@ const TaskList = ({
   const [expandedSections, setExpandedSections] = useState({
     CREATED: true,
     IN_PROGRESS: true,
-    COMPLETED: true
+    COMPLETED: true,
+    OVERDUE: true
   });
 
   const toggleSection = (section) => {
@@ -30,13 +31,15 @@ const TaskList = ({
   const groupedTasks = {
     CREATED: tasks.filter(task => task.status === "CREATED"),
     IN_PROGRESS: tasks.filter(task => task.status === "IN_PROGRESS"),
-    COMPLETED: tasks.filter(task => task.status === "COMPLETED")
+    COMPLETED: tasks.filter(task => task.status === "COMPLETED"),
+    OVERDUE: tasks.filter(task => task.status === "OVERDUE")
   };
 
   const statusLabels = {
     CREATED: "Запланировано",
     IN_PROGRESS: "В процессе",
-    COMPLETED: "Выполнено"
+    COMPLETED: "Выполнено",
+    OVERDUE: "Просрочены"
   };
 
   const statusIcons = {
@@ -54,8 +57,16 @@ const TaskList = ({
       <svg className="w-5 h-5 text-green-600" viewBox="0 0 20 20" fill="currentColor">
         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
       </svg>
+    ),
+    OVERDUE: (
+      <svg className="w-5 h-5 text-red-600" viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V5z" clipRule="evenodd" />
+      </svg>
     )
   };
+
+  // Define the order of sections to display
+  const sectionOrder = ["CREATED", "IN_PROGRESS", "COMPLETED", "OVERDUE"];
 
   return (
     <div className="flex flex-col space-y-6">
@@ -83,7 +94,7 @@ const TaskList = ({
           <p className="text-sm text-gray-500 mt-2">Создайте новую задачу или измените параметры фильтра</p>
         </div>
       ) : (
-        Object.keys(statusLabels).map(status => (
+        sectionOrder.map(status => (
           <div key={status} className="bg-white rounded-xl shadow-sm overflow-hidden">
             <div 
               className="flex items-center justify-between p-4 bg-indigo-50 cursor-pointer border-b border-indigo-100"
