@@ -12,10 +12,19 @@ const CreateRuleModal = ({ onClose, onCreate }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [penaltyAmount, setPenaltyAmount] = useState("");
-  const [autoCreateTasks, setAutoCreateTasks] = useState(false); // Новое состояние
+  const [autoCreateTasks, setAutoCreateTasks] = useState(false);
+
+  // Состояние для хранения ошибок валидации
+  const [errors, setErrors] = useState({
+    name: "",
+    description: "",
+    timeOfDay: "",
+    weeklyDays: "",
+    monthlyDay: ""
+  });
 
   // Этап 2: настройки расписания
-  const [frequency, setFrequency] = useState("daily"); // daily, weekly, monthly
+  const [frequency, setFrequency] = useState("daily");
   const [timeOfDay, setTimeOfDay] = useState(""); // формат "HH:MM"
   const [weeklyDays, setWeeklyDays] = useState([]); // для еженедельного расписания
   const [monthlyDay, setMonthlyDay] = useState(""); // для ежемесячного расписания
@@ -46,6 +55,59 @@ const CreateRuleModal = ({ onClose, onCreate }) => {
     }
   };
 
+  // Функция для валидации полей первого шага
+  const validateStep1 = () => {
+    const newErrors = { ...errors };
+    let isValid = true;
+
+    if (!name.trim()) {
+      newErrors.name = "Название правила обязательно";
+      isValid = false;
+    } else {
+      newErrors.name = "";
+    }
+
+    if (!description.trim()) {
+      newErrors.description = "Описание правила обязательно";
+      isValid = false;
+    } else {
+      newErrors.description = "";
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
+  // Функция для валидации полей второго шага
+  const validateStep2 = () => {
+    const newErrors = { ...errors };
+    let isValid = true;
+
+    if (!timeOfDay) {
+      newErrors.timeOfDay = "Время выполнения обязательно";
+      isValid = false;
+    } else {
+      newErrors.timeOfDay = "";
+    }
+
+    if (frequency === "weekly" && weeklyDays.length === 0) {
+      newErrors.weeklyDays = "Выберите хотя бы один день недели";
+      isValid = false;
+    } else {
+      newErrors.weeklyDays = "";
+    }
+
+    if (frequency === "monthly" && !monthlyDay) {
+      newErrors.monthlyDay = "Укажите день месяца";
+      isValid = false;
+    } else {
+      newErrors.monthlyDay = "";
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
   // Функция генерации CRON-выражения из выбранных параметров
   const generateCronExpression = () => {
     if (!timeOfDay) return "";
@@ -73,10 +135,19 @@ const CreateRuleModal = ({ onClose, onCreate }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Если автоматическое создание задач включено, проверяем время выполнения
-    if (autoCreateTasks && !timeOfDay) {
-      console.error("Введите время выполнения");
-      return;
+    // Проверяем валидацию в зависимости от текущего шага
+    if (step === 1 && !autoCreateTasks) {
+      if (!validateStep1()) {
+        return;
+      }
+    } else if (step === 2 || (step === 1 && autoCreateTasks)) {
+      if (!validateStep1()) {
+        return;
+      }
+      
+      if (autoCreateTasks && !validateStep2()) {
+        return;
+      }
     }
 
     // Генерируем CRON-выражение только если автоматическое создание задач включено
@@ -121,8 +192,13 @@ const CreateRuleModal = ({ onClose, onCreate }) => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+              className={`mt-1 block w-full border ${
+                errors.name ? "border-red-500" : "border-gray-300"
+              } rounded-md p-2`}
             />
+            {errors.name && (
+              <p className="mt-1 text-sm text-red-600">{errors.name}</p>
+            )}
           </div>
 
           <div>
@@ -136,8 +212,13 @@ const CreateRuleModal = ({ onClose, onCreate }) => {
               id="ruleDescription"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+              className={`mt-1 block w-full border ${
+                errors.description ? "border-red-500" : "border-gray-300"
+              } rounded-md p-2`}
             />
+            {errors.description && (
+              <p className="mt-1 text-sm text-red-600">{errors.description}</p>
+            )}
           </div>
 
           <div>
@@ -157,7 +238,7 @@ const CreateRuleModal = ({ onClose, onCreate }) => {
             />
           </div>
 
-          {/* Новый чекбокс для автоматического создания задач */}
+          {/* Чекбокс для автоматического создания задач */}
           <div className="flex items-center">
             <input
               id="autoCreateTasks"
@@ -181,7 +262,9 @@ const CreateRuleModal = ({ onClose, onCreate }) => {
               onClick={(e) => {
                 e.preventDefault();
                 if (autoCreateTasks) {
-                  setStep(2);
+                  if (validateStep1()) {
+                    setStep(2);
+                  }
                 } else {
                   handleSubmit(e);
                 }
@@ -224,8 +307,13 @@ const CreateRuleModal = ({ onClose, onCreate }) => {
               value={timeOfDay}
               onChange={(e) => setTimeOfDay(e.target.value)}
               required
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+              className={`mt-1 block w-full border ${
+                errors.timeOfDay ? "border-red-500" : "border-gray-300"
+              } rounded-md p-2`}
             />
+            {errors.timeOfDay && (
+              <p className="mt-1 text-sm text-red-600">{errors.timeOfDay}</p>
+            )}
           </div>
 
           {frequency === "weekly" && (
@@ -239,7 +327,7 @@ const CreateRuleModal = ({ onClose, onCreate }) => {
                     type="button"
                     key={day.value}
                     onClick={() => toggleWeekDay(day.value)}
-                    className={`px-3 py-1 border rounded-full text-sm transition-colors duration-150 ${
+                    className={`px-3 py-1 border rounded-full text-sm transition-colors duration-150 cursor-pointer ${
                       weeklyDays.includes(day.value)
                         ? "bg-indigo-600 text-white border-indigo-600"
                         : "bg-white text-gray-700 border-gray-300"
@@ -249,6 +337,9 @@ const CreateRuleModal = ({ onClose, onCreate }) => {
                   </div>
                 ))}
               </div>
+              {errors.weeklyDays && (
+                <p className="mt-1 text-sm text-red-600">{errors.weeklyDays}</p>
+              )}
             </div>
           )}
 
@@ -268,8 +359,13 @@ const CreateRuleModal = ({ onClose, onCreate }) => {
                 value={monthlyDay}
                 onChange={(e) => setMonthlyDay(e.target.value)}
                 required
-                className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+                className={`mt-1 block w-full border ${
+                  errors.monthlyDay ? "border-red-500" : "border-gray-300"
+                } rounded-md p-2`}
               />
+              {errors.monthlyDay && (
+                <p className="mt-1 text-sm text-red-600">{errors.monthlyDay}</p>
+              )}
             </div>
           )}
 

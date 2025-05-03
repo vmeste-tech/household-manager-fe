@@ -87,9 +87,7 @@ function RulePage() {
     try {
       const createRuleRequest = new CreateRuleRequest(
         ruleData.name,
-        ruleData.description,
-        ruleData.cronExpression,
-        ruleData.timeZone
+        ruleData.description
       );
       
       if (ruleData.penaltyAmount) {
@@ -97,14 +95,26 @@ function RulePage() {
       }
       
       createRuleRequest.apartmentId = ruleData.apartmentId;
-      createRuleRequest.autoCreateTasks = ruleData.autoCreateTasks || false; // Добавляем параметр автоматического создания задач
+      createRuleRequest.autoCreateTasks = ruleData.autoCreateTasks || false;
+      
+      if (ruleData.autoCreateTasks) {
+        createRuleRequest.cronExpression = ruleData.cronExpression;
+        createRuleRequest.timeZone = ruleData.timeZone;
+      }
       
       ruleApi.createRule(createRuleRequest, (error, data) => {
         setIsLoading(false);
         
         if (error) {
           console.error("Error creating rule:", error);
-          setErrorMsg("Не удалось создать правило");
+          let errorMessage = "Не удалось создать правило";
+          
+          // Проверяем, есть ли конкретная ошибка от API
+          if (error.response && error.response.data && error.response.data.message) {
+            errorMessage = error.response.data.message;
+          }
+          
+          setErrorMsg(errorMessage);
         } else {
           console.log("Rule created successfully:", data);
           setIsModalOpen(false);
